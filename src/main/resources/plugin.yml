@@ -1,0 +1,4 @@
+name: GrassCooking
+version: ${project.version}
+main: net.unicroak.grasscooking.GrassCooking
+authors: [GrassLife]

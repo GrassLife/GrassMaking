@@ -3,6 +3,7 @@ package life.grass.grasscooking.table;
 import life.grass.grasscooking.ui.TableInterface;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,8 +14,16 @@ import java.util.List;
 public abstract class Table implements TableInterface {
     private static final ItemStack PADDING_ICON;
 
+    private Block block;
+    private Inventory inventory;
+
     static {
-        PADDING_ICON = initIcon(Material.STAINED_GLASS_PANE, 15, null, null);
+        PADDING_ICON = createIcon(Material.STAINED_GLASS_PANE, 15, null, null);
+    }
+
+    public Table(Block block) {
+        this.block = block;
+        this.inventory = initInventory();
     }
 
     @Override
@@ -24,14 +33,10 @@ public abstract class Table implements TableInterface {
 
     @Override
     public Inventory getInventory() {
-        Inventory inv = Bukkit.createInventory(this, TABLE_SIZE, getTitle());
-
-        for (int i = 0; i < TABLE_SIZE; i++) inv.setItem(i, getPaddingIcon(i));
-
-        return inv;
+        return inventory;
     }
 
-    protected static ItemStack initIcon(Material material, int data, String name, List<String> lore) {
+    protected static ItemStack createIcon(Material material, int data, String name, List<String> lore) {
         ItemStack icon = new ItemStack(material);
         ItemMeta meta = icon.getItemMeta();
 
@@ -42,6 +47,17 @@ public abstract class Table implements TableInterface {
         icon.setItemMeta(meta);
 
         return icon;
+    }
+
+    public Block getBlock() {
+        return block;
+    }
+
+    protected Inventory initInventory() {
+        Inventory inv = Bukkit.createInventory(this, TABLE_SIZE, getTitle());
+        for (int i = 0; i < TABLE_SIZE; i++) inv.setItem(i, getPaddingIcon(i));
+
+        return inv;
     }
 
     public abstract String getTitle();

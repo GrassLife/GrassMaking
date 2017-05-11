@@ -3,6 +3,7 @@ package life.grass.grasscooking.table;
 import life.grass.grasscooking.ui.CookerInterface;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,7 +11,11 @@ public abstract class Cooker extends Maker implements CookerInterface {
     private static final ItemStack SEASONING_ICON;
 
     static {
-        SEASONING_ICON = initIcon(Material.NAME_TAG, 0, ChatColor.RED + "調味料", null);
+        SEASONING_ICON = createIcon(Material.NAME_TAG, 0, ChatColor.RED + "調味料", null);
+    }
+
+    public Cooker(Block block) {
+        super(block);
     }
 
     @Override
@@ -19,8 +24,8 @@ public abstract class Cooker extends Maker implements CookerInterface {
     }
 
     @Override
-    public Inventory getInventory() {
-        Inventory inv = super.getInventory();
+    public Inventory initInventory() {
+        Inventory inv = super.initInventory();
 
         getSeasoningSpacePositionList().forEach(position -> inv.setItem(position, null));
         inv.setItem(getSeasoningIconPosition(), getSeasoningIcon());

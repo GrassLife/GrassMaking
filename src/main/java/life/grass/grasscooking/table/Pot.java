@@ -1,4 +1,4 @@
-package net.unicroak.grasscooking.table;
+package life.grass.grasscooking.table;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

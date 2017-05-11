@@ -1,6 +1,6 @@
-package net.unicroak.grasscooking.table;
+package life.grass.grasscooking.table;
 
-import net.unicroak.grasscooking.ui.MakerInterface;
+import life.grass.grasscooking.ui.MakerInterface;
 import org.bukkit.inventory.Inventory;
 
 public abstract class Maker extends Table implements MakerInterface {

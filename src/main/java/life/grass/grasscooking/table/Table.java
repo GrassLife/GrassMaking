@@ -1,6 +1,6 @@
-package net.unicroak.grasscooking.table;
+package life.grass.grasscooking.table;
 
-import net.unicroak.grasscooking.ui.TableInterface;
+import life.grass.grasscooking.ui.TableInterface;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;

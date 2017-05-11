@@ -1,4 +1,4 @@
-package net.unicroak.grasscooking;
+package life.grass.grasscooking;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;

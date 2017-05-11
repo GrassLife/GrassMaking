@@ -1,4 +1,4 @@
-package net.unicroak.grasscooking.ui;
+package life.grass.grasscooking.ui;
 
 import org.bukkit.inventory.ItemStack;
 

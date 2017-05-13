@@ -1,5 +1,6 @@
 package life.grass.grasscooking;
 
+import life.grass.grasscooking.listener.ChunkLoad;
 import life.grass.grasscooking.listener.InventoryClick;
 import life.grass.grasscooking.listener.PlayerInteract;
 import life.grass.grasscooking.manager.TableManager;
@@ -49,6 +50,7 @@ public final class GrassCooking extends JavaPlugin {
     private void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
 
+        pm.registerEvents(new ChunkLoad(), this);
         pm.registerEvents(new InventoryClick(), this);
         pm.registerEvents(new PlayerInteract(), this);
     }

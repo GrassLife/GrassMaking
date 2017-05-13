@@ -21,7 +21,7 @@ public abstract class VisualOperation extends Operation {
         armorStand = world.spawn(location, ArmorStand.class);
         armorStand.setVisible(false);
         armorStand.setGravity(false);
-        armorStand.setCustomName("**" + Double.toString(Math.random()));
+        armorStand.setCustomName("GSC_" + Double.toString(Math.random()));
         armorStand.setCustomNameVisible(false);
         armorStand.setSmall(true);
         armorStand.setHelmet(getVisualItem());

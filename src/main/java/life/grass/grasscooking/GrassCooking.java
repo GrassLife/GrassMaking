@@ -27,7 +27,7 @@ public final class GrassCooking extends JavaPlugin {
         super.onDisable();
         instance = null;
 
-        tableManager.getTableSet().stream()
+        tableManager.getTableList().stream()
                 .filter(table -> table instanceof Operable)
                 .map(table -> ((Operable) table).getOperation())
                 .forEach(Operation::cancel);

@@ -28,7 +28,7 @@ public class TableManager {
         }
     }
 
-    public List<Table> getTableSet() {
+    public List<Table> getTableList() {
         return (List<Table>) tableMap.values();
     }
 

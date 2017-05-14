@@ -1,8 +1,6 @@
 package life.grass.grasscooking;
 
-import life.grass.grasscooking.listener.ChunkLoad;
-import life.grass.grasscooking.listener.InventoryClick;
-import life.grass.grasscooking.listener.PlayerInteract;
+import life.grass.grasscooking.listener.*;
 import life.grass.grasscooking.manager.TableManager;
 import life.grass.grasscooking.operation.Operable;
 import life.grass.grasscooking.operation.Operation;
@@ -52,6 +50,8 @@ public final class GrassCooking extends JavaPlugin {
 
         pm.registerEvents(new ChunkLoad(), this);
         pm.registerEvents(new InventoryClick(), this);
+        pm.registerEvents(new ItemSpawn(), this);
         pm.registerEvents(new PlayerInteract(), this);
+        pm.registerEvents(new PlayerItemConsume(), this);
     }
 }

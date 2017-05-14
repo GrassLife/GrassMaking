@@ -2,3 +2,4 @@ name: GrassCooking
 version: ${project.version}
 main: life.grass.grasscooking.GrassCooking
 authors: [GrassLife]
+depend: [GrassPlayer]

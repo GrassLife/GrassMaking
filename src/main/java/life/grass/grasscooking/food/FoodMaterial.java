@@ -19,11 +19,13 @@ public abstract class FoodMaterial {
     protected ItemStack item;
     protected FoodType foodType;
     protected Map<FoodElement, Integer> elementMap;
+    protected int size;
 
-    protected FoodMaterial(ItemStack item, FoodType foodType, Map<FoodElement, Integer> elementMap) {
+    protected FoodMaterial(ItemStack item, FoodType foodType, Map<FoodElement, Integer> elementMap, int size) {
         this.item = item;
         this.foodType = foodType;
         this.elementMap = elementMap;
+        this.size = size;
 
         updateItem();
     }
@@ -34,6 +36,10 @@ public abstract class FoodMaterial {
 
     public Map<FoodElement, Integer> getElementMap() {
         return elementMap;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public ItemStack getItem() {
@@ -47,6 +53,11 @@ public abstract class FoodMaterial {
 
     public void setFoodType(FoodType foodType) {
         this.foodType = foodType;
+        updateItem();
+    }
+
+    public void setSize(int size) {
+        this.size = size;
         updateItem();
     }
 

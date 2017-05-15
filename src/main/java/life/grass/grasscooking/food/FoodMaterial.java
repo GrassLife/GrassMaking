@@ -15,16 +15,16 @@ public abstract class FoodMaterial {
             = ChatColor.GRAY + ": " + ChatColor.BLUE;
 
     protected ItemStack item;
-    protected Map<Element, Integer> elementMap;
+    protected Map<FoodElement, Integer> elementMap;
 
-    protected FoodMaterial(ItemStack item, Map<Element, Integer> elementMap) {
+    protected FoodMaterial(ItemStack item, Map<FoodElement, Integer> elementMap) {
         this.item = item;
         this.elementMap = elementMap;
 
         updateItem();
     }
 
-    public Map<Element, Integer> getElementMap() {
+    public Map<FoodElement, Integer> getElementMap() {
         return elementMap;
     }
 
@@ -32,7 +32,7 @@ public abstract class FoodMaterial {
         return item;
     }
 
-    public void setElementMap(Map<Element, Integer> elementMap) {
+    public void setElementMap(Map<FoodElement, Integer> elementMap) {
         this.elementMap = elementMap;
         updateItem();
     }

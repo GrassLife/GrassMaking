@@ -21,9 +21,9 @@ public class Ingredient extends FoodMaterial implements Eatable {
         this.baseName = baseName;
         this.restoreStamina = restoreStamina;
 
-        ItemMeta meta = item.getItemMeta();
+        ItemMeta meta = this.item.getItemMeta();
         meta.setDisplayName(ChatColor.YELLOW + baseName);
-        item.setItemMeta(meta);
+        this.item.setItemMeta(meta);
 
         updateItem();
     }

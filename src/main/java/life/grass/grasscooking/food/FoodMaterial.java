@@ -65,7 +65,7 @@ public abstract class FoodMaterial {
         ItemMeta meta = item.getItemMeta();
 
         List<String> lore = new ArrayList<>();
-        lore.add(FOOD_TYPE_LORE + foodType.toString());
+        lore.add(FOOD_TYPE_LORE + /* foodType.toString() */ "--");
         elementMap.forEach((key, value) -> lore.add(ELEMENT_PREFIX_LORE + key + ELEMENT_SEPARATOR_LORE + value));
         meta.setLore(lore);
 

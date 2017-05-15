@@ -7,19 +7,20 @@ import java.util.Map;
 
 public class Seasoning extends FoodMaterial {
 
-    public Seasoning(ItemStack item, Map<FoodElement, Integer> elementMap) {
-        super(item, elementMap);
+    public Seasoning(ItemStack item, FoodType foodType, Map<FoodElement, Integer> elementMap) {
+        super(item, foodType, elementMap);
     }
 
     public static Seasoning fromItemStack(ItemStack item) {
         // TODO: read and write NBT
+        FoodType foodType = null;
         Map<FoodElement, Integer> elementMap = new HashMap<>();
 
-        return new Seasoning(item, elementMap);
+        return new Seasoning(item, foodType, elementMap);
     }
 
-    public static Seasoning fromItemStack(ItemStack item, Map<FoodElement, Integer> elementMap) {
-        return new Seasoning(item, elementMap);
+    public static Seasoning fromItemStack(ItemStack item, FoodType foodType, Map<FoodElement, Integer> elementMap) {
+        return new Seasoning(item, foodType, elementMap);
     }
 
     public static boolean verifySeasoning(ItemStack item) {

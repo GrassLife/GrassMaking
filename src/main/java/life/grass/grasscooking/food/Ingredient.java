@@ -14,8 +14,8 @@ public class Ingredient extends FoodMaterial implements Eatable {
     private String baseName;
     private int restoreStamina;
 
-    private Ingredient(ItemStack item, Map<FoodElement, Integer> elementMap, long expireDate, String baseName, int restoreStamina) {
-        super(item, elementMap);
+    private Ingredient(ItemStack item, FoodType foodType, Map<FoodElement, Integer> elementMap, long expireDate, String baseName, int restoreStamina) {
+        super(item, foodType, elementMap);
 
         this.expireDate = expireDate;
         this.baseName = baseName;
@@ -30,16 +30,17 @@ public class Ingredient extends FoodMaterial implements Eatable {
 
     public static Ingredient fromItemStack(ItemStack item) {
         // TODO: read and write NBT
+        FoodType foodType = null;
         Map<FoodElement, Integer> elementMap = new HashMap<>();
         long expireDate = -1;
         String baseName = item.getType().toString();
         int restoreStamina = 20;
 
-        return new Ingredient(item, elementMap, expireDate, baseName, restoreStamina);
+        return new Ingredient(item, foodType, elementMap, expireDate, baseName, restoreStamina);
     }
 
-    public static Ingredient fromItemStack(ItemStack item, Map<FoodElement, Integer> elementMap, long expireDate, String baseName, int restoreStamina) {
-        return new Ingredient(item, elementMap, expireDate, baseName, restoreStamina);
+    public static Ingredient fromItemStack(ItemStack item, FoodType foodType, Map<FoodElement, Integer> elementMap, long expireDate, String baseName, int restoreStamina) {
+        return new Ingredient(item, foodType, elementMap, expireDate, baseName, restoreStamina);
     }
 
     public static boolean verifyIngredient(ItemStack item) {

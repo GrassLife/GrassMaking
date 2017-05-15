@@ -9,19 +9,27 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class FoodMaterial {
+    protected static final String FOOD_TYPE_LORE
+            = ChatColor.GREEN + "食材種" + ChatColor.GRAY + ": " + ChatColor.GREEN;
     protected static final String ELEMENT_PREFIX_LORE
             = ChatColor.DARK_GRAY + "  * " + ChatColor.BLUE;
     protected static final String ELEMENT_SEPARATOR_LORE
             = ChatColor.GRAY + ": " + ChatColor.BLUE;
 
     protected ItemStack item;
+    protected FoodType foodType;
     protected Map<FoodElement, Integer> elementMap;
 
-    protected FoodMaterial(ItemStack item, Map<FoodElement, Integer> elementMap) {
+    protected FoodMaterial(ItemStack item, FoodType foodType, Map<FoodElement, Integer> elementMap) {
         this.item = item;
+        this.foodType = foodType;
         this.elementMap = elementMap;
 
         updateItem();
+    }
+
+    public FoodType getFoodType() {
+        return foodType;
     }
 
     public Map<FoodElement, Integer> getElementMap() {
@@ -37,10 +45,16 @@ public abstract class FoodMaterial {
         updateItem();
     }
 
+    public void setFoodType(FoodType foodType) {
+        this.foodType = foodType;
+        updateItem();
+    }
+
     protected void updateItem() {
         ItemMeta meta = item.getItemMeta();
 
         List<String> lore = new ArrayList<>();
+        lore.add(FOOD_TYPE_LORE + foodType.toString());
         elementMap.forEach((key, value) -> lore.add(ELEMENT_PREFIX_LORE + key + ELEMENT_SEPARATOR_LORE + value));
         meta.setLore(lore);
 

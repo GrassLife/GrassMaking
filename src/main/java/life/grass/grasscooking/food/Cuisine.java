@@ -16,15 +16,14 @@ public class Cuisine implements Eatable {
     private ItemStack item;
     private long expireDate;
     private String baseName;
-    private int restoreStamina, restoreEffectiveStamina;
+    private int restoreStamina;
     private Map<FoodEffect, Integer> foodEffectMap;
 
-    private Cuisine(ItemStack item, long expireDate, String baseName, int restoreStamina, int restoreEffectiveStamina, Map<FoodEffect, Integer> foodEffectMap) {
+    private Cuisine(ItemStack item, long expireDate, String baseName, int restoreStamina, Map<FoodEffect, Integer> foodEffectMap) {
         this.item = item;
         this.expireDate = expireDate;
         this.baseName = baseName;
         this.restoreStamina = restoreStamina;
-        this.restoreEffectiveStamina = restoreEffectiveStamina;
         this.foodEffectMap = foodEffectMap;
 
         ItemMeta meta = item.getItemMeta();
@@ -38,15 +37,14 @@ public class Cuisine implements Eatable {
         // TODO: read and write NBT
         long expireDate = -1;
         String baseName = item.getType().toString();
-        int restoreStamina = 1;
-        int restoreEffectiveStamina = 1;
+        int restoreStamina = 20;
         Map<FoodEffect, Integer> foodEffectMap = new HashMap<>();
 
-        return new Cuisine(item, expireDate, baseName, restoreStamina, restoreEffectiveStamina, foodEffectMap);
+        return new Cuisine(item, expireDate, baseName, restoreStamina, foodEffectMap);
     }
 
-    public static Cuisine fromItemStack(ItemStack item, long expireDate, String baseName, int restoreStamina, int restoreEffectiveStamina, Map<FoodEffect, Integer> foodEffectMap) {
-        return new Cuisine(item, expireDate, baseName, restoreStamina, restoreEffectiveStamina, foodEffectMap);
+    public static Cuisine fromItemStack(ItemStack item, long expireDate, String baseName, int restoreStamina, Map<FoodEffect, Integer> foodEffectMap) {
+        return new Cuisine(item, expireDate, baseName, restoreStamina, foodEffectMap);
     }
 
     @Override
@@ -62,11 +60,6 @@ public class Cuisine implements Eatable {
     @Override
     public int getRestoreStamina() {
         return restoreStamina;
-    }
-
-    @Override
-    public int getRestoreEffectiveStamina() {
-        return restoreEffectiveStamina;
     }
 
     @Override
@@ -87,12 +80,6 @@ public class Cuisine implements Eatable {
         updateItem();
     }
 
-    @Override
-    public void setRestoreEffectiveStamina(int restoreEffectiveStamina) {
-        this.restoreEffectiveStamina = restoreEffectiveStamina;
-        updateItem();
-    }
-
     public ItemStack getItem() {
         return item;
     }
@@ -102,8 +89,7 @@ public class Cuisine implements Eatable {
 
         List<String> lore = Arrays.asList(
                 EXPIRE_DATE_LORE + "--",
-                RESTORE_STAMINA_LORE + restoreStamina,
-                RESTORE_EFFECTIVE_STAMINA_LORE + restoreEffectiveStamina);
+                RESTORE_STAMINA_LORE + restoreStamina);
         foodEffectMap.forEach((key, value) -> lore.add(EFFECT_PREFIX_LORE + key.toString() + EFFECT_SEPARATOR_LORE + value));
         meta.setLore(lore);
 

@@ -9,20 +9,21 @@ import java.util.Map;
 import java.util.Optional;
 
 public class TableManager {
-    private Map<Block, Table> tableMap;
+    private Map<String, Table> tableMap;
 
     public TableManager() {
         tableMap = new HashMap<>();
     }
 
     public Optional<Table> findTable(Block block) {
-        return Optional.ofNullable(tableMap.getOrDefault(block, null));
+        return Optional.ofNullable(tableMap.get(generateKey(block)));
     }
 
     public Table createTable(Block block, Class<? extends Table> clazz) {
+        String key = generateKey(block);
         try {
-            tableMap.put(block, clazz.getConstructor(Block.class).newInstance(block));
-            return tableMap.get(block);
+            tableMap.put(key, clazz.getConstructor(Block.class).newInstance(block));
+            return tableMap.get(key);
         } catch (Exception ignore) {
             return null;
         }
@@ -33,6 +34,10 @@ public class TableManager {
     }
 
     public void remove(Block block) {
-        tableMap.remove(block);
+        tableMap.remove(generateKey(block));
+    }
+
+    private static String generateKey(Block block) {
+        return block.getX() + "_" + block.getY() + "_" + block.getZ();
     }
 }

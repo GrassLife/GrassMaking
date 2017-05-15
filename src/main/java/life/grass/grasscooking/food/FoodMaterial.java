@@ -17,7 +17,7 @@ public abstract class FoodMaterial {
     protected ItemStack item;
     protected Map<Element, Integer> elementMap;
 
-    /* package */ FoodMaterial(ItemStack item, Map<Element, Integer> elementMap) {
+    protected FoodMaterial(ItemStack item, Map<Element, Integer> elementMap) {
         this.item = item;
         this.elementMap = elementMap;
 

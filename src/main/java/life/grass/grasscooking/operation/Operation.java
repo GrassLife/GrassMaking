@@ -2,8 +2,6 @@ package life.grass.grasscooking.operation;
 
 import life.grass.grasscooking.GrassCooking;
 import org.bukkit.block.Block;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.inventory.Inventory;
 
 public abstract class Operation {
     private GrassCooking instance;

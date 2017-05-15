@@ -21,4 +21,9 @@ public class Seasoning extends FoodMaterial {
     public static Seasoning fromItemStack(ItemStack item, Map<Element, Integer> elementMap) {
         return new Seasoning(item, elementMap);
     }
+
+    public static boolean verifySeasoning(ItemStack item) {
+        // TODO: change
+        return true;
+    }
 }

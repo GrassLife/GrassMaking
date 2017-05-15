@@ -40,7 +40,7 @@ public class PlayerItemConsume implements Listener {
         GrassPlayer grassPlayer = GrassPlayer.findOrCreate(event.getPlayer());
 
         // TODO: change
-        grassPlayer.incrementEffectiveStamina(5);
+        grassPlayer.incrementEffectiveStamina(20);
 
         player.updateInventory();
     }

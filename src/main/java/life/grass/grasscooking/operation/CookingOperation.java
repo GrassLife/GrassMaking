@@ -28,14 +28,14 @@ public class CookingOperation extends VisualOperation {
         this.cooker = cooker;
     }
 
-    public void precook(List<ItemStack> ingredientItemList, List<ItemStack> seasoningItemList) {
+    public boolean precook(List<ItemStack> ingredientItemList, List<ItemStack> seasoningItemList) {
         List<Ingredient> ingredientList = new ArrayList<>();
         ingredientItemList.stream()
                 .filter(Ingredient::verifyIngredient)
-                .forEach(item -> {
-                    ingredientList.add(Ingredient.fromItemStack(item));
-                    cooker.getInventory().remove(item);
-                });
+                .forEach(item -> ingredientList.add(Ingredient.fromItemStack(item)));
+
+        if (ingredientList.isEmpty()) return false;
+        else ingredientList.forEach(ingredient -> cooker.getInventory().remove(ingredient.getItem()));
 
         List<Seasoning> seasoningList = new ArrayList<>();
         seasoningItemList.stream()
@@ -46,6 +46,7 @@ public class CookingOperation extends VisualOperation {
                 });
 
         this.cuisine = Kitchen.cook(cooker, ingredientList, seasoningList);
+        return true;
     }
 
     @Override

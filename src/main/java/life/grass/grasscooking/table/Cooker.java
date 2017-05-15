@@ -57,8 +57,7 @@ public abstract class Cooker extends Maker implements CookerInterface {
                 .filter(item -> item != null && item.getType() != Material.AIR)
                 .forEach(seasoningList::add);
 
-        operation.precook(ingredientList, seasoningList);
-        operation.start(cookingTick);
+        if (operation.precook(ingredientList, seasoningList)) operation.start(cookingTick);
     }
 
     public CookingOperation getOperation() {

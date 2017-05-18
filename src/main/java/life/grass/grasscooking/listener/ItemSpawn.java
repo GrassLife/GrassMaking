@@ -1,7 +1,9 @@
 package life.grass.grasscooking.listener;
 
 import life.grass.grasscooking.food.Cuisine;
-import life.grass.grasscooking.food.Ingredient;
+import life.grass.grasscooking.food.Food;
+import life.grass.grasscooking.food.ingredient.Meat;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemSpawnEvent;
@@ -19,10 +21,10 @@ public class ItemSpawn implements Listener {
 
         switch (item.getType()) {
             case RAW_CHICKEN:
-                item = Ingredient.fromItemStack(item).getItem();
+                item = Food.fromItemStack(event.getEntity().getWorld(), new ItemStack(Material.COOKED_BEEF), Meat.class).getItem();
                 break;
             case COOKED_CHICKEN:
-                item = Cuisine.fromItemStack(item).getItem();
+                item = Food.fromItemStack(event.getEntity().getWorld(), new ItemStack(Material.COOKED_BEEF), Meat.class).getItem();
                 break;
         }
 

@@ -1,8 +1,8 @@
 package life.grass.grasscooking.operation;
 
 import life.grass.grasscooking.food.Cuisine;
-import life.grass.grasscooking.food.Ingredient;
-import life.grass.grasscooking.food.Seasoning;
+import life.grass.grasscooking.food.ingredient.Ingredient;
+import life.grass.grasscooking.food.ingredient.Meat;
 import life.grass.grasscooking.manager.Kitchen;
 import life.grass.grasscooking.table.Cooker;
 import org.bukkit.Material;
@@ -29,23 +29,13 @@ public class CookingOperation extends VisualOperation {
     }
 
     public boolean precook(List<ItemStack> ingredientItemList, List<ItemStack> seasoningItemList) {
+        World world = getBlock().getWorld();
+
         List<Ingredient> ingredientList = new ArrayList<>();
-        ingredientItemList.stream()
-                .filter(Ingredient::verifyIngredient)
-                .forEach(item -> ingredientList.add(Ingredient.fromItemStack(item)));
-
+        ingredientItemList.forEach(item -> ingredientList.add(Ingredient.fromItemStack(world, item, Meat.class)));
         if (ingredientList.isEmpty()) return false;
-        else ingredientList.forEach(ingredient -> cooker.getInventory().remove(ingredient.getItem()));
 
-        List<Seasoning> seasoningList = new ArrayList<>();
-        seasoningItemList.stream()
-                .filter(Seasoning::verifySeasoning)
-                .forEach(item -> {
-                    seasoningList.add(Seasoning.fromItemStack(item));
-                    cooker.getInventory().remove(item);
-                });
-
-        this.cuisine = Kitchen.cook(cooker, ingredientList, seasoningList);
+        this.cuisine = Kitchen.cook(cooker, ingredientList, new ArrayList<>());
         return true;
     }
 

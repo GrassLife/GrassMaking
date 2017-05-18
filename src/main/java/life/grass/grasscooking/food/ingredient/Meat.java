@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class Meat extends Ingredient {
 
-    protected Meat(World world, ItemStack item) {
+    public Meat(World world, ItemStack item) {
         super(world, item);
     }
 }

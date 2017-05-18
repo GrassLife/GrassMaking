@@ -1,6 +1,5 @@
 package life.grass.grasscooking.food;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
@@ -22,24 +21,15 @@ public abstract class Food {
     private Map<FoodElement, Integer> elementMap;
     private Map<FoodEffect, Integer> effectMap;
 
-    protected Food(World world, ItemStack item) {
+    public Food(World world, ItemStack item) {
         this.world = world;
-        this.item = item.clone();
+        this.item = item;
         this.restoreAmount = 20;
         this.elementMap = new HashMap<>();
         this.effectMap = new HashMap<>();
         entryExpireDate(60 * 30);
 
         updateItem();
-    }
-
-    public static <T extends Food> T fromItemStack(World world, ItemStack item, Class<T> clazz) {
-        try {
-            return clazz.getConstructor(World.class, ItemStack.class).newInstance(world, item);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
     }
 
     protected void updateItem() {
@@ -50,6 +40,7 @@ public abstract class Food {
                 EXPIRE_DATE_LORE + calcExpireDate().toString(),
                 RESTORE_AMOUNT_LORE + restoreAmount
         ));
+        meta.setLore(lore);
 
         item.setItemMeta(meta);
     }

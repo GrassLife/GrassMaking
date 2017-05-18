@@ -32,7 +32,7 @@ public class CookingOperation extends VisualOperation {
         World world = getBlock().getWorld();
 
         List<Ingredient> ingredientList = new ArrayList<>();
-        ingredientItemList.forEach(item -> ingredientList.add(Ingredient.fromItemStack(world, item, Meat.class)));
+        ingredientItemList.forEach(item -> ingredientList.add(new Meat(world, item)));
         if (ingredientList.isEmpty()) return false;
 
         this.cuisine = Kitchen.cook(cooker, ingredientList, new ArrayList<>());

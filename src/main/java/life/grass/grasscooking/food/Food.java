@@ -1,10 +1,12 @@
 package life.grass.grasscooking.food;
 
+import javafx.util.converter.LocalDateTimeStringConverter;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -37,7 +39,7 @@ public abstract class Food {
 
         List<String> lore = new ArrayList<>();
         lore.addAll(Arrays.asList(
-                EXPIRE_DATE_LORE + calcExpireDate().toString(),
+                EXPIRE_DATE_LORE + new LocalDateTimeStringConverter().toString(calcExpireDate()),
                 RESTORE_AMOUNT_LORE + restoreAmount
         ));
         meta.setLore(lore);
@@ -62,8 +64,7 @@ public abstract class Food {
         long time = getExpireDate() - world.getFullTime();
         LocalDateTime date = LocalDateTime.now();
 
-        date.plusSeconds(time / 72);
-        return date;
+        return date.plusSeconds(time / 72);
     }
 
     public void setExpireDate(long expireDate) {
@@ -72,8 +73,7 @@ public abstract class Food {
     }
 
     public void entryExpireDate(int seconds) {
-        long time = world.getFullTime() + seconds * 72;
-        setExpireDate(time);
+        setExpireDate(world.getFullTime() + seconds * 72);
     }
 
     public int getRestoreAmount() {

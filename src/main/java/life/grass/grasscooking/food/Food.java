@@ -2,7 +2,6 @@ package life.grass.grasscooking.food;
 
 import javafx.util.converter.LocalDateTimeStringConverter;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -16,15 +15,13 @@ public abstract class Food {
     protected static final String RESTORE_AMOUNT_LORE
             = ChatColor.AQUA + "スタミナ回復量" + ChatColor.GRAY + ": " + ChatColor.AQUA;
 
-    private World world;
     private ItemStack item;
     private LocalDateTime expireDate;
     private int restoreAmount;
     private Map<FoodElement, Integer> elementMap;
     private Map<FoodEffect, Integer> effectMap;
 
-    public Food(World world, ItemStack item) {
-        this.world = world;
+    public Food(ItemStack item) {
         this.item = item;
         this.expireDate = LocalDateTime.now();
         this.restoreAmount = 20;

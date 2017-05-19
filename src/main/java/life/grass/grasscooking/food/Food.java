@@ -17,7 +17,7 @@ public abstract class Food {
 
     private World world;
     private ItemStack item;
-    private long expireDate;
+    private LocalDateTime expireDate;
     private int restoreAmount;
     private Map<FoodElement, Integer> elementMap;
     private Map<FoodEffect, Integer> effectMap;
@@ -25,10 +25,12 @@ public abstract class Food {
     public Food(World world, ItemStack item) {
         this.world = world;
         this.item = item;
+        this.expireDate = LocalDateTime.now();
         this.restoreAmount = 20;
         this.elementMap = new HashMap<>();
         this.effectMap = new HashMap<>();
-        entryExpireDate(60 * 30);
+
+        setExpireDate(expireDate.plusMinutes(40));
 
         updateItem();
     }
@@ -38,7 +40,7 @@ public abstract class Food {
 
         List<String> lore = new ArrayList<>();
         lore.addAll(Arrays.asList(
-                EXPIRE_DATE_LORE + new LocalDateTimeStringConverter().toString(calcExpireDate()),
+                EXPIRE_DATE_LORE + new LocalDateTimeStringConverter().toString(expireDate),
                 RESTORE_AMOUNT_LORE + restoreAmount
         ));
         meta.setLore(lore);
@@ -55,24 +57,14 @@ public abstract class Food {
         updateItem();
     }
 
-    public long getExpireDate() {
+    public LocalDateTime getExpireDate() {
         return expireDate;
     }
 
-    public LocalDateTime calcExpireDate() {
-        long time = getExpireDate() - world.getFullTime();
-        LocalDateTime date = LocalDateTime.now();
-
-        return date.plusSeconds(time / 72);
-    }
-
-    public void setExpireDate(long expireDate) {
-        this.expireDate = expireDate;
+    public void setExpireDate(LocalDateTime expireDate) {
+        System.out.println(expireDate.getMinute());
+        this.expireDate = expireDate.minusMinutes(expireDate.getMinute() % 10);
         updateItem();
-    }
-
-    public void entryExpireDate(int seconds) {
-        setExpireDate(world.getFullTime() + seconds * 72);
     }
 
     public int getRestoreAmount() {
@@ -117,5 +109,9 @@ public abstract class Food {
 
     public void increaseEffect(FoodEffect effect, int level) {
         setEffect(effect, getEffectLevel(effect) + level);
+    }
+
+    public String getFoodType() {
+        return getClass().getSimpleName();
     }
 }

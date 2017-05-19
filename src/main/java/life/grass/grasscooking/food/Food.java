@@ -7,6 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 public abstract class Food {
@@ -62,7 +64,7 @@ public abstract class Food {
     }
 
     public void setExpireDate(LocalDateTime expireDate) {
-        this.expireDate = expireDate.minusMinutes(expireDate.getMinute() % 10);
+        this.expireDate = expireDate.minusMinutes(expireDate.getMinute() % 10).truncatedTo(ChronoUnit.MINUTES);
         updateItem();
     }
 

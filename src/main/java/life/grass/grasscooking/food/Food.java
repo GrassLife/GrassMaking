@@ -62,7 +62,6 @@ public abstract class Food {
     }
 
     public void setExpireDate(LocalDateTime expireDate) {
-        System.out.println(expireDate.getMinute());
         this.expireDate = expireDate.minusMinutes(expireDate.getMinute() % 10);
         updateItem();
     }

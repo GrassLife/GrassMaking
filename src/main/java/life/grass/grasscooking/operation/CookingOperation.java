@@ -29,11 +29,9 @@ public class CookingOperation extends VisualOperation {
     }
 
     public boolean precook(List<ItemStack> ingredientItemList, List<ItemStack> seasoningItemList) {
-        World world = getBlock().getWorld();
-
         List<Ingredient> ingredientList = new ArrayList<>();
         ingredientItemList.forEach(item -> {
-            ingredientList.add(new Meat(world, item));
+            ingredientList.add(new Meat(item));
             cooker.getInventory().remove(item);
         });
         if (ingredientList.isEmpty()) return false;

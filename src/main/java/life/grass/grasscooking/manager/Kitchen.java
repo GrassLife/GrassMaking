@@ -12,6 +12,6 @@ import java.util.List;
 public class Kitchen {
 
     public static Cuisine cook(Cooker cooker, List<Ingredient> ingredientList, List<Seasoning> seasoningList) {
-        return new Cuisine(cooker.getBlock().getWorld(), new ItemStack(Material.COOKED_BEEF));
+        return new Cuisine(new ItemStack(Material.COOKED_BEEF));
     }
 }

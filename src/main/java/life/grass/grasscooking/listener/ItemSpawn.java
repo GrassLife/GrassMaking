@@ -18,10 +18,10 @@ public class ItemSpawn implements Listener {
 
         switch (item.getType()) {
             case RAW_CHICKEN:
-                item = new Meat(event.getEntity().getWorld(), item).getItem();
+                item = new Meat(item).getItem();
                 break;
             case COOKED_CHICKEN:
-                item = new Meat(event.getEntity().getWorld(), item).getItem();
+                item = new Meat( item).getItem();
                 break;
         }
 

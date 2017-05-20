@@ -1,68 +1,29 @@
 package life.grass.grasscooking.food;
 
 public enum FoodElement {
-    SWEET("甘さ") {
-        @Override
-        public FoodElement getConflict() {
-            return FoodElement.BITTER;
-        }
-    },
-    BITTER("苦さ") {
-        @Override
-        public FoodElement getConflict() {
-            return FoodElement.SWEET;
-        }
-    },
+    SWEET("甘味", "甘さ", "苦さ"),
+    SPICY("酸味", "酸っぱさ", "辛さ"),
+    SALTY("塩味", "塩辛さ", "淡泊さ"),
+    UMAMI("旨味", "旨さ", "不味さ");
 
-    TART("酸っぱさ") {
-        @Override
-        public FoodElement getConflict() {
-            return FoodElement.SPICY;
-        }
-    },
-    SPICY("辛さ") {
-        @Override
-        public FoodElement getConflict() {
-            return FoodElement.TART;
-        }
-    },
+    private String elementName, uprightName, reversedName;
 
-    SALTY("塩辛さ") {
-        @Override
-        public FoodElement getConflict() {
-            return FoodElement.PLAIN;
-        }
-    },
-    PLAIN("淡泊さ") {
-        @Override
-        public FoodElement getConflict() {
-            return FoodElement.SALTY;
-        }
-    },
-
-    UMAMI("旨さ") {
-        @Override
-        public FoodElement getConflict() {
-            return FoodElement.BRACKISH;
-        }
-    },
-    BRACKISH("不味さ") {
-        @Override
-        public FoodElement getConflict() {
-            return FoodElement.UMAMI;
-        }
-    };
-
-    private String displayName;
-
-    FoodElement(String displayName) {
-        this.displayName = displayName;
+    FoodElement(String name, String uprightName, String reversedName) {
+        this.elementName = name;
+        this.uprightName = uprightName;
+        this.reversedName = reversedName;
     }
 
     @Override
     public String toString() {
-        return displayName;
+        return elementName;
     }
 
-    abstract FoodElement getConflict();
+    public String getUprightName() {
+        return uprightName;
+    }
+
+    public String getReversedName() {
+        return reversedName;
+    }
 }

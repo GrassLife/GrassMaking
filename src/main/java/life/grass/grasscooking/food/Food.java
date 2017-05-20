@@ -14,6 +14,8 @@ public abstract class Food {
             = ChatColor.RED + "消費期限" + ChatColor.GRAY + ": " + ChatColor.RED;
     protected static final String RESTORE_AMOUNT_LORE
             = ChatColor.AQUA + "スタミナ回復量" + ChatColor.GRAY + ": " + ChatColor.AQUA;
+    protected static final String SEPARATOR_LORE
+            = ChatColor.GRAY + "-----------------------";
 
     private ItemStack item;
     private LocalDateTime expireDate;
@@ -29,7 +31,6 @@ public abstract class Food {
         this.effectMap = new HashMap<>();
 
         setExpireDate(expireDate.plusMinutes(40));
-
         updateItem();
     }
 
@@ -41,6 +42,41 @@ public abstract class Food {
                 EXPIRE_DATE_LORE + new LocalDateTimeStringConverter().toString(expireDate),
                 RESTORE_AMOUNT_LORE + restoreAmount
         ));
+
+        if (!elementMap.isEmpty()) lore.addAll(Arrays.asList(" ", SEPARATOR_LORE));
+        elementMap.forEach((key, value) -> {
+                    if (value == 0) return;
+                    String name = value > 0 ? key.getUprightName() : key.getReversedName();
+                    String element = ChatColor.DARK_GRAY + " * " + ChatColor.YELLOW + name + ChatColor.GRAY + ": ";
+
+                    ChatColor color;
+                    for (int i = 1; i <= Math.abs(value); i++) {
+                        switch (i) {
+                            case 1:
+                                color = ChatColor.AQUA;
+                                break;
+                            case 2:
+                                color = ChatColor.GREEN;
+                                break;
+                            case 3:
+                                color = ChatColor.YELLOW;
+                                break;
+                            case 4:
+                                color = ChatColor.GOLD;
+                                break;
+                            case 5:
+                                color = ChatColor.RED;
+                                break;
+                            default:
+                                color = ChatColor.BLACK;
+                        }
+                        element += color + ChatColor.BOLD.toString() + "*";
+                    }
+
+                    lore.add(element);
+                }
+        );
+
         meta.setLore(lore);
 
         item.setItemMeta(meta);

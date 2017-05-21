@@ -118,6 +118,9 @@ public abstract class Food {
     }
 
     public void setElement(FoodElement element, int level) {
+        if (5 < level) level = 5;
+        else if (level < -5) level = -5;
+
         elementMap.put(element, level);
         updateItem();
     }

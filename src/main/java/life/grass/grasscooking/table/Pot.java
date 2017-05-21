@@ -21,8 +21,6 @@ public class Pot extends Cooker {
 
     public Pot(Block block) {
         super(block);
-
-        setCookingTick(5 * 6);
     }
 
     @Override
@@ -67,6 +65,11 @@ public class Pot extends Cooker {
     @Override
     public List<Integer> getSeasoningSpacePositionList() {
         return Arrays.asList(41, 42, 43);
+    }
+
+    @Override
+    public int getCookingTick() {
+        return 5 * 6;
     }
 
     @Override

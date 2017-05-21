@@ -15,7 +15,6 @@ public abstract class Cooker extends Maker implements CookerInterface {
     private static final ItemStack SEASONING_ICON;
 
     private CookingOperation operation;
-    private int cookingTick;
 
     static {
         SEASONING_ICON = createIcon(Material.NAME_TAG, 0, ChatColor.RED + "調味料", null);
@@ -25,7 +24,6 @@ public abstract class Cooker extends Maker implements CookerInterface {
         super(block);
 
         operation = new CookingOperation(block, this);
-        cookingTick = 5 * 4;
     }
 
     @Override
@@ -57,14 +55,14 @@ public abstract class Cooker extends Maker implements CookerInterface {
                 .filter(item -> item != null && item.getType() != Material.AIR)
                 .forEach(seasoningList::add);
 
-        if (operation.precook(ingredientList, seasoningList)) operation.start(cookingTick);
+        if (operation.precook(ingredientList, seasoningList)) operation.start(getCookingTick());
     }
 
     public CookingOperation getOperation() {
         return operation;
     }
 
-    public void setCookingTick(int cookingTick) {
-        this.cookingTick = cookingTick;
+    public int getCookingTick() {
+        return 5 * 4;
     }
 }

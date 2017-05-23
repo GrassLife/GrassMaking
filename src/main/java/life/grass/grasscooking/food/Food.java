@@ -10,18 +10,21 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public abstract class Food {
-    protected static final String EXPIRE_DATE_LORE
-            = ChatColor.RED + "消費期限" + ChatColor.GRAY + ": " + ChatColor.RED;
-    protected static final String RESTORE_AMOUNT_LORE
-            = ChatColor.AQUA + "スタミナ回復量" + ChatColor.GRAY + ": " + ChatColor.AQUA;
-    protected static final String SEPARATOR_LORE
-            = ChatColor.GRAY + "-----------------------";
+    protected static final String EXPIRE_DATE_LORE;
+    protected static final String RESTORE_AMOUNT_LORE;
+    protected static final String SEPARATOR_LORE;
 
     private ItemStack item;
     private LocalDateTime expireDate;
     private int restoreAmount;
     private Map<FoodElement, Integer> elementMap;
     private Map<FoodEffect, Integer> effectMap;
+
+    static {
+        EXPIRE_DATE_LORE = ChatColor.RED + "消費期限" + ChatColor.GRAY + ": " + ChatColor.RED;
+        RESTORE_AMOUNT_LORE = ChatColor.AQUA + "スタミナ回復量" + ChatColor.GRAY + ": " + ChatColor.AQUA;
+        SEPARATOR_LORE = ChatColor.GRAY + "-----------------------";
+    }
 
     public Food(ItemStack item) {
         this.item = item;

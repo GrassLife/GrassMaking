@@ -1,0 +1,22 @@
+{
+  "FoodType": "Salt",
+  "ItemStack": {
+    "Name": "岩塩",
+    "Lore": [
+      "白方の塩"
+    ],
+    "Material": "SUGAR",
+    "Data": 0
+  },
+  "Expire": {
+    "Days": 14,
+    "Hours": 0,
+    "Minutes": 0,
+    "Seconds": 0
+  },
+  "RestoreAmount": 1,
+  "Element": {
+    "SALTY": 4
+  },
+  "Effect": {}
+}

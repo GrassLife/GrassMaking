@@ -1,8 +1,8 @@
 package life.grass.grasscooking.operation;
 
 import life.grass.grasscooking.food.Cuisine;
-import life.grass.grasscooking.food.ingredient.Ingredient;
-import life.grass.grasscooking.food.ingredient.Meat;
+import life.grass.grasscooking.food.Ingredient;
+import life.grass.grasscooking.food.Meat;
 import life.grass.grasscooking.manager.Kitchen;
 import life.grass.grasscooking.table.Cooker;
 import org.bukkit.Material;

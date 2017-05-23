@@ -1,4 +1,4 @@
-package life.grass.grasscooking.food.seasoning;
+package life.grass.grasscooking.food;
 
 import org.bukkit.inventory.ItemStack;
 

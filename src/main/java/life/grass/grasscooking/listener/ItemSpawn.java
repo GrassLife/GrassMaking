@@ -1,7 +1,7 @@
 package life.grass.grasscooking.listener;
 
 import life.grass.grasscooking.food.FoodElement;
-import life.grass.grasscooking.food.ingredient.Meat;
+import life.grass.grasscooking.food.Meat;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemSpawnEvent;

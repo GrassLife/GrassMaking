@@ -23,6 +23,8 @@ public abstract class Operation {
     }
 
     public final void cancel() {
+        if (!isOperating()) return;
+
         onCancel();
         end();
     }

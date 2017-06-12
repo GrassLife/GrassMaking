@@ -15,8 +15,8 @@
     "Seconds": 0
   },
   "RestoreAmount": 1,
-  "Element": {
+  "Element": [
     "SALTY": 4
-  },
-  "Effect": {}
+  ],
+  "Effect": []
 }

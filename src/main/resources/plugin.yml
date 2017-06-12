@@ -1,5 +1,5 @@
-name: GrassCooking
+name: GrassMaking
 version: ${project.version}
-main: life.grass.grasscooking.GrassCooking
+main: life.grass.grassmaking.GrassMaking
 authors: [GrassLife]
 depend: [GrassPlayer]

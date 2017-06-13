@@ -1,6 +1,8 @@
 package life.grass.grassmaking.food;
 
 import javafx.util.converter.LocalDateTimeStringConverter;
+import life.grass.grassitem.GrassItem;
+import life.grass.grassmaking.tag.CookingTag;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -28,10 +30,13 @@ public abstract class Food {
 
     public Food(ItemStack item) {
         this.item = item;
-        this.expireDate = LocalDateTime.now();
-        this.restoreAmount = 20;
+
+        GrassItem grassItem = new GrassItem(item);
+        this.expireDate = grassItem.hasNBT(CookingTag.EXPIRE_DATE) ? LocalDateTime.parse((String) grassItem.getNBT(CookingTag.EXPIRE_DATE).get()) : LocalDateTime.now();
+        this.restoreAmount = grassItem.hasNBT(CookingTag.RESTORE_AMOUNT) ? (int) grassItem.getNBT(CookingTag.RESTORE_AMOUNT).get() : 0;
         this.elementMap = new HashMap<>();
         this.effectMap = new HashMap<>();
+        grassItem.getNBT(CookingTag.ELEMENT).ifPresent(obj -> ((Map<String, Integer>) obj).forEach((element, level) -> elementMap.put(FoodElement.valueOf(element), level)));
 
         setExpireDate(expireDate.plusMinutes(40));
         updateItem();
@@ -83,6 +88,13 @@ public abstract class Food {
         meta.setLore(lore);
 
         item.setItemMeta(meta);
+
+        GrassItem grassItem = new GrassItem(item);
+        grassItem.setNBT(CookingTag.EXPIRE_DATE, expireDate.toString());
+        grassItem.setNBT(CookingTag.RESTORE_AMOUNT, restoreAmount);
+        grassItem.setNBT(CookingTag.ELEMENT, elementMap);
+
+        this.item = grassItem.toItemStack();
     }
 
     public ItemStack getItem() {

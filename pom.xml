@@ -72,17 +72,17 @@
         </dependency>
         <dependency>
             <groupId>life.grass</groupId>
-            <artifactId>GrassMaking</artifactId>
+            <artifactId>GrassPlayer</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/GrassPlayer.jar</systemPath>
+            <systemPath>${basedir}/GrassPlayer-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>life.grass</groupId>
-            <artifactId>GrassMaking</artifactId>
+            <artifactId>GrassItem</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/GrassItem.jar</systemPath>
+            <systemPath>${basedir}/GrassItem-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

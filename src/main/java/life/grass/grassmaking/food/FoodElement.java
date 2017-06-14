@@ -16,6 +16,10 @@ public enum FoodElement {
 
     @Override
     public String toString() {
+        return this.name();
+    }
+
+    public String getElementName() {
         return elementName;
     }
 

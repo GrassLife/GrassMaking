@@ -24,15 +24,6 @@ public class PlayerInteract implements Listener {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
 
-        // debugging
-        if (event.getItem() != null && event.getAction() == Action.LEFT_CLICK_AIR) {
-            GrassItem grassItem = new GrassItem(event.getItem());
-            Arrays.stream(CookingTag.values()).forEach(tag -> {
-                player.sendMessage(tag.getKey() + ": " + (grassItem.hasNBT(tag) ? grassItem.getNBT(tag).toString() : "NULL"));
-            });
-            return;
-        }
-
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK
                 || event.getHand() != EquipmentSlot.HAND) {
             return;

@@ -36,7 +36,7 @@ public abstract class Food {
         this.restoreAmount = grassItem.hasNBT(CookingTag.RESTORE_AMOUNT) ? (int) grassItem.getNBT(CookingTag.RESTORE_AMOUNT).get() : 0;
         this.elementMap = new HashMap<>();
         this.effectMap = new HashMap<>();
-        grassItem.getNBT(CookingTag.ELEMENT).ifPresent(obj -> ((Map<String, Integer>) obj).forEach((element, level) -> elementMap.put(FoodElement.valueOf(element), level)));
+        grassItem.getNBT(CookingTag.ELEMENT).ifPresent(obj -> ((Map<String, String>) obj).forEach((element, level) -> elementMap.put(FoodElement.valueOf(element), Integer.valueOf(level))));
 
         setExpireDate(expireDate.plusMinutes(40));
         updateItem();

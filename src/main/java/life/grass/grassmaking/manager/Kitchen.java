@@ -7,15 +7,15 @@ import life.grass.grassmaking.tag.CookingTag;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 public class Kitchen {
 
     public static Cuisine cook(Cooker cooker, List<Ingredient> ingredientList, List<Seasoning> seasoningList) {
         // TODO: change
         Cuisine cuisine = new Cuisine(new ItemStack(Material.COOKED_BEEF));
+        cuisine.setExpireDate(LocalDateTime.now().plusDays(1));
         cuisine.setElement(FoodElement.SALTY, (int) (Math.random() * 2));
         cuisine.setElement(FoodElement.UMAMI, (int) (Math.random() * 3));
         return cuisine;
@@ -39,15 +39,22 @@ public class Kitchen {
             }
         }
 
+        Food food;
         switch (foodType) {
             case CUISINE:
-                return new Cuisine(item);
+                food = new Cuisine(item);
+                break;
             case INGREDIENT_MEAT:
-                return new Meat(item);
+                food = new Meat(item);
+                break;
             case SEASONING_SALT:
-                return new Salt(item);
+                food = new Salt(item);
+                break;
+            default:
+                food = null;
+                break;
         }
 
-        return null;
+        return food;
     }
 }

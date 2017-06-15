@@ -41,7 +41,6 @@ public abstract class Food {
         if (itemFoodType == FoodType.UNKNOWN) {
             this.expireDate = LocalDateTime.now();
             this.restoreAmount = 1;
-            return;
         } else {
             this.expireDate = LocalDateTime.parse((String) grassItem.getNBT(CookingTag.EXPIRE_DATE).get());
             this.restoreAmount = (int) grassItem.getNBT(CookingTag.RESTORE_AMOUNT).get();

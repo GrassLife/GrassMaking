@@ -33,16 +33,16 @@ public abstract class Food {
         this.item = item;
 
         GrassItem grassItem = new GrassItem(item);
+        FoodType itemFoodType = grassItem.hasNBT(CookingTag.FOOD_TYPE) ? FoodType.valueOf((String) grassItem.getNBT(CookingTag.FOOD_TYPE).get()) : FoodType.UNKNOWN;
 
+        this.foodType = itemFoodType;
         this.elementMap = new HashMap<>();
         this.effectMap = new HashMap<>();
-        if (!grassItem.hasNBT(CookingTag.FOOD_TYPE)) {
-            this.foodType = FoodType.UNKNOWN;
+        if (itemFoodType == FoodType.UNKNOWN) {
             this.expireDate = LocalDateTime.now();
             this.restoreAmount = 1;
             return;
         } else {
-            this.foodType = FoodType.valueOf((String) grassItem.getNBT(CookingTag.FOOD_TYPE).get());
             this.expireDate = LocalDateTime.parse((String) grassItem.getNBT(CookingTag.EXPIRE_DATE).get());
             this.restoreAmount = (int) grassItem.getNBT(CookingTag.RESTORE_AMOUNT).get();
             grassItem.getNBT(CookingTag.ELEMENT)

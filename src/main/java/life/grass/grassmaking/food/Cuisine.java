@@ -6,5 +6,6 @@ public class Cuisine extends Food {
 
     public Cuisine(ItemStack item) {
         super(item);
+        setFoodType(FoodType.CUISINE);
     }
 }

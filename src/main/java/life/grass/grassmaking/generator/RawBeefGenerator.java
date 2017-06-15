@@ -13,8 +13,9 @@ public class RawBeefGenerator extends Generator {
     public ItemStack generate(ItemStack item) {
         Meat meat = (Meat) Kitchen.generateFoodFromItemStack(item);
         assert meat != null;
-        meat.setRestoreAmount(2);
-        meat.setExpireDate(LocalDateTime.now().plusDays(3));
+        meat.setRestoreAmount(5);
+        meat.setWeight((int) (200 + (100 * Math.random() - 50)));
+        meat.setExpireDate(LocalDateTime.now().plusDays(1).plusHours(12));
         meat.increaseElement(FoodElement.UMAMI, (int) (Math.random() * 4) - 2);
 
         return meat.getItem();

@@ -14,6 +14,7 @@ import java.util.*;
 public abstract class Food {
     protected static final String EXPIRE_DATE_LORE;
     protected static final String RESTORE_AMOUNT_LORE;
+    protected static final String WEIGHT_LORE;
     protected static final String SEPARATOR_LORE;
 
     private ItemStack item;
@@ -27,6 +28,7 @@ public abstract class Food {
     static {
         EXPIRE_DATE_LORE = ChatColor.RED + "消費期限" + ChatColor.GRAY + ": " + ChatColor.RED;
         RESTORE_AMOUNT_LORE = ChatColor.AQUA + "スタミナ回復量" + ChatColor.GRAY + ": " + ChatColor.AQUA;
+        WEIGHT_LORE = ChatColor.YELLOW + "重量[g]" + ChatColor.GRAY + ": " + ChatColor.YELLOW;
         SEPARATOR_LORE = ChatColor.GRAY + "-----------------------";
     }
 
@@ -39,13 +41,14 @@ public abstract class Food {
         this.foodType = itemFoodType;
         this.elementMap = new HashMap<>();
         this.effectMap = new HashMap<>();
-        this.weight = 1;
         if (itemFoodType == FoodType.UNKNOWN) {
             this.expireDate = LocalDateTime.now();
             this.restoreAmount = 1;
+            this.weight = 10;
         } else {
             this.expireDate = LocalDateTime.parse((String) grassItem.getNBT(CookingTag.EXPIRE_DATE).get());
             this.restoreAmount = (int) grassItem.getNBT(CookingTag.RESTORE_AMOUNT).get();
+            this.weight = (int) grassItem.getNBT(CookingTag.WEIGHT).get();
             grassItem.getNBT(CookingTag.ELEMENT)
                     .ifPresent(obj -> ((Map<String, String>) obj)
                             .forEach((element, level) -> elementMap.put(FoodElement.valueOf(element), Integer.valueOf(level)))
@@ -61,7 +64,8 @@ public abstract class Food {
         List<String> lore = new ArrayList<>();
         lore.addAll(Arrays.asList(
                 EXPIRE_DATE_LORE + new LocalDateTimeStringConverter().toString(expireDate),
-                RESTORE_AMOUNT_LORE + restoreAmount
+                RESTORE_AMOUNT_LORE + restoreAmount,
+                WEIGHT_LORE + weight
         ));
 
         if (!elementMap.isEmpty()) lore.addAll(Arrays.asList(" ", SEPARATOR_LORE));
@@ -133,7 +137,11 @@ public abstract class Food {
     }
 
     public void setWeight(int weight) {
-        if (0 < weight) this.weight = weight;
+        if (10 <= weight) {
+            weight /= 10;
+            weight *= 10;
+            this.weight = weight;
+        }
     }
 
     public LocalDateTime getExpireDate() {

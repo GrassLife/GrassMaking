@@ -8,6 +8,7 @@ public enum CookingTag implements GrassNBTTag {
     FOOD_TYPE("FoodType", String.class),
     EXPIRE_DATE("ExpireDate", String.class),
     RESTORE_AMOUNT("RestoreAmount", Integer.class),
+    WEIGHT("Weight", Integer.class),
     ELEMENT("Element", HashMap.class);
 
     private String key;

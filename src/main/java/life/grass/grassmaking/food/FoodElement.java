@@ -8,8 +8,8 @@ public enum FoodElement {
 
     private String elementName, uprightName, reversedName;
 
-    FoodElement(String name, String uprightName, String reversedName) {
-        this.elementName = name;
+    FoodElement(String elementName, String uprightName, String reversedName) {
+        this.elementName = elementName;
         this.uprightName = uprightName;
         this.reversedName = reversedName;
     }

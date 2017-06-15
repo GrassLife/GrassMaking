@@ -18,6 +18,7 @@ public abstract class Food {
 
     private ItemStack item;
     private FoodType foodType;
+    private int weight;
     private LocalDateTime expireDate;
     private int restoreAmount;
     private Map<FoodElement, Integer> elementMap;
@@ -38,6 +39,7 @@ public abstract class Food {
         this.foodType = itemFoodType;
         this.elementMap = new HashMap<>();
         this.effectMap = new HashMap<>();
+        this.weight = 1;
         if (itemFoodType == FoodType.UNKNOWN) {
             this.expireDate = LocalDateTime.now();
             this.restoreAmount = 1;
@@ -124,6 +126,14 @@ public abstract class Food {
     public void setFoodType(FoodType foodType) {
         this.foodType = foodType;
         updateItem();
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        if (0 < weight) this.weight = weight;
     }
 
     public LocalDateTime getExpireDate() {

@@ -1,10 +1,9 @@
 package life.grass.grassmaking.manager;
 
-import life.grass.grassmaking.food.Cuisine;
-import life.grass.grassmaking.food.FoodElement;
-import life.grass.grassmaking.food.Ingredient;
-import life.grass.grassmaking.food.Seasoning;
+import life.grass.grassitem.GrassItem;
+import life.grass.grassmaking.food.*;
 import life.grass.grassmaking.table.Cooker;
+import life.grass.grassmaking.tag.CookingTag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -24,5 +23,32 @@ public class Kitchen {
         elementMap.forEach((key, value) -> cuisine.setElement(key, value / cuisine.getItem().getAmount()));
 
         return cuisine;
+    }
+
+    public static Food generateFoodFromItemStack(ItemStack item) {
+        GrassItem grassItem = new GrassItem(item);
+        FoodType foodType = grassItem.hasNBT(CookingTag.FOOD_TYPE) ? FoodType.valueOf((String) grassItem.getNBT(CookingTag.FOOD_TYPE).get()) : null;
+
+        if (foodType == null) {
+            switch (item.getType()) {
+                case RAW_BEEF:
+                case RAW_CHICKEN:
+                case RABBIT:
+                case MUTTON:
+                    foodType = FoodType.INGREDIENT_MEAT;
+                    break;
+            }
+        }
+
+        switch (foodType) {
+            case CUISINE:
+                return new Cuisine(item);
+            case INGREDIENT_MEAT:
+                return new Meat(item);
+            case SEASONING_SALT:
+                return new Salt(item);
+        }
+
+        return null;
     }
 }

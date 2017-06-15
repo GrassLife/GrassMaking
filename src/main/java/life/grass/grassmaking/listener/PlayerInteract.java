@@ -1,12 +1,10 @@
 package life.grass.grassmaking.listener;
 
-import life.grass.grassitem.GrassItem;
 import life.grass.grassmaking.GrassMaking;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.operation.Operable;
 import life.grass.grassmaking.table.Pot;
 import life.grass.grassmaking.table.Table;
-import life.grass.grassmaking.tag.CookingTag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,8 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-
-import java.util.Arrays;
 
 public class PlayerInteract implements Listener {
 
@@ -39,10 +35,8 @@ public class PlayerInteract implements Listener {
                 break;
         }
 
-        if (table != null) {
-            if (table instanceof Operable) {
-                if (((Operable) table).getOperation().isOperating()) return;
-            }
+        if (table instanceof Operable) {
+            if (((Operable) table).getOperation().isOperating()) return;
 
             player.openInventory(table.getInventory());
         }

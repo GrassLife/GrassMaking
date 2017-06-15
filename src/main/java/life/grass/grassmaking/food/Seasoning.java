@@ -2,9 +2,8 @@ package life.grass.grassmaking.food;
 
 import org.bukkit.inventory.ItemStack;
 
-public abstract class Seasoning extends Food {
-
-    protected Seasoning(ItemStack item) {
+public class Seasoning extends Food {
+    public Seasoning(ItemStack item) {
         super(item);
     }
 }

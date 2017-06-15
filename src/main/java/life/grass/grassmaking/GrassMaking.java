@@ -1,6 +1,7 @@
 package life.grass.grassmaking;
 
 import life.grass.grassmaking.listener.*;
+import life.grass.grassmaking.manager.GeneratorManager;
 import life.grass.grassmaking.manager.JsonFoodHamper;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.operation.Operable;
@@ -13,6 +14,7 @@ public final class GrassMaking extends JavaPlugin {
     private static GrassMaking instance;
     private static TableManager tableManager;
     private static JsonFoodHamper foodHamper;
+    private static GeneratorManager generatorManager;
 
     @Override
     public void onEnable() {
@@ -20,6 +22,7 @@ public final class GrassMaking extends JavaPlugin {
         instance = this;
         tableManager = new TableManager();
         foodHamper = new JsonFoodHamper();
+        generatorManager = new GeneratorManager();
 
         this.registerEvents();
     }
@@ -52,10 +55,15 @@ public final class GrassMaking extends JavaPlugin {
         return foodHamper;
     }
 
+    public static GeneratorManager getGeneratorManager() {
+        return generatorManager;
+    }
+
     private void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
 
         pm.registerEvents(new ChunkLoad(), this);
+        pm.registerEvents(new EntityDeath(), this);
         pm.registerEvents(new InventoryClick(), this);
         pm.registerEvents(new ItemSpawn(), this);
         pm.registerEvents(new PlayerInteract(), this);

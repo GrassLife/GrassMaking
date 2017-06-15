@@ -2,7 +2,6 @@ package life.grass.grassmaking.operation;
 
 import life.grass.grassmaking.food.Cuisine;
 import life.grass.grassmaking.food.Ingredient;
-import life.grass.grassmaking.food.Meat;
 import life.grass.grassmaking.manager.Kitchen;
 import life.grass.grassmaking.table.Cooker;
 import org.bukkit.Material;
@@ -23,17 +22,18 @@ public class CookingOperation extends VisualOperation {
     public CookingOperation(Block block, Cooker cooker) {
         super(block);
 
-        // TODO: change
         this.mainIngredient = new ItemStack(Material.RAW_BEEF);
         this.cooker = cooker;
     }
 
     public boolean precook(List<ItemStack> ingredientItemList, List<ItemStack> seasoningItemList) {
         List<Ingredient> ingredientList = new ArrayList<>();
-        ingredientItemList.forEach(item -> {
-            ingredientList.add(new Meat(item));
-            cooker.getInventory().remove(item);
-        });
+        ingredientItemList.stream()
+                .filter(item -> Kitchen.generateFoodFromItemStack(item) instanceof Ingredient)
+                .forEach(item -> {
+                    ingredientList.add((Ingredient) Kitchen.generateFoodFromItemStack(item));
+                    cooker.getInventory().remove(item);
+                });
         if (ingredientList.isEmpty()) return false;
 
         this.cuisine = Kitchen.cook(cooker, ingredientList, new ArrayList<>());

@@ -5,6 +5,7 @@ import life.grass.grassitem.GrassNBTTag;
 import java.util.HashMap;
 
 public enum CookingTag implements GrassNBTTag {
+    FOOD_TYPE("FoodType", String.class),
     EXPIRE_DATE("ExpireDate", String.class),
     RESTORE_AMOUNT("RestoreAmount", Integer.class),
     ELEMENT("Element", HashMap.class);

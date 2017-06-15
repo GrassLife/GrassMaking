@@ -17,6 +17,7 @@ public abstract class Food {
     protected static final String SEPARATOR_LORE;
 
     private ItemStack item;
+    private FoodType foodType;
     private LocalDateTime expireDate;
     private int restoreAmount;
     private Map<FoodElement, Integer> elementMap;
@@ -28,17 +29,28 @@ public abstract class Food {
         SEPARATOR_LORE = ChatColor.GRAY + "-----------------------";
     }
 
-    public Food(ItemStack item) {
+    /* package */ Food(ItemStack item) {
         this.item = item;
 
         GrassItem grassItem = new GrassItem(item);
-        this.expireDate = grassItem.hasNBT(CookingTag.EXPIRE_DATE) ? LocalDateTime.parse((String) grassItem.getNBT(CookingTag.EXPIRE_DATE).get()) : LocalDateTime.now();
-        this.restoreAmount = grassItem.hasNBT(CookingTag.RESTORE_AMOUNT) ? (int) grassItem.getNBT(CookingTag.RESTORE_AMOUNT).get() : 0;
+
         this.elementMap = new HashMap<>();
         this.effectMap = new HashMap<>();
-        grassItem.getNBT(CookingTag.ELEMENT).ifPresent(obj -> ((Map<String, String>) obj).forEach((element, level) -> elementMap.put(FoodElement.valueOf(element), Integer.valueOf(level))));
+        if (!grassItem.hasNBT(CookingTag.FOOD_TYPE)) {
+            this.foodType = FoodType.UNKNOWN;
+            this.expireDate = LocalDateTime.now();
+            this.restoreAmount = 1;
+            return;
+        } else {
+            this.foodType = FoodType.valueOf((String) grassItem.getNBT(CookingTag.FOOD_TYPE).get());
+            this.expireDate = LocalDateTime.parse((String) grassItem.getNBT(CookingTag.EXPIRE_DATE).get());
+            this.restoreAmount = (int) grassItem.getNBT(CookingTag.RESTORE_AMOUNT).get();
+            grassItem.getNBT(CookingTag.ELEMENT)
+                    .ifPresent(obj -> ((Map<String, String>) obj)
+                            .forEach((element, level) -> elementMap.put(FoodElement.valueOf(element), Integer.valueOf(level)))
+                    );
+        }
 
-        setExpireDate(expireDate.plusMinutes(40));
         updateItem();
     }
 
@@ -106,6 +118,15 @@ public abstract class Food {
         updateItem();
     }
 
+    public FoodType getFoodType() {
+        return foodType;
+    }
+
+    public void setFoodType(FoodType foodType) {
+        this.foodType = foodType;
+        updateItem();
+    }
+
     public LocalDateTime getExpireDate() {
         return expireDate;
     }
@@ -160,9 +181,5 @@ public abstract class Food {
 
     public void increaseEffect(FoodEffect effect, int level) {
         setEffect(effect, getEffectLevel(effect) + level);
-    }
-
-    public String getFoodType() {
-        return getClass().getSimpleName();
     }
 }

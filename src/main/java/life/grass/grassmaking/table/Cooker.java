@@ -26,6 +26,8 @@ public abstract class Cooker extends Maker implements CookerInterface {
         operation = new CookingOperation(block, this);
     }
 
+    public abstract String getCookingPrefix();
+
     @Override
     public ItemStack getSeasoningIcon() {
         return SEASONING_ICON;

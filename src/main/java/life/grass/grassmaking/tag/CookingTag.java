@@ -6,9 +6,11 @@ import java.util.HashMap;
 
 public enum CookingTag implements GrassNBTTag {
     FOOD_TYPE("FoodType", String.class),
+    FOOD_NAME("FoodName", String.class),
     EXPIRE_DATE("ExpireDate", String.class),
     RESTORE_AMOUNT("RestoreAmount", Integer.class),
     WEIGHT("Weight", Integer.class),
+    AFTER_MATERIAL("AfterMaterial", String.class),
     ELEMENT("Element", HashMap.class);
 
     private String key;

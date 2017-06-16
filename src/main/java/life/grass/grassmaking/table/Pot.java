@@ -12,11 +12,13 @@ public class Pot extends Cooker {
     private static final ItemStack PADDING_ICON_FENCE;
     private static final ItemStack PADDING_ICON_FIRE;
     private static final ItemStack MAKING_ICON;
+    private static final String COOKING_PREFIX;
 
     static {
         PADDING_ICON_FENCE = createIcon(Material.IRON_FENCE, 0, null, null);
         PADDING_ICON_FIRE = createIcon(Material.STAINED_GLASS_PANE, 14, null, null);
         MAKING_ICON = createIcon(Material.CAULDRON_ITEM, 0, ChatColor.RED + "調理する", null);
+        COOKING_PREFIX = "焼いた";
     }
 
     public Pot(Block block) {
@@ -80,5 +82,10 @@ public class Pot extends Cooker {
     @Override
     public List<Integer> getIngredientSpacePositionList() {
         return Arrays.asList(10, 11, 12, 13, 19, 20, 21, 22, 29, 30);
+    }
+
+    @Override
+    public String getCookingPrefix() {
+        return COOKING_PREFIX;
     }
 }

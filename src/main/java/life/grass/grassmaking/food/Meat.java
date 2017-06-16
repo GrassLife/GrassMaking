@@ -8,4 +8,9 @@ public class Meat extends Ingredient {
         super(item);
         setFoodType(FoodType.INGREDIENT_MEAT);
     }
+
+    @Override
+    public int getExpireHours() {
+        return 18;
+    }
 }

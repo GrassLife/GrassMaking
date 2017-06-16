@@ -7,4 +7,8 @@ public abstract class Ingredient extends Food {
     protected Ingredient(ItemStack item) {
         super(item);
     }
+
+    public int getExpireHours() {
+        return 48;
+    }
 }

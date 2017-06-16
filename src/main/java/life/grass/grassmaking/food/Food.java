@@ -4,6 +4,7 @@ import javafx.util.converter.LocalDateTimeStringConverter;
 import life.grass.grassitem.GrassItem;
 import life.grass.grassmaking.tag.CookingTag;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -19,7 +20,9 @@ public abstract class Food {
 
     private ItemStack item;
     private FoodType foodType;
+    private String foodName;
     private int weight;
+    private Material afterMaterial;
     private LocalDateTime expireDate;
     private int restoreAmount;
     private Map<FoodElement, Integer> elementMap;
@@ -39,16 +42,20 @@ public abstract class Food {
         FoodType itemFoodType = grassItem.hasNBT(CookingTag.FOOD_TYPE) ? FoodType.valueOf((String) grassItem.getNBT(CookingTag.FOOD_TYPE).get()) : FoodType.UNKNOWN;
 
         this.foodType = itemFoodType;
+        this.foodName = "--";
         this.elementMap = new HashMap<>();
         this.effectMap = new HashMap<>();
         if (itemFoodType == FoodType.UNKNOWN) {
             this.expireDate = LocalDateTime.now();
             this.restoreAmount = 1;
             this.weight = 10;
+            this.afterMaterial = Material.COOKED_BEEF;
         } else {
+            this.foodName = (String) grassItem.getNBT(CookingTag.FOOD_NAME).get();
             this.expireDate = LocalDateTime.parse((String) grassItem.getNBT(CookingTag.EXPIRE_DATE).get());
             this.restoreAmount = (int) grassItem.getNBT(CookingTag.RESTORE_AMOUNT).get();
             this.weight = (int) grassItem.getNBT(CookingTag.WEIGHT).get();
+            this.afterMaterial = Material.valueOf((String) grassItem.getNBT(CookingTag.AFTER_MATERIAL).get());
             grassItem.getNBT(CookingTag.ELEMENT)
                     .ifPresent(obj -> ((Map<String, String>) obj)
                             .forEach((element, level) -> elementMap.put(FoodElement.valueOf(element), Integer.valueOf(level)))
@@ -60,6 +67,8 @@ public abstract class Food {
 
     protected void updateItem() {
         ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(ChatColor.GRAY + getFoodName());
 
         List<String> lore = new ArrayList<>();
         lore.addAll(Arrays.asList(
@@ -107,9 +116,13 @@ public abstract class Food {
         item.setItemMeta(meta);
 
         GrassItem grassItem = new GrassItem(item);
+        grassItem.setNBT(CookingTag.FOOD_TYPE, foodType.toString());
+        grassItem.setNBT(CookingTag.FOOD_NAME, foodName);
         grassItem.setNBT(CookingTag.EXPIRE_DATE, expireDate.toString());
         grassItem.setNBT(CookingTag.RESTORE_AMOUNT, restoreAmount);
+        grassItem.setNBT(CookingTag.WEIGHT, weight);
         grassItem.setNBT(CookingTag.ELEMENT, elementMap);
+        grassItem.setNBT(CookingTag.AFTER_MATERIAL, afterMaterial.toString());
 
         this.item = grassItem.toItemStack();
     }
@@ -132,6 +145,14 @@ public abstract class Food {
         updateItem();
     }
 
+    public String getFoodName() {
+        return foodName;
+    }
+
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
+    }
+
     public int getWeight() {
         return weight;
     }
@@ -142,6 +163,14 @@ public abstract class Food {
             weight *= 10;
             this.weight = weight;
         }
+    }
+
+    public Material getAfterMaterial() {
+        return afterMaterial;
+    }
+
+    public void setAfterMaterial(Material material) {
+        this.afterMaterial = afterMaterial;
     }
 
     public LocalDateTime getExpireDate() {

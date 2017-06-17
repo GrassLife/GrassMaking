@@ -1,6 +1,7 @@
 package life.grass.grassmaking.table;
 
 import life.grass.grassmaking.food.Food;
+import life.grass.grassmaking.food.FoodElement;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -9,9 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class IronPlate extends Cooker {
     private static final ItemStack PADDING_ICON_FENCE;
@@ -57,7 +56,12 @@ public class IronPlate extends Cooker {
 
         cuisine.setAdditionalRestoreAmount(weight / 5);
 
-        // TODO: write element
+        Map<FoodElement, Integer> elementMap = new HashMap<>();
+        ingredientList.forEach(ingredient -> ingredient.getTotalElementMap().forEach((key, value) -> elementMap.put(key, value / 2)));
+        seasoningList.forEach(seasoning -> seasoning.getTotalElementMap().forEach((key, value) -> elementMap.put(key, value * 2)));
+        elementMap.forEach((key, value) -> cuisine.increaseAdditionalElement(key, value / amount));
+
+        cuisine.setName("焼いた" + mainIngredient);
 
         return cuisine;
     }

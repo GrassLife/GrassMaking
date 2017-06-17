@@ -2,4 +2,4 @@ name: GrassMaking
 version: ${project.version}
 main: life.grass.grassmaking.GrassMaking
 authors: [GrassLife]
-depend: [GrassPlayer, GrassItem]
+depend: [GrassPlayer, GrassItem, ProtocolLib]

@@ -1,5 +1,6 @@
 package life.grass.grassmaking.table;
 
+import life.grass.grassmaking.food.Food;
 import life.grass.grassmaking.operation.CookingOperation;
 import life.grass.grassmaking.ui.CookerInterface;
 import org.bukkit.ChatColor;
@@ -23,10 +24,10 @@ public abstract class Cooker extends Maker implements CookerInterface {
     public Cooker(Block block) {
         super(block);
 
-        operation = new CookingOperation(block, this);
+        operation = new CookingOperation(block);
     }
 
-    public abstract String getCookingPrefix();
+    protected abstract Food cook(List<Food> ingredientList, List<Food> seasoningList);
 
     @Override
     public ItemStack getSeasoningIcon() {
@@ -45,19 +46,27 @@ public abstract class Cooker extends Maker implements CookerInterface {
 
     @Override
     public void onPressedMaking() {
-        List<ItemStack> ingredientList = new ArrayList<>();
+        List<Food> ingredientList = new ArrayList<>();
         getIngredientSpacePositionList().stream()
                 .map(position -> getInventory().getItem(position))
                 .filter(item -> item != null && item.getType() != Material.AIR)
+                .map(Food::fromItemStack)
+                .filter(food -> food != null && food.getType().toString().startsWith("INGREDIENT_"))
                 .forEach(ingredientList::add);
 
-        List<ItemStack> seasoningList = new ArrayList<>();
+        List<Food> seasoningList = new ArrayList<>();
         getSeasoningSpacePositionList().stream()
                 .map(position -> getInventory().getItem(position))
                 .filter(item -> item != null && item.getType() != Material.AIR)
+                .map(Food::fromItemStack)
+                .filter(food -> food != null && food.getType().toString().startsWith("SEASONING_"))
                 .forEach(seasoningList::add);
 
-        if (operation.precook(ingredientList, seasoningList)) operation.start(getCookingTick());
+        Food result = cook(ingredientList, seasoningList);
+        if (result != null) {
+            operation.setCuisine(result);
+            operation.start(getCookingTick());
+        }
     }
 
     public CookingOperation getOperation() {
@@ -66,5 +75,17 @@ public abstract class Cooker extends Maker implements CookerInterface {
 
     public int getCookingTick() {
         return 5 * 4;
+    }
+
+    protected void subtractOneItem(Inventory inventory, ItemStack item) {
+        for (int slot = 0; slot < inventory.getSize(); slot++) {
+            ItemStack slotItem = inventory.getItem(slot);
+
+
+            if (slotItem != null && slotItem.isSimilar(item)) {
+                inventory.setItem(slot, null);
+                return;
+            }
+        }
     }
 }

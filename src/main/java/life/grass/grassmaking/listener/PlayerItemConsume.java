@@ -1,7 +1,6 @@
 package life.grass.grassmaking.listener;
 
-import life.grass.grassitem.GrassItem;
-import life.grass.grassmaking.tag.CookingTag;
+import life.grass.grassmaking.food.Food;
 import life.grass.grassplayer.GrassPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,11 +19,11 @@ public class PlayerItemConsume implements Listener {
         Player player = event.getPlayer();
         PlayerInventory inv = player.getInventory();
         ItemStack item = event.getItem().clone();
-        GrassItem grassItem = new GrassItem(item);
+        Food food = Food.fromItemStack(item);
 
         event.setCancelled(true);
 
-        if (!grassItem.hasNBT(CookingTag.RESTORE_AMOUNT)) return;
+        if (food == null) food = Food.fromItemStack(new ItemStack(Material.RAW_BEEF));
 
         if (item.getAmount() < 2) {
             item.setType(Material.AIR);
@@ -41,11 +40,12 @@ public class PlayerItemConsume implements Listener {
         }
 
         GrassPlayer grassPlayer = GrassPlayer.findOrCreate(event.getPlayer());
-        if (LocalDateTime.parse((String) grassItem.getNBT(CookingTag.EXPIRE_DATE).get()).isBefore(LocalDateTime.now())) {
+        if (food.getExpireDate().isBefore(LocalDateTime.now())) {
             grassPlayer.incrementEffectiveStamina(-10);
         } else {
-            grassPlayer.incrementEffectiveStamina((int) grassItem.getNBT(CookingTag.RESTORE_AMOUNT).get());
+            grassPlayer.incrementEffectiveStamina(food.getTotalRestoreAmount());
         }
+
         player.updateInventory();
     }
 }

@@ -1,7 +1,9 @@
 package life.grass.grassmaking.listener;
 
+import life.grass.grassitem.GrassItem;
+import life.grass.grassitem.tag.UnityTag;
+import life.grass.grassmaking.food.Food;
 import life.grass.grassmaking.food.FoodElement;
-import life.grass.grassmaking.food.Meat;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemSpawnEvent;
@@ -12,24 +14,17 @@ public class ItemSpawn implements Listener {
     @EventHandler
     public void onItemSpawn(ItemSpawnEvent event) {
         ItemStack item = event.getEntity().getItemStack();
+        GrassItem grassItem = new GrassItem(item);
+        if (grassItem.hasNBT(UnityTag.JSON_NAME)) return;
 
-        if (!true /* check it does not have any GrassItem types */) {
-            return;
-        }
-
+        Food food = null;
         switch (item.getType()) {
-            case RAW_CHICKEN:
-                Meat meat = new Meat(item);
-                meat.setElement(FoodElement.SWEET, -1);
-                meat.setElement(FoodElement.SALTY, 3);
-                meat.setElement(FoodElement.UMAMI, 2);
-                item = meat.getItem();
-                break;
-            case COOKED_CHICKEN:
-                item = new Meat(item).getItem();
-                break;
+            case RAW_BEEF:
+                food = Food.fromItemStack(item);
+                food.setAdditionalWeight((int) (Math.random() * 80.0) - 40);
+                food.increaseAdditionalElement(FoodElement.SACHI, (int) (Math.random() + 0.5));
         }
 
-        event.getEntity().setItemStack(item);
+        if (food != null) event.getEntity().setItemStack(food.getItem());
     }
 }

@@ -3,9 +3,11 @@ package life.grass.grassmaking.listener;
 import life.grass.grassmaking.GrassMaking;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.operation.Operable;
-import life.grass.grassmaking.table.Pot;
+import life.grass.grassmaking.table.IronPlate;
 import life.grass.grassmaking.table.Table;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,8 +32,9 @@ public class PlayerInteract implements Listener {
         // TODO: change
         Table table = null;
         switch (block.getType()) {
-            case CAULDRON:
-                table = tableManager.findTable(block).orElseGet(() -> tableManager.createTable(block, Pot.class));
+            case STONE_PLATE:
+                if (block.getRelative(BlockFace.DOWN).getType() == Material.MAGMA)
+                    table = tableManager.findTable(block).orElseGet(() -> tableManager.createTable(block, IronPlate.class));
                 break;
         }
 

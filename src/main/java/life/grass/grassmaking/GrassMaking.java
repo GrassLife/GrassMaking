@@ -1,11 +1,12 @@
 package life.grass.grassmaking;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import life.grass.grassmaking.listener.*;
-import life.grass.grassmaking.manager.GeneratorManager;
-import life.grass.grassmaking.manager.JsonFoodHamper;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.operation.Operable;
 import life.grass.grassmaking.operation.Operation;
+import life.grass.grassmaking.protocol.ItemPacketRewriter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,18 +14,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class GrassMaking extends JavaPlugin {
     private static GrassMaking instance;
     private static TableManager tableManager;
-    private static JsonFoodHamper foodHamper;
-    private static GeneratorManager generatorManager;
+    private static ProtocolManager protocolManager;
 
     @Override
     public void onEnable() {
         super.onEnable();
         instance = this;
         tableManager = new TableManager();
-        foodHamper = new JsonFoodHamper();
-        generatorManager = new GeneratorManager();
+        protocolManager = ProtocolLibrary.getProtocolManager();
 
         this.registerEvents();
+        ItemPacketRewriter.getInstance().addListener(protocolManager, this);
     }
 
     @Override
@@ -51,19 +51,10 @@ public final class GrassMaking extends JavaPlugin {
         return tableManager;
     }
 
-    public static JsonFoodHamper getFoodHamper() {
-        return foodHamper;
-    }
-
-    public static GeneratorManager getGeneratorManager() {
-        return generatorManager;
-    }
-
     private void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
 
         pm.registerEvents(new ChunkLoad(), this);
-        pm.registerEvents(new EntityDeath(), this);
         pm.registerEvents(new InventoryClick(), this);
         pm.registerEvents(new ItemSpawn(), this);
         pm.registerEvents(new PlayerInteract(), this);

@@ -2,7 +2,10 @@ package life.grass.grassmaking.food;
 
 public enum FoodType {
     CUISINE,
-    INGREDIENT_MEAT,
-    SEASONING_SALT,
-    UNKNOWN;
+    INGREDIENT_MEAT;
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }

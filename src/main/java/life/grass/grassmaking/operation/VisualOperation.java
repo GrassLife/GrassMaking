@@ -16,12 +16,12 @@ public abstract class VisualOperation extends Operation {
     @Override
     protected void onStart() {
         World world = getBlock().getWorld();
-        Location location = getBlock().getLocation().clone().add(0.5, -0.25, 0.5);
+        Location location = getBlock().getLocation().clone().add(0.5, -1.1, 0.5);
 
         armorStand = world.spawn(location, ArmorStand.class);
         armorStand.setVisible(false);
         armorStand.setGravity(false);
-        armorStand.setCustomName("GSC_" + Double.toString(Math.random()));
+        armorStand.setCustomName("GMG_" + Double.toString(Math.random()));
         armorStand.setCustomNameVisible(false);
         armorStand.setSmall(true);
         armorStand.setHelmet(getVisualItem());

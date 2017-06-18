@@ -1,16 +1,12 @@
 package life.grass.grassmaking.table;
 
-import life.grass.grassmaking.food.Food;
-import life.grass.grassmaking.food.FoodElement;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class IronPlate extends Cooker {
     private static final ItemStack PADDING_ICON_FENCE;
@@ -25,45 +21,6 @@ public class IronPlate extends Cooker {
 
     public IronPlate(Block block) {
         super(block);
-    }
-
-    // TODO: move to Cooker
-    @Override
-    protected Food cook(List<Food> ingredientList, List<Food> seasoningList) {
-        Inventory inventory = this.getInventory();
-        ingredientList.forEach(ingredient -> subtractOneItem(inventory, ingredient.getItem()));
-        seasoningList.forEach(seasoning -> subtractOneItem(inventory, seasoning.getItem()));
-
-        if (ingredientList.isEmpty()) return null;
-
-        Food mainIngredient = ingredientList.stream().sorted(Comparator.comparing(Food::getTotalWeight).reversed()).findFirst().orElse(null);
-        Food mainSeasoning = seasoningList.stream().sorted(Comparator.comparing(Food::getTotalWeight).reversed()).findFirst().orElse(null);
-
-        int amount = ingredientList.size();
-
-        int totalWeight = 0;
-        int[] ingredientWeights = ingredientList.stream().mapToInt(Food::getTotalWeight).toArray();
-        for (int i = 0; i < ingredientWeights.length; i++) totalWeight += ingredientWeights[i];
-
-        Food cuisine = Food.makeCuisine(new ItemStack(mainIngredient.getAfterMaterial(), amount));
-
-        int weight = totalWeight / amount;
-        cuisine.setAdditionalWeight(weight);
-
-        long ingredientDiff = ChronoUnit.MINUTES.between(LocalDateTime.now(), mainIngredient.getExpireDate());
-        long seasoningDiff = mainSeasoning == null ? 0 : ChronoUnit.MINUTES.between(LocalDateTime.now(), mainSeasoning.getExpireDate());
-        cuisine.setExpireDate(LocalDateTime.now().plusMinutes(ingredientDiff * 2).plusMinutes(seasoningDiff / 4));
-
-        cuisine.setAdditionalRestoreAmount(weight / 5);
-
-        Map<FoodElement, Integer> elementMap = new HashMap<>();
-        ingredientList.forEach(ingredient -> ingredient.getTotalElementMap().forEach((key, value) -> elementMap.put(key, value / 2)));
-        seasoningList.forEach(seasoning -> seasoning.getTotalElementMap().forEach((key, value) -> elementMap.put(key, value * 2)));
-        elementMap.forEach((key, value) -> cuisine.increaseAdditionalElement(key, value / amount));
-
-        cuisine.setName("焼いた" + mainIngredient);
-
-        return cuisine;
     }
 
     @Override

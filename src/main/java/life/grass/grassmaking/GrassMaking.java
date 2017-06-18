@@ -2,7 +2,10 @@ package life.grass.grassmaking;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import life.grass.grassmaking.listener.*;
+import life.grass.grassmaking.listener.ChunkLoad;
+import life.grass.grassmaking.listener.InventoryClick;
+import life.grass.grassmaking.listener.PlayerInteract;
+import life.grass.grassmaking.listener.PlayerItemConsume;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.operation.Operable;
 import life.grass.grassmaking.operation.Operation;
@@ -56,7 +59,6 @@ public final class GrassMaking extends JavaPlugin {
 
         pm.registerEvents(new ChunkLoad(), this);
         pm.registerEvents(new InventoryClick(), this);
-        pm.registerEvents(new ItemSpawn(), this);
         pm.registerEvents(new PlayerInteract(), this);
         pm.registerEvents(new PlayerItemConsume(), this);
     }

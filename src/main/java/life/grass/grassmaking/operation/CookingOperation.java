@@ -1,7 +1,6 @@
 package life.grass.grassmaking.operation;
 
 import life.grass.grassmaking.food.Food;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -13,8 +12,6 @@ public class CookingOperation extends VisualOperation {
 
     public CookingOperation(Block block) {
         super(block);
-
-        cuisine = Food.makeCuisine(new ItemStack(Material.COOKED_BEEF));
     }
 
     @Override

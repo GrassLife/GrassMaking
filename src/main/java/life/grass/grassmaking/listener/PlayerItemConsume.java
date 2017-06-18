@@ -19,11 +19,11 @@ public class PlayerItemConsume implements Listener {
         Player player = event.getPlayer();
         PlayerInventory inv = player.getInventory();
         ItemStack item = event.getItem().clone();
-        Food food = Food.fromItemStack(item);
+        Food food = Food.findFood(item).orElse(null);
 
         event.setCancelled(true);
 
-        if (food == null) food = Food.fromItemStack(new ItemStack(Material.RAW_BEEF));
+        if (food == null) return;
 
         if (item.getAmount() < 2) {
             item.setType(Material.AIR);
@@ -43,7 +43,7 @@ public class PlayerItemConsume implements Listener {
         if (food.getExpireDate().isBefore(LocalDateTime.now())) {
             grassPlayer.incrementEffectiveStamina(-10);
         } else {
-            grassPlayer.incrementEffectiveStamina(food.getTotalRestoreAmount());
+            grassPlayer.incrementEffectiveStamina(food.getRestoreAmount());
         }
 
         player.updateInventory();

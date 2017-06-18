@@ -2,6 +2,7 @@ package life.grass.grassmaking.protocol;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import javafx.util.converter.LocalDateTimeStringConverter;
@@ -39,8 +40,10 @@ public class ItemPacketRewriter {
         return instance;
     }
 
+
     public void addListener(ProtocolManager manager, JavaPlugin plugin) {
         manager.addPacketListener(new PacketAdapter(plugin,
+                ListenerPriority.NORMAL,
                 PacketType.Play.Server.SET_SLOT,
                 PacketType.Play.Server.WINDOW_ITEMS) {
 
@@ -61,21 +64,25 @@ public class ItemPacketRewriter {
     }
 
     private void rewriteItem(ItemStack item) {
-        Food food = Food.fromItemStack(item);
-        if (food == null) return;
+        if (item == null || !Food.findFood(item).isPresent()) return;
 
+        Food food = Food.findFood(item).get();
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GRAY + food.getName());
+
+        if (food.isCuisine())
+            meta.setDisplayName(ChatColor.YELLOW + food.getGrassJson().getDynamicDataAsString("CuisineName").orElse("料理"));
+        else
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', food.getGrassJson().getDisplayName()));
 
         List<String> lore = new ArrayList<>();
         lore.addAll(Arrays.asList(
                 EXPIRE_DATE_LORE + new LocalDateTimeStringConverter().toString(food.getExpireDate()),
-                RESTORE_AMOUNT_LORE + food.getTotalRestoreAmount(),
-                WEIGHT_LORE + food.getTotalWeight()
+                RESTORE_AMOUNT_LORE + food.getRestoreAmount(),
+                WEIGHT_LORE + food.getWeight()
         ));
 
-        if (!food.getTotalElementMap().isEmpty()) lore.addAll(Arrays.asList(" ", SEPARATOR_LORE));
-        food.getTotalElementMap().forEach((key, value) -> {
+        if (!food.getElementMap().isEmpty()) lore.addAll(Arrays.asList(" ", SEPARATOR_LORE));
+        food.getElementMap().forEach((key, value) -> {
                     if (value == 0) return;
                     String name = value > 0 ? key.getUprightName() : key.getReversedName();
                     String element = ChatColor.DARK_GRAY + " * " + ChatColor.YELLOW + name + ChatColor.GRAY + ": ";

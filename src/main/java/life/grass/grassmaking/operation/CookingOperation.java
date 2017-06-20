@@ -1,5 +1,6 @@
 package life.grass.grassmaking.operation;
 
+import life.grass.grassmaking.food.Cuisine;
 import life.grass.grassmaking.food.Food;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -8,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public class CookingOperation extends VisualOperation {
-    private Food cuisine;
+    private Cuisine cuisine;
 
     public CookingOperation(Block block) {
         super(block);
@@ -51,7 +52,7 @@ public class CookingOperation extends VisualOperation {
         return cuisine.getItem();
     }
 
-    public void setCuisine(Food cuisine) {
+    public void setCuisine(Cuisine cuisine) {
         this.cuisine = cuisine;
     }
 }

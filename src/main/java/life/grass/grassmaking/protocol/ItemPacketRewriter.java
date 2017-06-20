@@ -12,23 +12,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ItemPacketRewriter {
+    private static final String CUISINE_NAME_LORE;
     private static final String EXPIRE_DATE_LORE;
     private static final String RESTORE_AMOUNT_LORE;
     private static final String WEIGHT_LORE;
-    private static final String SEPARATOR_LORE;
 
     private static ItemPacketRewriter instance;
 
     static {
+        CUISINE_NAME_LORE = ChatColor.GRAY + "料理名: " + ChatColor.GOLD;
         EXPIRE_DATE_LORE = ChatColor.RED + "消費期限" + ChatColor.GRAY + ": " + ChatColor.RED;
         RESTORE_AMOUNT_LORE = ChatColor.AQUA + "スタミナ回復量" + ChatColor.GRAY + ": " + ChatColor.AQUA;
         WEIGHT_LORE = ChatColor.YELLOW + "重量[g]" + ChatColor.GRAY + ": " + ChatColor.YELLOW;
-        SEPARATOR_LORE = ChatColor.GRAY + "-----------------------";
 
         instance = new ItemPacketRewriter();
     }
@@ -64,24 +63,22 @@ public class ItemPacketRewriter {
     }
 
     private void rewriteItem(ItemStack item) {
-        if (item == null || !Food.findFood(item).isPresent()) return;
+        if (item == null || !Food.makeFood(item).isPresent()) return;
+        Food food = Food.makeFood(item).get();
 
-        Food food = Food.findFood(item).get();
+        item.setType(food.getItem().getType());
+
         ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(food.getName());
 
-        if (food.isCuisine())
-            meta.setDisplayName(ChatColor.YELLOW + food.getGrassJson().getDynamicDataAsString("CuisineName").orElse("料理"));
-        else
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', food.getGrassJson().getDisplayName()));
-
-        List<String> lore = new ArrayList<>();
+        List<String> lore = meta.getLore();
         lore.addAll(Arrays.asList(
                 EXPIRE_DATE_LORE + new LocalDateTimeStringConverter().toString(food.getExpireDate()),
                 RESTORE_AMOUNT_LORE + food.getRestoreAmount(),
                 WEIGHT_LORE + food.getWeight()
         ));
 
-        if (!food.getElementMap().isEmpty()) lore.addAll(Arrays.asList(" ", SEPARATOR_LORE));
+        if (!food.getElementMap().isEmpty()) lore.add(" ");
         food.getElementMap().forEach((key, value) -> {
                     if (value == 0) return;
                     String name = value > 0 ? key.getUprightName() : key.getReversedName();

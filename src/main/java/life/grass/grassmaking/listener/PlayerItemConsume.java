@@ -19,7 +19,7 @@ public class PlayerItemConsume implements Listener {
         Player player = event.getPlayer();
         PlayerInventory inv = player.getInventory();
         ItemStack item = event.getItem().clone();
-        Food food = Food.findFood(item).orElse(null);
+        Food food = Food.makeFood(item).orElse(null);
 
         event.setCancelled(true);
 

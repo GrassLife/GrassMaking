@@ -12,10 +12,10 @@ public class InventoryClick implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getClickedInventory() == null
-                || !(event.getClickedInventory().getHolder() instanceof Table)) return;
+        if (event.getInventory() == null
+                || !(event.getInventory().getHolder() instanceof Table)) return;
 
-        Table table = (Table) event.getClickedInventory().getHolder();
+        Table table = (Table) event.getInventory().getHolder();
         ItemStack clicked = event.getCurrentItem();
         int slot = event.getSlot();
 

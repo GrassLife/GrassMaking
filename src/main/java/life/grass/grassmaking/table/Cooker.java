@@ -1,17 +1,22 @@
 package life.grass.grassmaking.table;
 
-import life.grass.grassmaking.food.*;
+import life.grass.grassitem.GrassJson;
+import life.grass.grassitem.JsonHandler;
+import life.grass.grassmaking.cooking.CookingType;
+import life.grass.grassmaking.event.GrassCookEvent;
 import life.grass.grassmaking.operation.CookingOperation;
 import life.grass.grassmaking.ui.CookerInterface;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public abstract class Cooker extends Maker implements CookerInterface {
     private static final ItemStack SEASONING_ICON;
@@ -27,6 +32,12 @@ public abstract class Cooker extends Maker implements CookerInterface {
 
         operation = new CookingOperation(block);
     }
+
+    public abstract String namesCuisine(ItemStack mainIngredient, ItemStack mainSeasoning);
+
+    protected abstract CookingType getCookingType();
+
+    protected abstract boolean canCook(List<ItemStack> ingredientList, List<ItemStack> seasoningList);
 
     @Override
     public ItemStack getSeasoningIcon() {
@@ -45,76 +56,41 @@ public abstract class Cooker extends Maker implements CookerInterface {
 
     @Override
     public void onPressedMaking() {
-        List<Ingredient> ingredientList = new ArrayList<>();
+        List<ItemStack> ingredientList = new ArrayList<>();
         getIngredientSpacePositionList().stream()
-                .map(position -> Food.makeFood(getInventory().getItem(position)))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .filter(food -> food instanceof Ingredient)
-                .map(food -> (Ingredient) food)
+                .map(position -> getInventory().getItem(position))
+                .filter(ingredient -> {
+                    if (ingredient == null) return false;
+                    GrassJson ingredientJson = JsonHandler.getGrassJson(ingredient);
+                    LocalDateTime expireDate = LocalDateTime.parse(ingredientJson
+                            .getDynamicValue("ExpireDate")
+                            .getAsOverwritedString().orElse(LocalDateTime.now().minusSeconds(1).toString()));
+                    return ingredientJson.hasItemTag("Ingredient") && expireDate.isAfter(LocalDateTime.now());
+                })
                 .forEach(ingredientList::add);
 
-        List<Seasoning> seasoningList = new ArrayList<>();
+        List<ItemStack> seasoningList = new ArrayList<>();
         getSeasoningSpacePositionList().stream()
-                .map(position -> Food.makeFood(getInventory().getItem(position)))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .filter(food -> food instanceof Seasoning)
-                .map(food -> (Seasoning) food)
+                .map(position -> getInventory().getItem(position))
+                .filter(seasoning -> seasoning != null && JsonHandler.getGrassJson(seasoning).hasItemTag("Seasoning"))
                 .forEach(seasoningList::add);
 
-        Cuisine result = cook(ingredientList, seasoningList);
-        if (result != null) {
+        ItemStack result = cook(ingredientList, seasoningList);
+        if (canCook(ingredientList, seasoningList) && result != null) {
+            Iterator<HumanEntity> viewerIterator = this.getInventory().getViewers().iterator();
+            while (viewerIterator.hasNext()) {
+                HumanEntity viewer = viewerIterator.next();
+                viewerIterator.remove();
+                viewer.closeInventory();
+            }
+
             operation.setCuisine(result);
             operation.start(getCookingTick());
         }
     }
 
-    public Cuisine cook(List<Ingredient> ingredientList, List<Seasoning> seasoningList) {
-        if (ingredientList.isEmpty() || operation.isOperating()) return null;
-
-        int amount = ingredientList.size();
-
-        int totalWeight = 0;
-        int[] ingredientWeights = ingredientList.stream().mapToInt(Food::getWeight).toArray();
-        for (int i = 0; i < ingredientWeights.length; i++) totalWeight += ingredientWeights[i];
-
-        Inventory inventory = this.getInventory();
-        for (int slot = 0; slot < inventory.getSize(); slot++) {
-            ItemStack slotItem = inventory.getItem(slot);
-            Food.makeFood(slotItem).ifPresent(food -> {
-                if (food instanceof Ingredient || food instanceof Seasoning)
-                    slotItem.setAmount(slotItem.getAmount() - 1);
-            });
-
-            inventory.setItem(slot, slotItem);
-        }
-
-        Ingredient mainIngredient = ingredientList.stream().sorted(Comparator.comparing(Food::getWeight).reversed()).findFirst().orElseThrow(IllegalArgumentException::new);
-        Seasoning mainSeasoning = seasoningList.stream().sorted(Comparator.comparing(Food::getWeight).reversed()).findFirst().orElse(null);
-        final Cuisine cuisine = Cuisine.makeCuisine(new ItemStack(mainIngredient.getAfterMaterial(), amount));
-
-        cuisine.setType(mainIngredient.getAfterMaterial());
-
-        int weight = totalWeight / amount;
-        cuisine.setAdditionalWeight(weight);
-
-        long ingredientDiff = ChronoUnit.MINUTES.between(LocalDateTime.now(), mainIngredient.getExpireDate());
-        long seasoningDiff = mainSeasoning == null ? 0 : ChronoUnit.MINUTES.between(LocalDateTime.now(), mainSeasoning.getExpireDate());
-        cuisine.setExpireDate(LocalDateTime.now().plusMinutes(ingredientDiff * 2).plusMinutes(seasoningDiff / 4));
-
-        cuisine.setAdditionalRestoreAmount(weight / 5);
-
-        Map<FoodElement, Integer> elementMap = new HashMap<>();
-        ingredientList.forEach(ingredient -> ingredient.getElementMap().forEach((key, value) -> elementMap.put(key, value / 2)));
-        seasoningList.forEach(seasoning -> seasoning.getElementMap().forEach((key, value) -> elementMap.put(key, value * 2)));
-        elementMap.forEach((key, value) -> {
-            if (value != 0) cuisine.putElement(key, value);
-        });
-
-        cuisine.setName("調理後料理");
-
-        return cuisine;
+    public ItemStack cook(List<ItemStack> ingredientList, List<ItemStack> seasoningList) {
+        return new GrassCookEvent(this, getCookingType(), ingredientList, seasoningList).getResult();
     }
 
     public CookingOperation getOperation() {

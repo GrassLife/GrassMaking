@@ -27,6 +27,7 @@ public final class GrassMaking extends JavaPlugin {
 
         this.registerEvents();
         ItemPacketRewriter.getInstance().addListener(protocolManager, this);
+        System.out.println();
     }
 
     @Override
@@ -57,7 +58,6 @@ public final class GrassMaking extends JavaPlugin {
         PluginManager pm = Bukkit.getPluginManager();
 
         pm.registerEvents(new ChunkLoad(), this);
-        pm.registerEvents(new EntityDeath(), this);
         pm.registerEvents(new InventoryClick(), this);
         pm.registerEvents(new PlayerInteract(), this);
         pm.registerEvents(new PlayerItemConsume(), this);

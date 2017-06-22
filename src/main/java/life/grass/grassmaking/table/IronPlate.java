@@ -1,5 +1,7 @@
 package life.grass.grassmaking.table;
 
+import life.grass.grassitem.JsonHandler;
+import life.grass.grassmaking.cooking.CookingType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,6 +23,21 @@ public class IronPlate extends Cooker {
 
     public IronPlate(Block block) {
         super(block);
+    }
+
+    @Override
+    public String namesCuisine(ItemStack mainIngredient, ItemStack mainSeasoning) {
+        return "焼いた" + JsonHandler.getGrassJson(mainIngredient).getDisplayName();
+    }
+
+    @Override
+    protected CookingType getCookingType() {
+        return CookingType.GRILL;
+    }
+
+    @Override
+    protected boolean canCook(List<ItemStack> ingredientList, List<ItemStack> seasoningList) {
+        return true;
     }
 
     @Override

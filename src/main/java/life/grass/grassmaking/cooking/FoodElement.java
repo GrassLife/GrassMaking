@@ -1,4 +1,4 @@
-package life.grass.grassmaking.food;
+package life.grass.grassmaking.cooking;
 
 public enum FoodElement {
     SWEET("甘味", "甘さ", "苦さ"),

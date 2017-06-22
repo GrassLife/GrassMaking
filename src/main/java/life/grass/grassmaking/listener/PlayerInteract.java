@@ -28,8 +28,6 @@ public class PlayerInteract implements Listener {
         }
 
         TableManager tableManager = GrassMaking.getTableManager();
-
-        // TODO: change
         Table table = null;
         switch (block.getType()) {
             case STONE_PLATE:

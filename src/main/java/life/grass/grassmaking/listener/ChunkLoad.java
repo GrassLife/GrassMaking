@@ -27,7 +27,7 @@ public class ChunkLoad implements Listener {
             public void run() {
                 Arrays.stream(chunk.getEntities())
                         .filter(entity -> entity instanceof ArmorStand
-                                && (entity.getCustomName() != null ? entity.getCustomName() : "NONE").startsWith("GMG_"))
+                                && (entity.getCustomName() != null ? entity.getCustomName() : "NONE").startsWith("GrassMaking_"))
                         .forEach(Entity::remove);
             }
         }.runTaskLater(instance, 1);

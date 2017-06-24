@@ -5,6 +5,7 @@ import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.cooking.CookingType;
 import life.grass.grassmaking.cooking.FoodEffect;
 import life.grass.grassmaking.cooking.FoodElement;
+import life.grass.grassmaking.cooking.IngredientType;
 import life.grass.grassmaking.event.GrassCookEvent;
 import life.grass.grassmaking.table.Cooker;
 import org.bukkit.Material;
@@ -24,10 +25,7 @@ public class GrassCook implements Listener {
         List<ItemStack> ingredientList = event.getIngredientList();
         List<ItemStack> seasoningList = event.getSeasoningList();
 
-        if (ingredientList.isEmpty()) {
-            event.setResult(null);
-            return;
-        }
+        if (cookingType == null || ingredientList.isEmpty()) return;
 
         ItemStack mainIngredient = ingredientList.stream()
                 .sorted(Comparator.comparingInt(ingredient -> JsonHandler.getGrassJson((ItemStack) ingredient)
@@ -50,6 +48,27 @@ public class GrassCook implements Listener {
                 .sum();
         int amount = totalWeight / cookingType.getWeightDivider() + 1;
 
+        int oily = ingredientList.stream()
+                .mapToInt(ingredient -> {
+                    GrassJson grassJson = JsonHandler.getGrassJson(ingredient);
+
+                    IngredientType ingredientType;
+                    if (grassJson.hasItemTag("Meat")) {
+                        ingredientType = IngredientType.MEAT;
+                    } else if (grassJson.hasItemTag("Fish")) {
+                        ingredientType = IngredientType.FISH;
+                    } else if (grassJson.hasItemTag("Vegetable")) {
+                        ingredientType = IngredientType.VEGETABLE;
+                    } else {
+                        ingredientType = null;
+                    }
+
+                    if (ingredientType == null) return 0;
+                    else {
+                        return (int) (grassJson.getDynamicValue("Calorie").getAsMaskedInteger().orElse(0) * ingredientType.getOilyMultiple());
+                    }
+                }).sum() / amount;
+
         int totalCalorie = (int) (ingredientList.stream().mapToInt(ingredient -> JsonHandler.getGrassJson(ingredient)
                 .getDynamicValue("Calorie")
                 .getAsMaskedInteger().orElse(0))
@@ -58,12 +77,6 @@ public class GrassCook implements Listener {
                 .getAsMaskedDouble().orElse(1.0))
                 .reduce(1, (n, m) -> n * m));
         int calorie = totalCalorie / amount;
-
-        int totalOily = (int) (ingredientList.stream().mapToInt(ingredient -> JsonHandler.getGrassJson(ingredient)
-                .getDynamicValue("Oily")
-                .getAsMaskedInteger().orElse(0))
-                .sum() * cookingType.getOilyMultiple());
-        int oily = totalOily * 4 / amount;
 
         Map<FoodElement, Integer> foodElementMap = new HashMap<>();
         Arrays.stream(FoodElement.values()).forEach(foodElement -> {
@@ -96,6 +109,7 @@ public class GrassCook implements Listener {
 
         // TODO: add effect to cuisine from food element
 
+        if (oily == 0) oily = 1;
         if (0 < oily / 10) {
             result = JsonHandler.putDynamicData(result, "FoodEffect/" + FoodEffect.HEAVY_STOMACH.toString(), oily / 10);
         }

@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class PlayerItemConsume implements Listener {
-    private static final int CALORIE_PER_RESTORE_AMOUNT = 15;
+    private static final int CALORIE_PER_RESTORE_AMOUNT = 3;
 
     @EventHandler
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
@@ -46,10 +46,10 @@ public class PlayerItemConsume implements Listener {
                 .getAsOverwritedString()
                 .orElse(LocalDateTime.now().minusSeconds(1).toString()));
         if (expireDate.isBefore(LocalDateTime.now())) {
-            player.sendTitle("", ChatColor.DARK_GREEN + "腐っているようだ...", 3, 20 * 2, 3); // TODO: rewrite
+            player.sendTitle("", ChatColor.DARK_GREEN + "腐っているようだ...", 3, 20 * 2, 3);
             grassPlayer.incrementEffectiveStamina(-10);
         } else {
-            grassPlayer.incrementEffectiveStamina(grassJson.getDynamicValue("Calories").getAsMaskedInteger().orElse(1) / CALORIE_PER_RESTORE_AMOUNT);
+            grassPlayer.incrementEffectiveStamina(grassJson.getDynamicValue("Calorie").getAsMaskedInteger().orElse(1) / CALORIE_PER_RESTORE_AMOUNT);
         }
 
         Arrays.stream(FoodEffect.values()).forEach(element -> {

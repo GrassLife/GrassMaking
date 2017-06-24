@@ -61,4 +61,6 @@ public abstract class Table implements TableInterface {
     }
 
     public abstract String getTitle();
+
+    public abstract boolean canOpen(Block block);
 }

@@ -24,6 +24,10 @@ public class GrassCookEvent extends Event {
         this.seasoningList = seasoningList;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @Override
     public HandlerList getHandlers() {
         return handlers;

@@ -55,6 +55,7 @@ public final class GrassMaking extends JavaPlugin {
     private void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
 
+        pm.registerEvents(new BlockBreak(), this);
         pm.registerEvents(new ChunkLoad(), this);
         pm.registerEvents(new GrassCook(), this);
         pm.registerEvents(new InventoryClick(), this);

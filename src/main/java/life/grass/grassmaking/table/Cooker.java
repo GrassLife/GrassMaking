@@ -6,6 +6,7 @@ import life.grass.grassmaking.cooking.CookingType;
 import life.grass.grassmaking.event.GrassCookEvent;
 import life.grass.grassmaking.operation.CookingOperation;
 import life.grass.grassmaking.ui.CookerInterface;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -60,7 +61,10 @@ public abstract class Cooker extends Maker implements CookerInterface {
         getIngredientSpacePositionList().stream()
                 .map(position -> getInventory().getItem(position))
                 .filter(ingredient -> {
-                    if (ingredient == null) return false;
+                    if (ingredient == null || JsonHandler.getGrassJson(ingredient).hasItemTag("ingredient")) {
+                        return false;
+                    }
+
                     GrassJson ingredientJson = JsonHandler.getGrassJson(ingredient);
                     LocalDateTime expireDate = LocalDateTime.parse(ingredientJson
                             .getDynamicValue("ExpireDate")
@@ -90,7 +94,9 @@ public abstract class Cooker extends Maker implements CookerInterface {
     }
 
     public ItemStack cook(List<ItemStack> ingredientList, List<ItemStack> seasoningList) {
-        return new GrassCookEvent(this, getCookingType(), ingredientList, seasoningList).getResult();
+        GrassCookEvent event = new GrassCookEvent(this, getCookingType(), ingredientList, seasoningList);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        return event.getResult();
     }
 
     public CookingOperation getOperation() {

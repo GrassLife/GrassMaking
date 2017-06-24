@@ -5,6 +5,7 @@ import life.grass.grassmaking.cooking.CookingType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -43,6 +44,13 @@ public class IronPlate extends Cooker {
     @Override
     public String getTitle() {
         return ChatColor.DARK_RED + "鉄板";
+    }
+
+    @Override
+    public boolean canOpen(Block block) {
+        return block != null
+                && block.getType() == Material.STONE_PLATE
+                && block.getRelative(BlockFace.DOWN).getType() == Material.MAGMA;
     }
 
     @Override

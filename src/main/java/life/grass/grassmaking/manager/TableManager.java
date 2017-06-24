@@ -16,10 +16,10 @@ public class TableManager {
         return Optional.ofNullable(tableMap.get(generateKey(block)));
     }
 
-    public Table createTable(Block block, Class<? extends Table> clazz) {
+    public Table createTable(Block block, Table table) {
         String key = generateKey(block);
         try {
-            tableMap.put(key, clazz.getConstructor(Block.class).newInstance(block));
+            tableMap.put(key, table);
             return tableMap.get(key);
         } catch (Exception ignore) {
             return null;

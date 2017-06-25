@@ -1,12 +1,9 @@
 package life.grass.grassmaking;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import life.grass.grassmaking.listener.*;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.operation.Operable;
 import life.grass.grassmaking.operation.Operation;
-import life.grass.grassmaking.protocol.ItemPacketRewriter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,18 +11,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class GrassMaking extends JavaPlugin {
     private static GrassMaking instance;
     private static TableManager tableManager;
-    private static ProtocolManager protocolManager;
 
     @Override
     public void onEnable() {
         super.onEnable();
         instance = this;
         tableManager = new TableManager();
-        protocolManager = ProtocolLibrary.getProtocolManager();
 
         this.registerEvents();
-        ItemPacketRewriter.getInstance().addListener(protocolManager, this);
-        System.out.println();
     }
 
     @Override
@@ -33,7 +26,7 @@ public final class GrassMaking extends JavaPlugin {
         super.onDisable();
         instance = null;
 
-        tableManager.getTableList().stream()
+        tableManager.getTableSet().stream()
                 .filter(table -> table instanceof Operable)
                 .map(table -> ((Operable) table).getOperation())
                 .forEach(Operation::cancel);

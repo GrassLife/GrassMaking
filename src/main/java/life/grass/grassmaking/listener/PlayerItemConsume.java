@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class PlayerItemConsume implements Listener {
-    private static final int CALORIE_PER_RESTORE_AMOUNT = 3;
+    private static final int CALORIE_PER_RESTORE_AMOUNT = 4;
 
     @EventHandler
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {

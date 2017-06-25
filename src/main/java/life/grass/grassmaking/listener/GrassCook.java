@@ -14,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class GrassCook implements Listener {
@@ -60,18 +61,31 @@ public class GrassCook implements Listener {
                     } else if (grassJson.hasItemTag("Vegetable")) {
                         ingredientType = IngredientType.VEGETABLE;
                     } else {
-                        ingredientType = null;
+                        return 0;
                     }
 
-                    if (ingredientType == null) return 0;
-                    else {
-                        return (int) (grassJson.getDynamicValue("Calorie").getAsMaskedInteger().orElse(0) * ingredientType.getOilyMultiple());
-                    }
+                    return (int) (grassJson.getDynamicValue("Calorie").getAsMaskedInteger().orElse(1) * ingredientType.getOilyMultiple());
                 }).sum() / amount;
 
-        int totalCalorie = (int) (ingredientList.stream().mapToInt(ingredient -> JsonHandler.getGrassJson(ingredient)
-                .getDynamicValue("Calorie")
-                .getAsMaskedInteger().orElse(0))
+        int totalCalorie = (int) (ingredientList.stream()
+                .mapToInt(ingredient -> {
+                    GrassJson grassJson = JsonHandler.getGrassJson(ingredient);
+
+                    IngredientType ingredientType;
+                    if (grassJson.hasItemTag("Meat")) {
+                        ingredientType = IngredientType.MEAT;
+                    } else if (grassJson.hasItemTag("Fish")) {
+                        ingredientType = IngredientType.FISH;
+                    } else if (grassJson.hasItemTag("Vegetable")) {
+                        ingredientType = IngredientType.VEGETABLE;
+                    } else {
+                        return 0;
+                    }
+
+                    return (int) (JsonHandler.getGrassJson(ingredient)
+                            .getDynamicValue("Calorie")
+                            .getAsMaskedDouble().orElse(1.0) * cookingType.getCalorieMultiple(ingredientType));
+                })
                 .sum() * seasoningList.stream().mapToDouble(seasoning -> JsonHandler.getGrassJson(seasoning)
                 .getDynamicValue("CalorieMultiple")
                 .getAsMaskedDouble().orElse(1.0))
@@ -98,7 +112,7 @@ public class GrassCook implements Listener {
         });
 
         GrassJson mainIngredientJson = JsonHandler.getGrassJson(mainIngredient);
-        Material cuisineMaterial = Material.valueOf(mainIngredientJson.getStaticValue("AfterMaterial")
+        Material cuisineMaterial = Material.valueOf(mainIngredientJson.getStaticValue("AfterMaterial/" + cookingType.toString())
                 .getAsOriginalString()
                 .orElse("COOKED_BEEF"));
 
@@ -106,12 +120,15 @@ public class GrassCook implements Listener {
         result = JsonHandler.putDynamicData(result, "CustomMaterial", cuisineMaterial);
         result = JsonHandler.putDynamicData(result, "CustomName", cooker.namesCuisine(mainIngredient, mainSeasoning));
         result = JsonHandler.putDynamicData(result, "Calorie", "+" + calorie);
+        result = JsonHandler.putDynamicData(result, "ExpireDate",
+                LocalDateTime.parse(JsonHandler.getGrassJson(mainIngredient).getDynamicValue("ExpireDate").getAsOverwritedString().orElse(LocalDateTime.now().toString())).plusHours(12));
 
         // TODO: add effect to cuisine from food element
 
         if (oily == 0) oily = 1;
-        if (0 < oily / 10) {
-            result = JsonHandler.putDynamicData(result, "FoodEffect/" + FoodEffect.HEAVY_STOMACH.toString(), oily / 10);
+        int oilyLevel = oily / 1000;
+        if (0 < oilyLevel) {
+            result = JsonHandler.putDynamicData(result, "FoodEffect/" + FoodEffect.HEAVY_STOMACH.toString(), oilyLevel);
         }
 
         event.setResult(result);

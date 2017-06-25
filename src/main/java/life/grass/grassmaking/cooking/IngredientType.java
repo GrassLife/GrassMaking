@@ -1,9 +1,9 @@
 package life.grass.grassmaking.cooking;
 
 public enum IngredientType {
-    MEAT(0.4),
-    FISH(0.15),
-    VEGETABLE(0.08);
+    MEAT(1.5),
+    FISH(1.0),
+    VEGETABLE(0.5);
 
     private double oilyMultiple;
 

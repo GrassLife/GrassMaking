@@ -9,9 +9,12 @@ import org.bukkit.util.Vector;
 
 public class CookingOperation extends VisualOperation {
     private ItemStack cuisine;
+    private Particle particle;
 
     public CookingOperation(Block block) {
         super(block);
+
+        particle = Particle.CRIT;
     }
 
     @Override
@@ -19,7 +22,7 @@ public class CookingOperation extends VisualOperation {
         Block block = getBlock();
 
         block.getWorld().spawnParticle(
-                Particle.SMOKE_LARGE,
+                particle,
                 block.getLocation().clone().add(0.5, 0.5, 0.5),
                 3,
                 0.25,
@@ -53,5 +56,9 @@ public class CookingOperation extends VisualOperation {
 
     public void setCuisine(ItemStack cuisine) {
         this.cuisine = cuisine;
+    }
+
+    public void setParticle(Particle particle) {
+        this.particle = particle;
     }
 }

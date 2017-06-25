@@ -9,6 +9,7 @@ import life.grass.grassmaking.ui.CookerInterface;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
@@ -36,6 +37,8 @@ public abstract class Cooker extends Maker implements CookerInterface {
 
     public abstract String namesCuisine(ItemStack mainIngredient, ItemStack mainSeasoning);
 
+    public abstract Particle getCookingParticle();
+
     protected abstract CookingType getCookingType();
 
     protected abstract boolean canCook(List<ItemStack> ingredientList, List<ItemStack> seasoningList);
@@ -61,7 +64,9 @@ public abstract class Cooker extends Maker implements CookerInterface {
         getIngredientSpacePositionList().stream()
                 .map(position -> getInventory().getItem(position))
                 .filter(ingredient -> {
-                    if (ingredient == null || JsonHandler.getGrassJson(ingredient).hasItemTag("ingredient")) {
+                    GrassJson grassJson = JsonHandler.getGrassJson(ingredient);
+                    if (ingredient == null || grassJson == null || !grassJson.hasItemTag("Ingredient")
+                            || !grassJson.hasStaticValue("AfterMaterial/" + getCookingType().toString())) {
                         return false;
                     }
 
@@ -76,11 +81,31 @@ public abstract class Cooker extends Maker implements CookerInterface {
         List<ItemStack> seasoningList = new ArrayList<>();
         getSeasoningSpacePositionList().stream()
                 .map(position -> getInventory().getItem(position))
-                .filter(seasoning -> seasoning != null && JsonHandler.getGrassJson(seasoning).hasItemTag("Seasoning"))
+                .filter(seasoning -> seasoning != null
+                        && JsonHandler.getGrassJson(seasoning) != null
+                        && JsonHandler.getGrassJson(seasoning).hasItemTag("Seasoning"))
                 .forEach(seasoningList::add);
 
         ItemStack result = cook(ingredientList, seasoningList);
         if (canCook(ingredientList, seasoningList) && result != null) {
+            Inventory inventory = getInventory();
+            ingredientList.forEach(ingredient -> {
+                int position = inventory.first(ingredient);
+                if (position == -1) return;
+
+                ItemStack slotItem = inventory.getItem(position);
+                slotItem.setAmount(slotItem.getAmount() - 1);
+                inventory.setItem(position, slotItem);
+            });
+            seasoningList.forEach(seasoning -> {
+                int position = inventory.first(seasoning);
+                if (position == -1) return;
+
+                ItemStack slotItem = inventory.getItem(position);
+                slotItem.setAmount(slotItem.getAmount() - 1);
+                inventory.setItem(position, slotItem);
+            });
+
             Iterator<HumanEntity> viewerIterator = this.getInventory().getViewers().iterator();
             while (viewerIterator.hasNext()) {
                 HumanEntity viewer = viewerIterator.next();
@@ -89,6 +114,7 @@ public abstract class Cooker extends Maker implements CookerInterface {
             }
 
             operation.setCuisine(result);
+            operation.setParticle(getCookingParticle());
             operation.start(getCookingTick());
         }
     }

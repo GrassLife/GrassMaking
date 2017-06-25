@@ -16,7 +16,7 @@ public abstract class VisualOperation extends Operation {
     @Override
     protected void onStart() {
         World world = getBlock().getWorld();
-        Location location = getBlock().getLocation().clone().add(0.5, -1.1, 0.5);
+        Location location = getBlock().getLocation().clone().add(0.5, -1.02, 0.5);
 
         armorStand = world.spawn(location, ArmorStand.class);
         armorStand.setCustomName("GrassMaking_" + Double.toString(Math.random()));

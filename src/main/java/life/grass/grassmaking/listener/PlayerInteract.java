@@ -5,6 +5,7 @@ import life.grass.grassmaking.GrassMaking;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.operation.Operable;
 import life.grass.grassmaking.table.IronPlate;
+import life.grass.grassmaking.table.Manaita;
 import life.grass.grassmaking.table.Table;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -25,16 +26,13 @@ public class PlayerInteract implements Listener {
         tableClassSet = new HashSet<>();
 
         tableClassSet.add(IronPlate.class);
+        tableClassSet.add(Manaita.class);
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
-
-        if (event.getAction() == Action.LEFT_CLICK_AIR) {
-            player.getInventory().setItemInMainHand(JsonHandler.putDynamicData(event.getItem(), "ExpireDate", LocalDateTime.now().plusHours(12)));
-        }
 
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK
                 || event.getHand() != EquipmentSlot.HAND) {

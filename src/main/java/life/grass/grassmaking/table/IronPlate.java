@@ -4,6 +4,7 @@ import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.cooking.CookingType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
@@ -37,6 +38,11 @@ public class IronPlate extends Cooker {
     }
 
     @Override
+    public Particle getCookingParticle() {
+        return Particle.SMOKE_LARGE;
+    }
+
+    @Override
     protected boolean canCook(List<ItemStack> ingredientList, List<ItemStack> seasoningList) {
         return true;
     }
@@ -50,7 +56,7 @@ public class IronPlate extends Cooker {
     public boolean canOpen(Block block) {
         return block != null
                 && block.getType() == Material.STONE_PLATE
-                && block.getRelative(BlockFace.DOWN).getType() == Material.MAGMA;
+                && (block.getRelative(BlockFace.DOWN).getType() == Material.MAGMA || block.getRelative(BlockFace.DOWN).getType() == Material.BURNING_FURNACE);
     }
 
     @Override

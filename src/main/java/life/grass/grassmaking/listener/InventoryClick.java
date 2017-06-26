@@ -6,16 +6,18 @@ import life.grass.grassmaking.table.Table;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryClick implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getInventory() == null
-                || !(event.getInventory().getHolder() instanceof Table)) return;
+        Inventory inventory = event.getInventory();
 
-        Table table = (Table) event.getInventory().getHolder();
+        if (inventory == null || !(inventory.getHolder() instanceof Table)) return;
+
+        Table table = (Table) inventory.getHolder();
         ItemStack clicked = event.getCurrentItem();
         int slot = event.getSlot();
 
@@ -24,7 +26,7 @@ public class InventoryClick implements Listener {
             return;
         }
 
-        if (table instanceof Maker) {
+        if (table instanceof Maker && event.getRawSlot() < inventory.getSize()) {
             Maker maker = (Maker) table;
 
             if (maker.getMakingIconPosition() == slot) {

@@ -28,7 +28,7 @@ public class PlayerItemConsume implements Listener {
 
         event.setCancelled(true);
 
-        if (!grassJson.hasItemTag("Cuisine")) return;
+        if (grassJson == null || !grassJson.hasItemTag("Cuisine")) return;
 
         if (item.getAmount() < 2) item.setType(Material.AIR);
         else item.setAmount(item.getAmount() - 1);

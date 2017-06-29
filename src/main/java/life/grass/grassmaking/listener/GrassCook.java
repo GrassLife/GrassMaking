@@ -64,7 +64,7 @@ public class GrassCook implements Listener {
                         return 0;
                     }
 
-                    return (int) (grassJson.getDynamicValue("Calorie").getAsMaskedInteger().orElse(1) * ingredientType.getOilyMultiple());
+                    return grassJson.getDynamicValue("Calorie").getAsMaskedInteger().orElse(1) / ingredientType.getOilyPerCalorie();
                 }).sum() / amount;
 
         int totalCalorie = (int) (ingredientList.stream()
@@ -125,10 +125,8 @@ public class GrassCook implements Listener {
 
         // TODO: add effect to cuisine from food element
 
-        if (oily == 0) oily = 1;
-        int oilyLevel = oily / 1000;
-        if (0 < oilyLevel) {
-            result = JsonHandler.putDynamicData(result, "FoodEffect/" + FoodEffect.HEAVY_STOMACH.toString(), oilyLevel);
+        if (0 < oily) {
+            result = JsonHandler.putDynamicData(result, "FoodEffect/" + FoodEffect.HEAVY_STOMACH.toString(), "=" + oily);
         }
 
         event.setResult(result);

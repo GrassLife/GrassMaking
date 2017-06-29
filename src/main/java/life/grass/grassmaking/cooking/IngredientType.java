@@ -1,17 +1,17 @@
 package life.grass.grassmaking.cooking;
 
 public enum IngredientType {
-    MEAT(1.5),
-    FISH(1.0),
-    VEGETABLE(0.5);
+    MEAT(300),
+    FISH(450),
+    VEGETABLE(850);
 
-    private double oilyMultiple;
+    private int oilyPerCalorie;
 
-    IngredientType(double oilyMultiple) {
-        this.oilyMultiple = oilyMultiple;
+    IngredientType(int oilyPerCalorie) {
+        this.oilyPerCalorie = oilyPerCalorie;
     }
 
-    public double getOilyMultiple() {
-        return oilyMultiple;
+    public int getOilyPerCalorie() {
+        return oilyPerCalorie;
     }
 }

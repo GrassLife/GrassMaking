@@ -1,8 +1,8 @@
 package life.grass.grassmaking.cooking;
 
 public enum IngredientType {
-    MEAT(300),
-    FISH(450),
+    MEAT(200),
+    FISH(550),
     VEGETABLE(850);
 
     private int oilyPerCalorie;

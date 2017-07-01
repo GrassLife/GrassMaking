@@ -1,11 +1,10 @@
 package life.grass.grassmaking.listener;
 
-import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.GrassMaking;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.operation.Operable;
-import life.grass.grassmaking.table.IronPlate;
-import life.grass.grassmaking.table.Manaita;
+import life.grass.grassmaking.table.cooking.IronPlate;
+import life.grass.grassmaking.table.cooking.Manaita;
 import life.grass.grassmaking.table.Table;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -15,7 +14,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 

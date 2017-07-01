@@ -7,7 +7,7 @@ import life.grass.grassmaking.cooking.FoodEffect;
 import life.grass.grassmaking.cooking.FoodElement;
 import life.grass.grassmaking.cooking.IngredientType;
 import life.grass.grassmaking.event.GrassCookEvent;
-import life.grass.grassmaking.table.Cooker;
+import life.grass.grassmaking.table.cooking.Cooker;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

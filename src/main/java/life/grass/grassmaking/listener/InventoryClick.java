@@ -1,6 +1,6 @@
 package life.grass.grassmaking.listener;
 
-import life.grass.grassmaking.table.Cooker;
+import life.grass.grassmaking.table.cooking.Cooker;
 import life.grass.grassmaking.table.Maker;
 import life.grass.grassmaking.table.Table;
 import org.bukkit.event.EventHandler;

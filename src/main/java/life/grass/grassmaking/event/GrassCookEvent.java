@@ -1,7 +1,7 @@
 package life.grass.grassmaking.event;
 
 import life.grass.grassmaking.cooking.CookingType;
-import life.grass.grassmaking.table.Cooker;
+import life.grass.grassmaking.table.cooking.Cooker;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;

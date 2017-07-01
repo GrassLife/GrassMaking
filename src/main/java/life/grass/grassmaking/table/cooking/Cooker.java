@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class Cooker extends Maker implements CookerInterface {
     private static final ItemStack SEASONING_ICON;
@@ -90,22 +91,18 @@ public abstract class Cooker extends Maker implements CookerInterface {
         ItemStack result = cook(ingredientList, seasoningList);
         if (canCook(ingredientList, seasoningList) && result != null) {
             Inventory inventory = getInventory();
-            ingredientList.forEach(ingredient -> {
-                int position = inventory.first(ingredient);
-                if (position == -1) return;
 
-                ItemStack slotItem = inventory.getItem(position);
-                slotItem.setAmount(slotItem.getAmount() - 1);
-                inventory.setItem(position, slotItem);
-            });
-            seasoningList.forEach(seasoning -> {
-                int position = inventory.first(seasoning);
-                if (position == -1) return;
+            Consumer<List<ItemStack>> consumeItemStackInInventory = itemStackList ->
+                    itemStackList.forEach(item -> {
+                        int position = inventory.first(item);
+                        if (position == -1) return;
 
-                ItemStack slotItem = inventory.getItem(position);
-                slotItem.setAmount(slotItem.getAmount() - 1);
-                inventory.setItem(position, slotItem);
-            });
+                        ItemStack slotItem = inventory.getItem(position);
+                        slotItem.setAmount(slotItem.getAmount() - 1);
+                        inventory.setItem(position, slotItem);
+                    });
+            consumeItemStackInInventory.accept(ingredientList);
+            consumeItemStackInInventory.accept(seasoningList);
 
             Iterator<HumanEntity> viewerIterator = this.getInventory().getViewers().iterator();
             while (viewerIterator.hasNext()) {

@@ -16,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class GrassCook implements Listener {
 
@@ -28,20 +30,14 @@ public class GrassCook implements Listener {
 
         if (cookingType == null || ingredientList.isEmpty()) return;
 
-        ItemStack mainIngredient = ingredientList.stream()
-                .sorted(Comparator.comparingInt(ingredient -> JsonHandler.getGrassJson((ItemStack) ingredient)
+        Function<List<ItemStack>, Stream<ItemStack>> getSortedItemStackStream = itemStackList ->
+                itemStackList.stream().sorted(Comparator.comparingInt(ingredient -> JsonHandler.getGrassJson((ItemStack) ingredient)
                         .getDynamicValue("Weight")
                         .getAsMaskedInteger().orElse(10))
-                        .reversed())
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-        ItemStack mainSeasoning = seasoningList.stream()
-                .sorted(Comparator.comparingInt(seasoning -> JsonHandler.getGrassJson((ItemStack) seasoning)
-                        .getDynamicValue("Weight")
-                        .getAsMaskedInteger().orElse(10))
-                        .reversed())
-                .findFirst()
-                .orElse(null);
+                        .reversed());
+        ItemStack mainIngredient = getSortedItemStackStream.apply(ingredientList).findFirst().orElseThrow(IllegalArgumentException::new);
+        ItemStack accompaniment = getSortedItemStackStream.apply(ingredientList).skip(1).findFirst().orElse(null);
+        ItemStack mainSeasoning = getSortedItemStackStream.apply(seasoningList).findFirst().orElse(null);
 
         int totalWeight = ingredientList.stream().mapToInt(ingredient -> JsonHandler.getGrassJson(ingredient)
                 .getDynamicValue("Weight")
@@ -133,9 +129,8 @@ public class GrassCook implements Listener {
             result = JsonHandler.putDynamicData(result, "FoodEffect/" + effect.toString(), value);
         }
 
-        if (0 < oily) {
+        if (0 < oily)
             result = JsonHandler.putDynamicData(result, "FoodEffect/" + FoodEffect.HEAVY_STOMACH.toString(), oily);
-        }
 
         event.setResult(result);
     }

@@ -1,11 +1,12 @@
-package life.grass.grassmaking.table;
+package life.grass.grassmaking.table.cooking;
 
 import life.grass.grassitem.GrassJson;
 import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.cooking.CookingType;
 import life.grass.grassmaking.event.GrassCookEvent;
-import life.grass.grassmaking.operation.CookingOperation;
-import life.grass.grassmaking.ui.CookerInterface;
+import life.grass.grassmaking.operation.cooking.CookingOperation;
+import life.grass.grassmaking.table.Maker;
+import life.grass.grassmaking.ui.cooking.CookerInterface;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

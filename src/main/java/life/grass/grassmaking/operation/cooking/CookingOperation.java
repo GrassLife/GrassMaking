@@ -1,5 +1,6 @@
-package life.grass.grassmaking.operation;
+package life.grass.grassmaking.operation.cooking;
 
+import life.grass.grassmaking.operation.VisualOperation;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;

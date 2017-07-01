@@ -1,7 +1,8 @@
-package life.grass.grassmaking.table;
+package life.grass.grassmaking.table.cooking;
 
 import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.cooking.CookingType;
+import life.grass.grassmaking.table.cooking.Cooker;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;

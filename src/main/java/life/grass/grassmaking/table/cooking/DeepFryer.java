@@ -1,6 +1,6 @@
 // TODO: implementation
 
-package life.grass.grassmaking.table;
+package life.grass.grassmaking.table.cooking;
 
 public class DeepFryer /* extends Cooker */ {
     /*

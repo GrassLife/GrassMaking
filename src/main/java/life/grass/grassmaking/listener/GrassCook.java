@@ -123,10 +123,18 @@ public class GrassCook implements Listener {
         result = JsonHandler.putDynamicData(result, "ExpireDate",
                 LocalDateTime.parse(JsonHandler.getGrassJson(mainIngredient).getDynamicValue("ExpireDate").getAsOverwritedString().orElse(LocalDateTime.now().toString())).plusHours(12));
 
-        // TODO: add effect to cuisine from food element
+        for (FoodElement element : foodElementMap.keySet()) {
+            int value = foodElementMap.get(element);
+
+            FoodEffect effect = 0 < value ? element.getUprightEffect() : element.getReversedEffect();
+            value = Math.abs(value) / amount;
+            if (effect == FoodEffect.UNKNOWN || value == 0) continue;
+
+            result = JsonHandler.putDynamicData(result, "FoodEffect/" + effect.toString(), value);
+        }
 
         if (0 < oily) {
-            result = JsonHandler.putDynamicData(result, "FoodEffect/" + FoodEffect.HEAVY_STOMACH.toString(), "=" + oily);
+            result = JsonHandler.putDynamicData(result, "FoodEffect/" + FoodEffect.HEAVY_STOMACH.toString(), oily);
         }
 
         event.setResult(result);

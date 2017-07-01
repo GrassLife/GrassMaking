@@ -37,7 +37,9 @@ public abstract class Cooker extends Maker implements CookerInterface {
         operation = new CookingOperation(block);
     }
 
-    public abstract String namesCuisine(ItemStack mainIngredient, ItemStack mainSeasoning);
+    public abstract String namesCuisine(ItemStack mainIngredient, ItemStack accompaniment, ItemStack mainSeasoning);
+
+    public abstract LocalDateTime extendExpireDate(ItemStack ingredient);
 
     public abstract Particle getCookingParticle();
 

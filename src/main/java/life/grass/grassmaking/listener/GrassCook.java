@@ -14,7 +14,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -114,10 +113,9 @@ public class GrassCook implements Listener {
 
         ItemStack result = JsonHandler.putUniqueName(new ItemStack(cuisineMaterial, amount), "Cuisine");
         result = JsonHandler.putDynamicData(result, "CustomMaterial", cuisineMaterial);
-        result = JsonHandler.putDynamicData(result, "CustomName", cooker.namesCuisine(mainIngredient, mainSeasoning));
+        result = JsonHandler.putDynamicData(result, "CustomName", cooker.namesCuisine(mainIngredient, accompaniment, mainSeasoning));
         result = JsonHandler.putDynamicData(result, "Calorie", "+" + calorie);
-        result = JsonHandler.putDynamicData(result, "ExpireDate",
-                LocalDateTime.parse(JsonHandler.getGrassJson(mainIngredient).getDynamicValue("ExpireDate").getAsOverwritedString().orElse(LocalDateTime.now().toString())).plusHours(12));
+        result = JsonHandler.putDynamicData(result, "ExpireDate", cooker.extendExpireDate(mainIngredient));
 
         for (FoodElement element : foodElementMap.keySet()) {
             int value = foodElementMap.get(element);

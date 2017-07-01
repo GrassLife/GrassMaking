@@ -2,7 +2,6 @@ package life.grass.grassmaking.table.cooking;
 
 import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.cooking.CookingType;
-import life.grass.grassmaking.table.cooking.Cooker;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -10,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,8 +29,13 @@ public class IronPlate extends Cooker {
     }
 
     @Override
-    public String namesCuisine(ItemStack mainIngredient, ItemStack mainSeasoning) {
-        return "焼いた" + JsonHandler.getGrassJson(mainIngredient).getDisplayName();
+    public String namesCuisine(ItemStack mainIngredient, ItemStack accompaniment, ItemStack mainSeasoning) {
+        return "焼いた" + JsonHandler.getGrassJson(mainIngredient).getDisplayName() + (accompaniment != null ? "の" + JsonHandler.getGrassJson(accompaniment).getDisplayName() + "添え" : "");
+    }
+
+    @Override
+    public LocalDateTime extendExpireDate(ItemStack ingredient) {
+        return LocalDateTime.parse(JsonHandler.getGrassJson(ingredient).getDynamicValue("ExpireDate").getAsOverwritedString().orElse(LocalDateTime.now().toString())).plusHours(12);
     }
 
     @Override

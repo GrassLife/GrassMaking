@@ -24,6 +24,7 @@ public class BlockBreak implements Listener {
         ).forEach(block ->
                 tableManager.findTable(block).ifPresent(table -> {
                     if (table.canOpen(block)) tableManager.remove(block);
+                    else event.setCancelled(true);
                 })
         );
     }

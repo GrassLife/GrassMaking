@@ -9,7 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -57,8 +56,8 @@ public class Manaita extends Cooker {
     }
 
     @Override
-    public LocalDateTime extendExpireDate(ItemStack ingredient) {
-        return LocalDateTime.parse(JsonHandler.getGrassJson(ingredient).getDynamicValue("ExpireDate").getAsOverwritedString().orElse(LocalDateTime.now().toString())).plusHours(8);
+    public ItemStack extendExpireDate(ItemStack item) {
+        return JsonHandler.putExpireDateHours(item, 8);
     }
 
     @Override

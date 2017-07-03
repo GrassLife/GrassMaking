@@ -115,7 +115,7 @@ public class GrassCook implements Listener {
         result = JsonHandler.putDynamicData(result, "CustomMaterial", cuisineMaterial);
         result = JsonHandler.putDynamicData(result, "CustomName", cooker.namesCuisine(mainIngredient, accompaniment, mainSeasoning));
         result = JsonHandler.putDynamicData(result, "Calorie", "+" + calorie);
-        result = JsonHandler.putDynamicData(result, "ExpireDate", cooker.extendExpireDate(mainIngredient));
+        result = cooker.extendExpireDate(result);
 
         for (FoodElement element : foodElementMap.keySet()) {
             int value = foodElementMap.get(element);

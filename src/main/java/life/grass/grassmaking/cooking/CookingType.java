@@ -28,6 +28,20 @@ public enum CookingType {
                     return 1;
             }
         }
+    },
+    BOIL(140, 1.2) {
+        @Override
+        public double getCalorieMultiple(IngredientType ingredientType) {
+            switch (ingredientType) {
+                case MEAT:
+                case FISH:
+                    return 1.15;
+                case VEGETABLE:
+                    return 0.8;
+                default:
+                    return 1;
+            }
+        }
     };
 
     private int weightDivider;

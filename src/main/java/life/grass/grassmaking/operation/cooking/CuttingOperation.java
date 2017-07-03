@@ -15,6 +15,8 @@ public class CuttingOperation extends CookingOperation {
 
     @Override
     protected void onStart() {
+        super.onStart();
+
         World world = getBlock().getWorld();
         Location location = getBlock().getLocation().clone().add(1, -0.73, 0.35);
 
@@ -29,6 +31,8 @@ public class CuttingOperation extends CookingOperation {
 
     @Override
     protected void onFinish() {
+        super.onFinish();
+
         armorStand.remove();
     }
 }

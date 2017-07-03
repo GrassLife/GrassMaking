@@ -62,11 +62,6 @@ public class Manaita extends Cooker {
     }
 
     @Override
-    public Particle getCookingParticle() {
-        return Particle.SWEEP_ATTACK;
-    }
-
-    @Override
     protected CookingType getCookingType() {
         return CookingType.CUTTING;
     }

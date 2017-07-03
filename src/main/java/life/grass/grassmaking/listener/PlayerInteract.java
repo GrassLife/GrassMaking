@@ -3,9 +3,10 @@ package life.grass.grassmaking.listener;
 import life.grass.grassmaking.GrassMaking;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.operation.Operable;
+import life.grass.grassmaking.table.Table;
 import life.grass.grassmaking.table.cooking.IronPlate;
 import life.grass.grassmaking.table.cooking.Manaita;
-import life.grass.grassmaking.table.Table;
+import life.grass.grassmaking.table.cooking.Pot;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,6 +26,7 @@ public class PlayerInteract implements Listener {
 
         tableClassSet.add(IronPlate.class);
         tableClassSet.add(Manaita.class);
+        tableClassSet.add(Pot.class);
     }
 
     @EventHandler
@@ -65,6 +67,7 @@ public class PlayerInteract implements Listener {
         if (table instanceof Operable && table.canOpen(block)) {
             if (((Operable) table).getOperation().isOperating()) return;
 
+            event.setCancelled(true);
             player.openInventory(table.getInventory());
         }
     }

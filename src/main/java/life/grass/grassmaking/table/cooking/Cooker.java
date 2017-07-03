@@ -11,7 +11,6 @@ import life.grass.grassmaking.ui.cooking.CookerInterface;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
@@ -41,8 +40,6 @@ public abstract class Cooker extends Maker implements CookerInterface {
     public abstract String namesCuisine(ItemStack mainIngredient, ItemStack accompaniment, ItemStack mainSeasoning);
 
     public abstract ItemStack extendExpireDate(ItemStack item);
-
-    public abstract Particle getCookingParticle();
 
     protected abstract CookingType getCookingType();
 

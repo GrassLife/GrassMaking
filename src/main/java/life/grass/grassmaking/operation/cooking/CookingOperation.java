@@ -8,9 +8,17 @@ import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class CookingOperation extends ResultOperation {
+    private Location circleLocation;
 
     public CookingOperation(Block block) {
         super(block);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        this.circleLocation = getBlock().getLocation().clone().add(0.5, 0.2, 0.5);
     }
 
     @Override
@@ -18,7 +26,7 @@ public abstract class CookingOperation extends ResultOperation {
         super.onFinish();
 
         new BukkitRunnable() {
-            Location center = getBlock().getLocation().clone().add(0.5, 0.2, 0.5);
+            Location center = circleLocation.clone();
             double radius = 1.2;
             int space = 18;
             int count = 1;
@@ -41,5 +49,13 @@ public abstract class CookingOperation extends ResultOperation {
                 count += space;
             }
         }.runTaskTimer(GrassMaking.getInstance(), 0, 1);
+    }
+
+    public Location getCircleLocation() {
+        return circleLocation;
+    }
+
+    public void setCircleLocation(Location circleLocation) {
+        this.circleLocation = circleLocation;
     }
 }

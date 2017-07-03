@@ -2,6 +2,7 @@ package life.grass.grassmaking.listener;
 
 import life.grass.grassmaking.GrassMaking;
 import life.grass.grassmaking.manager.TableManager;
+import life.grass.grassmaking.table.cooking.Cooker;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,8 +24,10 @@ public class BlockBreak implements Listener {
                 event.getBlock().getRelative(BlockFace.UP)
         ).forEach(block ->
                 tableManager.findTable(block).ifPresent(table -> {
-                    if (table.canOpen(block)) tableManager.remove(block);
-                    else event.setCancelled(true);
+                    if (table instanceof Cooker) {
+                        if (((Cooker) table).getOperation().isOperating()) event.setCancelled(true);
+                        else tableManager.remove(block);
+                    }
                 })
         );
     }

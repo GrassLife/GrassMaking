@@ -53,6 +53,7 @@ public final class GrassMaking extends JavaPlugin {
         pm.registerEvents(new ChunkLoad(), this);
         pm.registerEvents(new GrassCook(), this);
         pm.registerEvents(new InventoryClick(), this);
+        pm.registerEvents(new ItemRewrite(), this);
         pm.registerEvents(new PlayerInteract(), this);
         pm.registerEvents(new PlayerItemConsume(), this);
     }

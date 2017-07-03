@@ -48,7 +48,7 @@ public enum FoodEffect {
 
             player.addPotionEffects(Arrays.asList(
                     new PotionEffect(PotionEffectType.SLOW, 20 * 60 * level, level - 1),
-                    new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 60 * level, level)
+                    new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 45 * level, level)
             ));
         }
     },

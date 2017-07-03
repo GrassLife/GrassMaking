@@ -5,12 +5,12 @@ import life.grass.grassmaking.cooking.CookingType;
 import life.grass.grassmaking.operation.cooking.IronPlateOperation;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class IronPlate extends Cooker {
@@ -21,7 +21,7 @@ public class IronPlate extends Cooker {
     static {
         PADDING_ICON_FENCE = createIcon(Material.IRON_FENCE, 0, null, null);
         PADDING_ICON_FIRE = createIcon(Material.STAINED_GLASS_PANE, 14, null, null);
-        MAKING_ICON = createIcon(Material.CAULDRON_ITEM, 0, ChatColor.RED + "調理する", null);
+        MAKING_ICON = createIcon(Material.REDSTONE_TORCH_ON, 0, ChatColor.RED + "調理する", null);
     }
 
     public IronPlate(Block block) {
@@ -41,11 +41,6 @@ public class IronPlate extends Cooker {
     @Override
     protected CookingType getCookingType() {
         return CookingType.GRILL;
-    }
-
-    @Override
-    public Particle getCookingParticle() {
-        return Particle.SMOKE_LARGE;
     }
 
     @Override
@@ -70,18 +65,18 @@ public class IronPlate extends Cooker {
         ItemStack icon = super.getPaddingIcon(position);
 
         switch (position) {
-            case 9:
-            case 14:
-            case 18:
-            case 23:
-            case 28:
-            case 31:
+            case 37:
             case 38:
             case 39:
+            case 40:
+            case 41:
                 icon = PADDING_ICON_FENCE;
                 break;
+            case 46:
             case 47:
             case 48:
+            case 49:
+            case 50:
                 icon = PADDING_ICON_FIRE;
                 break;
         }
@@ -96,12 +91,12 @@ public class IronPlate extends Cooker {
 
     @Override
     public int getSeasoningIconPosition() {
-        return 34;
+        return 16;
     }
 
     @Override
     public List<Integer> getSeasoningSpacePositionList() {
-        return Arrays.asList(41, 42, 43);
+        return Collections.singletonList(25);
     }
 
     @Override
@@ -111,11 +106,11 @@ public class IronPlate extends Cooker {
 
     @Override
     public int getMakingIconPosition() {
-        return 16;
+        return 43;
     }
 
     @Override
     public List<Integer> getIngredientSpacePositionList() {
-        return Arrays.asList(10, 11, 12, 13, 19, 20, 21, 22, 29, 30);
+        return Arrays.asList(10, 11, 12, 13, 14, 19, 20, 21, 22, 23, 28, 29, 30, 31, 32);
     }
 }

@@ -113,7 +113,7 @@ public class GrassCook implements Listener {
 
         ItemStack result = JsonHandler.putUniqueName(new ItemStack(cuisineMaterial, amount), "Cuisine");
         result = JsonHandler.putDynamicData(result, "CustomMaterial", cuisineMaterial);
-        result = JsonHandler.putDynamicData(result, "CustomName", cooker.namesCuisine(mainIngredient, accompaniment, mainSeasoning));
+        result = JsonHandler.putDynamicData(result, "CustomDisplayName", cooker.namesCuisine(mainIngredient, accompaniment, mainSeasoning));
         result = JsonHandler.putDynamicData(result, "Calorie", "+" + calorie);
         result = cooker.extendExpireDate(result);
 

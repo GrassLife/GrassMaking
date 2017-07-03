@@ -1,65 +1,45 @@
 package life.grass.grassmaking.operation.cooking;
 
-import life.grass.grassmaking.operation.VisualOperation;
+import life.grass.grassmaking.GrassMaking;
+import life.grass.grassmaking.operation.ResultOperation;
+import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Item;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
+import org.bukkit.scheduler.BukkitRunnable;
 
-public class CookingOperation extends VisualOperation {
-    private ItemStack cuisine;
-    private Particle particle;
+public abstract class CookingOperation extends ResultOperation {
 
     public CookingOperation(Block block) {
         super(block);
-
-        particle = Particle.CRIT;
-    }
-
-    @Override
-    protected void onOperate() {
-        Block block = getBlock();
-
-        block.getWorld().spawnParticle(
-                particle,
-                block.getLocation().clone().add(0.5, 0.5, 0.5),
-                3,
-                0.25,
-                0.25,
-                0.25,
-                0);
     }
 
     @Override
     protected void onFinish() {
-        Block block = getBlock();
-        World world = block.getWorld();
+        super.onFinish();
 
-        world.spawnParticle(
-                Particle.LAVA,
-                block.getLocation().clone().add(0.5, 0.5, 0.5),
-                8,
-                0,
-                0,
-                0,
-                0);
+        new BukkitRunnable() {
+            Location center = getBlock().getLocation().clone().add(0.5, 0.2, 0.5);
+            double radius = 1.2;
+            int space = 18;
+            int count = 1;
 
-        Item drop = world.dropItem(block.getLocation().clone().add(0.5D, 0.1D, 0.5D), cuisine);
-        drop.setVelocity(new Vector(Math.random(), 8, Math.random()).multiply(0.03));
-    }
+            @Override
+            public void run() {
+                double rad = Math.toRadians(count);
+                double x = radius * Math.cos(rad);
+                double z = radius * Math.sin(rad);
 
-    @Override
-    protected ItemStack getVisualItem() {
-        return cuisine;
-    }
+                center.add(x, 0, z);
+                center.getWorld().spawnParticle(Particle.END_ROD, center, 1, 0, 0, 0, 0);
+                center.subtract(2.0 * x, 0, 2.0 * z);
+                center.getWorld().spawnParticle(Particle.END_ROD, center, 1, 0, 0, 0, 0);
+                center.add(x, 0, z);
 
-    public void setCuisine(ItemStack cuisine) {
-        this.cuisine = cuisine;
-    }
-
-    public void setParticle(Particle particle) {
-        this.particle = particle;
+                if (360 < count) {
+                    cancel();
+                }
+                count += space;
+            }
+        }.runTaskTimer(GrassMaking.getInstance(), 0, 1);
     }
 }

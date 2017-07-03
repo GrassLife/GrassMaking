@@ -1,40 +1,34 @@
-package life.grass.grassmaking.operation;
+package life.grass.grassmaking.operation.cooking;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.EulerAngle;
 
-public abstract class VisualOperation extends Operation {
+public class CuttingOperation extends CookingOperation {
     private ArmorStand armorStand;
 
-    public VisualOperation(Block block) {
+    public CuttingOperation(Block block) {
         super(block);
     }
 
     @Override
     protected void onStart() {
         World world = getBlock().getWorld();
-        Location location = getBlock().getLocation().clone().add(0.5, -1.02, 0.5);
+        Location location = getBlock().getLocation().clone().add(1, -0.73, 0.35);
 
         armorStand = world.spawn(location, ArmorStand.class);
         armorStand.setCustomName("GrassMaking_" + Double.toString(Math.random()));
         armorStand.setCustomNameVisible(false);
         armorStand.setVisible(false);
         armorStand.setGravity(false);
-        armorStand.setSmall(true);
-        armorStand.setHelmet(getVisualItem());
+        armorStand.setItemInHand(getResult());
+        armorStand.setRightArmPose(new EulerAngle(0, 1.0, 0));
     }
 
     @Override
-    protected void onEnd() {
+    protected void onFinish() {
         armorStand.remove();
     }
-
-    public ArmorStand getArmorStand() {
-        return armorStand;
-    }
-
-    protected abstract ItemStack getVisualItem();
 }

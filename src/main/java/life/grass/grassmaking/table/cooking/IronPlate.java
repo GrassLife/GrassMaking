@@ -2,6 +2,7 @@ package life.grass.grassmaking.table.cooking;
 
 import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.cooking.CookingType;
+import life.grass.grassmaking.operation.cooking.IronPlateOperation;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -24,7 +25,7 @@ public class IronPlate extends Cooker {
     }
 
     public IronPlate(Block block) {
-        super(block);
+        super(block, new IronPlateOperation(block));
     }
 
     @Override

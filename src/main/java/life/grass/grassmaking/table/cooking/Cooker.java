@@ -4,6 +4,7 @@ import life.grass.grassitem.GrassJson;
 import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.cooking.CookingType;
 import life.grass.grassmaking.event.GrassCookEvent;
+import life.grass.grassmaking.operation.ResultOperation;
 import life.grass.grassmaking.operation.cooking.CookingOperation;
 import life.grass.grassmaking.table.Maker;
 import life.grass.grassmaking.ui.cooking.CookerInterface;
@@ -31,10 +32,10 @@ public abstract class Cooker extends Maker implements CookerInterface {
         SEASONING_ICON = createIcon(Material.NAME_TAG, 0, ChatColor.RED + "調味料", null);
     }
 
-    public Cooker(Block block) {
+    public Cooker(Block block, CookingOperation operation) {
         super(block);
 
-        operation = new CookingOperation(block);
+        this.operation = operation;
     }
 
     public abstract String namesCuisine(ItemStack mainIngredient, ItemStack accompaniment, ItemStack mainSeasoning);
@@ -113,8 +114,7 @@ public abstract class Cooker extends Maker implements CookerInterface {
                 viewer.closeInventory();
             }
 
-            operation.setCuisine(result);
-            operation.setParticle(getCookingParticle());
+            operation.setResult(result);
             operation.start(getCookingTick());
         }
     }
@@ -125,7 +125,7 @@ public abstract class Cooker extends Maker implements CookerInterface {
         return event.getResult();
     }
 
-    public CookingOperation getOperation() {
+    public ResultOperation getOperation() {
         return operation;
     }
 

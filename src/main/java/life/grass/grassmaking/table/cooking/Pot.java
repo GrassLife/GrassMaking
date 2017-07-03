@@ -20,7 +20,7 @@ public class Pot extends Cooker {
     static {
         PADDING_ICON_FENCE = createIcon(Material.IRON_FENCE, 0, null, null);
         PADDING_ICON_FIRE = createIcon(Material.STAINED_GLASS_PANE, 14, null, null);
-        MAKING_ICON = createIcon(Material.CAULDRON_ITEM, 0, ChatColor.RED + "調理する", null);
+        MAKING_ICON = createIcon(Material.CAULDRON_ITEM, 0, ChatColor.AQUA + "茹でる", null);
     }
 
     public Pot(Block block) {

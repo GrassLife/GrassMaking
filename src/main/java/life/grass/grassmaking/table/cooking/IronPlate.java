@@ -21,7 +21,7 @@ public class IronPlate extends Cooker {
     static {
         PADDING_ICON_FENCE = createIcon(Material.IRON_FENCE, 0, null, null);
         PADDING_ICON_FIRE = createIcon(Material.STAINED_GLASS_PANE, 14, null, null);
-        MAKING_ICON = createIcon(Material.REDSTONE_TORCH_ON, 0, ChatColor.RED + "調理する", null);
+        MAKING_ICON = createIcon(Material.REDSTONE_TORCH_ON, 0, ChatColor.RED + "焼く", null);
     }
 
     public IronPlate(Block block) {

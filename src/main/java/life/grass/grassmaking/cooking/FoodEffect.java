@@ -30,6 +30,17 @@ public enum FoodEffect {
             ));
         }
     },
+    ANALGESIC("鎮痛") {
+        @Override
+        public void exert(Player player, int level) {
+            level = Math.abs(level);
+            if (level < 1) return;
+
+            player.addPotionEffects(Collections.singletonList(
+                    new PotionEffect(PotionEffectType.ABSORPTION, 20 * 45, level)
+            ));
+        }
+    },
     HEAVY_STOMACH("胃もたれ") {
         @Override
         public void exert(Player player, int level) {

@@ -2,7 +2,7 @@ package life.grass.grassmaking.cooking;
 
 public enum FoodElement {
     SWEET("甘さ", "苦さ", FoodEffect.UNKNOWN, FoodEffect.UNKNOWN),
-    SPICY("酸っぱさ", "辛さ", FoodEffect.UNKNOWN, FoodEffect.UNKNOWN),
+    SPICY("辛さ", "酸っぱさ", FoodEffect.ANALGESIC, FoodEffect.UNKNOWN),
     SALTY("塩辛さ", "淡泊さ", FoodEffect.UNKNOWN, FoodEffect.UNKNOWN),
     SACHI("山の幸", "海の幸", FoodEffect.FULLNESS, FoodEffect.UNKNOWN),
     UMAMI("旨さ", "不味さ", FoodEffect.UNKNOWN, FoodEffect.UNKNOWN),

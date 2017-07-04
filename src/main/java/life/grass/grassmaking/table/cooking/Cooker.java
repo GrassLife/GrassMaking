@@ -61,7 +61,7 @@ public abstract class Cooker extends Maker implements CookerInterface {
     }
 
     @Override
-    public void onPressedMaking() {
+    public void onPressMaking() {
         List<ItemStack> ingredientList = new ArrayList<>();
         getIngredientSpacePositionList().stream()
                 .map(position -> getInventory().getItem(position))

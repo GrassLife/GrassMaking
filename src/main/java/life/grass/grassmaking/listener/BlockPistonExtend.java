@@ -1,6 +1,6 @@
 package life.grass.grassmaking.listener;
 
-import life.grass.grassmaking.manager.TableManager;
+import life.grass.grassmaking.manager.StationaryTableHolder;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,10 +9,10 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import java.util.Arrays;
 
 public class BlockPistonExtend implements Listener {
-    private static TableManager tableManager;
+    private static StationaryTableHolder tableManager;
 
     static {
-        tableManager = TableManager.getInstance();
+        tableManager = StationaryTableHolder.getInstance();
     }
 
     @EventHandler

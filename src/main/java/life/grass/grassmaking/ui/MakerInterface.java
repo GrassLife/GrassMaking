@@ -12,5 +12,5 @@ public interface MakerInterface extends TableInterface {
 
     List<Integer> getIngredientSpacePositionList();
 
-    void onPressedMaking();
+    void onPressMaking();
 }

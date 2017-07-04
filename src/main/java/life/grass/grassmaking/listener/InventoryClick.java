@@ -2,7 +2,7 @@ package life.grass.grassmaking.listener;
 
 import life.grass.grassmaking.table.cooking.Cooker;
 import life.grass.grassmaking.table.Maker;
-import life.grass.grassmaking.table.Table;
+import life.grass.grassmaking.table.StationaryTable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -15,28 +15,28 @@ public class InventoryClick implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory inventory = event.getInventory();
 
-        if (inventory == null || !(inventory.getHolder() instanceof Table)) return;
+        if (inventory == null || !(inventory.getHolder() instanceof StationaryTable)) return;
 
-        Table table = (Table) inventory.getHolder();
+        StationaryTable stationaryTable = (StationaryTable) inventory.getHolder();
         ItemStack clicked = event.getCurrentItem();
         int slot = event.getSlot();
 
-        if (table.getPaddingIcon(slot).equals(clicked)) {
+        if (stationaryTable.getPaddingIcon(slot).equals(clicked)) {
             event.setCancelled(true);
             return;
         }
 
-        if (table instanceof Maker && event.getRawSlot() < inventory.getSize()) {
-            Maker maker = (Maker) table;
+        if (stationaryTable instanceof Maker && event.getRawSlot() < inventory.getSize()) {
+            Maker maker = (Maker) stationaryTable;
 
             if (maker.getMakingIconPosition() == slot) {
                 event.setCancelled(true);
-                maker.onPressedMaking();
+                maker.onPressMaking();
                 return;
             }
 
-            if (table instanceof Cooker) {
-                Cooker cooker = (Cooker) table;
+            if (stationaryTable instanceof Cooker) {
+                Cooker cooker = (Cooker) stationaryTable;
 
                 if (cooker.getSeasoningIconPosition() == slot) {
                     event.setCancelled(true);

@@ -1,6 +1,6 @@
 package life.grass.grassmaking.manager;
 
-import life.grass.grassmaking.table.Table;
+import life.grass.grassmaking.table.StationaryTable;
 import org.bukkit.block.Block;
 
 import java.util.HashMap;
@@ -8,39 +8,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class TableManager {
-    private static TableManager instance;
+public class StationaryTableHolder {
+    private static StationaryTableHolder instance;
 
-    private Map<String, Table> tableMap;
+    private Map<String, StationaryTable> tableMap;
 
     static {
-        instance = new TableManager();
+        instance = new StationaryTableHolder();
     }
 
-    private TableManager() {
+    private StationaryTableHolder() {
         tableMap = new HashMap<>();
     }
 
-    public static TableManager getInstance() {
+    public static StationaryTableHolder getInstance() {
         return instance;
     }
 
-    public Optional<Table> findTable(Block block) {
+    public Optional<StationaryTable> findTable(Block block) {
         return Optional.ofNullable(tableMap.get(generateKey(block)));
     }
 
-    public Table createTable(Block block, Table table) {
+    public StationaryTable createTable(Block block, StationaryTable stationaryTable) {
         String key = generateKey(block);
         try {
-            tableMap.put(key, table);
+            tableMap.put(key, stationaryTable);
             return tableMap.get(key);
         } catch (Exception ignore) {
             return null;
         }
     }
 
-    public List<Table> getTableSet() {
-        return (List<Table>) tableMap.values();
+    public List<StationaryTable> getTableSet() {
+        return (List<StationaryTable>) tableMap.values();
     }
 
     public void remove(Block block) {

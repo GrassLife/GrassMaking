@@ -5,7 +5,7 @@ import life.grass.grassmaking.ui.MakerInterface;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 
-public abstract class Maker extends Table implements MakerInterface, Operable {
+public abstract class Maker extends StationaryTable implements MakerInterface, Operable {
 
     public Maker(Block block) {
         super(block);

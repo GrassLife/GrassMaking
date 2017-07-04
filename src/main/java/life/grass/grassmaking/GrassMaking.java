@@ -1,7 +1,7 @@
 package life.grass.grassmaking;
 
 import life.grass.grassmaking.listener.*;
-import life.grass.grassmaking.manager.TableManager;
+import life.grass.grassmaking.manager.StationaryTableHolder;
 import life.grass.grassmaking.operation.Operable;
 import life.grass.grassmaking.operation.Operation;
 import org.bukkit.Bukkit;
@@ -24,7 +24,7 @@ public final class GrassMaking extends JavaPlugin {
         super.onDisable();
         instance = null;
 
-        TableManager.getInstance().getTableSet().stream()
+        StationaryTableHolder.getInstance().getTableSet().stream()
                 .filter(table -> table instanceof Operable)
                 .map(table -> ((Operable) table).getOperation())
                 .forEach(Operation::cancel);

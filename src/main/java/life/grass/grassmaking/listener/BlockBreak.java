@@ -1,6 +1,5 @@
 package life.grass.grassmaking.listener;
 
-import life.grass.grassmaking.GrassMaking;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.table.cooking.Cooker;
 import org.bukkit.block.BlockFace;
@@ -14,7 +13,7 @@ public class BlockBreak implements Listener {
     private static TableManager tableManager;
 
     static {
-        tableManager = GrassMaking.getTableManager();
+        tableManager = TableManager.getInstance();
     }
 
     @EventHandler

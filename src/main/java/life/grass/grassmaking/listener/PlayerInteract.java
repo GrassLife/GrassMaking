@@ -1,6 +1,5 @@
 package life.grass.grassmaking.listener;
 
-import life.grass.grassmaking.GrassMaking;
 import life.grass.grassmaking.manager.TableManager;
 import life.grass.grassmaking.operation.Operable;
 import life.grass.grassmaking.table.Table;
@@ -39,7 +38,7 @@ public class PlayerInteract implements Listener {
             return;
         }
 
-        TableManager tableManager = GrassMaking.getTableManager();
+        TableManager tableManager = TableManager.getInstance();
 
         Table table;
         Class<? extends Table> clazz = tableClassSet.stream()

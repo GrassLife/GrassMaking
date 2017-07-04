@@ -10,13 +10,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class GrassMaking extends JavaPlugin {
     private static GrassMaking instance;
-    private static TableManager tableManager;
 
     @Override
     public void onEnable() {
         super.onEnable();
         instance = this;
-        tableManager = new TableManager();
 
         this.registerEvents();
     }
@@ -26,7 +24,7 @@ public final class GrassMaking extends JavaPlugin {
         super.onDisable();
         instance = null;
 
-        tableManager.getTableSet().stream()
+        TableManager.getInstance().getTableSet().stream()
                 .filter(table -> table instanceof Operable)
                 .map(table -> ((Operable) table).getOperation())
                 .forEach(Operation::cancel);
@@ -39,10 +37,6 @@ public final class GrassMaking extends JavaPlugin {
 
     public static GrassMaking getInstance() {
         return instance;
-    }
-
-    public static TableManager getTableManager() {
-        return tableManager;
     }
 
     private void registerEvents() {

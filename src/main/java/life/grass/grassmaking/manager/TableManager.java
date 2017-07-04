@@ -9,10 +9,20 @@ import java.util.Map;
 import java.util.Optional;
 
 public class TableManager {
+    private static TableManager instance;
+
     private Map<String, Table> tableMap;
 
-    public TableManager() {
+    static {
+        instance = new TableManager();
+    }
+
+    private TableManager() {
         tableMap = new HashMap<>();
+    }
+
+    public static TableManager getInstance() {
+        return instance;
     }
 
     public Optional<Table> findTable(Block block) {

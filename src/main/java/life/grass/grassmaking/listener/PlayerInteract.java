@@ -6,13 +6,15 @@ import life.grass.grassmaking.table.StationaryTable;
 import life.grass.grassmaking.table.cooking.IronPlate;
 import life.grass.grassmaking.table.cooking.Manaita;
 import life.grass.grassmaking.table.cooking.Pot;
+import life.grass.grassmaking.table.handcrafting.HandyCraftingTable;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,42 +34,50 @@ public class PlayerInteract implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
+        ItemStack item = player.getInventory().getItemInMainHand();
 
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK
-                || event.getHand() != EquipmentSlot.HAND) {
-            return;
-        }
+        if (event.getHand() != EquipmentSlot.HAND) return;
 
-        StationaryTableHolder tableManager = StationaryTableHolder.getInstance();
+        switch (event.getAction()) {
+            case RIGHT_CLICK_BLOCK:
+                StationaryTableHolder tableManager = StationaryTableHolder.getInstance();
 
-        StationaryTable stationaryTable;
-        Class<? extends StationaryTable> clazz = tableClassSet.stream()
-                .filter(tableClass -> {
-                    try {
-                        return tableClass.getConstructor(Block.class).newInstance(block).canOpen(block);
-                    } catch (Exception ex) {
-                        return false;
-                    }
-                })
-                .findFirst().orElse(null);
+                StationaryTable stationaryTable;
+                Class<? extends StationaryTable> clazz = tableClassSet.stream()
+                        .filter(tableClass -> {
+                            try {
+                                return tableClass.getConstructor(Block.class).newInstance(block).canOpen(block);
+                            } catch (Exception ex) {
+                                return false;
+                            }
+                        })
+                        .findFirst().orElse(null);
 
-        if (clazz == null) {
-            stationaryTable = null;
-        } else {
-            stationaryTable = tableManager.findTable(block).orElseGet(() -> {
-                try {
-                    return tableManager.createTable(block, clazz.getConstructor(Block.class).newInstance(block));
-                } catch (Exception ex) {
-                    return null;
+                if (clazz == null) {
+                    stationaryTable = null;
+                } else {
+                    stationaryTable = tableManager.findTable(block).orElseGet(() -> {
+                        try {
+                            return tableManager.createTable(block, clazz.getConstructor(Block.class).newInstance(block));
+                        } catch (Exception ex) {
+                            return null;
+                        }
+                    });
                 }
-            });
-        }
 
-        if (stationaryTable instanceof Operable && stationaryTable.canOpen(block)) {
-            if (((Operable) stationaryTable).getOperation().isOperating()) return;
+                if (stationaryTable instanceof Operable && stationaryTable.canOpen(block)) {
+                    if (((Operable) stationaryTable).getOperation().isOperating()) return;
 
-            event.setCancelled(true);
-            player.openInventory(stationaryTable.getInventory());
+                    event.setCancelled(true);
+                    player.openInventory(stationaryTable.getInventory());
+                }
+                break;
+            case RIGHT_CLICK_AIR:
+                if (item == null || item.getType() != Material.BREWING_STAND_ITEM) return;
+
+                HandyCraftingTable handyCraftingTable = new HandyCraftingTable();
+                player.openInventory(handyCraftingTable.getInventory());
+                break;
         }
     }
 }

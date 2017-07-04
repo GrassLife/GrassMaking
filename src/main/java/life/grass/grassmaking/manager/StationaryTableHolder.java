@@ -3,10 +3,7 @@ package life.grass.grassmaking.manager;
 import life.grass.grassmaking.table.StationaryTable;
 import org.bukkit.block.Block;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class StationaryTableHolder {
     private static StationaryTableHolder instance;
@@ -40,7 +37,7 @@ public class StationaryTableHolder {
     }
 
     public List<StationaryTable> getTableSet() {
-        return (List<StationaryTable>) tableMap.values();
+        return new ArrayList(tableMap.values());
     }
 
     public void remove(Block block) {

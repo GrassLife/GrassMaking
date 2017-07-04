@@ -36,6 +36,7 @@ public class RecipeShelf {
                                 recipeMap.put(recipe.getRecipeName(), recipe);
                                 System.out.println("Loaded json: " + file.getName());
                             } catch (Exception ex) {
+                                ex.printStackTrace();
                                 System.out.println("Could not load json: " + file.getName() + " / " + ex.getMessage());
                             }
                         })
@@ -51,7 +52,7 @@ public class RecipeShelf {
     }
 
     public List<Recipe> getRecipeList() {
-        return (List<Recipe>) recipeMap.values();
+        return new ArrayList(recipeMap.values());
     }
 
     private static Optional<JsonObject> loadJsonFromFile(File file) {

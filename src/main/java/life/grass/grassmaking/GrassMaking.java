@@ -1,6 +1,7 @@
 package life.grass.grassmaking;
 
 import life.grass.grassmaking.listener.*;
+import life.grass.grassmaking.manager.RecipeShelf;
 import life.grass.grassmaking.manager.StationaryTableHolder;
 import life.grass.grassmaking.operation.Operable;
 import life.grass.grassmaking.operation.Operation;
@@ -15,6 +16,9 @@ public final class GrassMaking extends JavaPlugin {
     public void onEnable() {
         super.onEnable();
         instance = this;
+
+        RecipeShelf.getInstance();
+        StationaryTableHolder.getInstance();
 
         this.registerEvents();
     }

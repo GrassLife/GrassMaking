@@ -3,7 +3,6 @@ package life.grass.grassmaking.handcrafting;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import life.grass.grassmaking.exception.IllegalJsonException;
-import life.grass.grassmaking.manager.RecipeShelf;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +16,7 @@ public class Recipe {
 
     public Recipe(JsonObject jsonObject) throws Exception {
         String recipeName = jsonObject.get("RecipeName").getAsString();
-        if (recipeName == null || recipeName.isEmpty() || RecipeShelf.getInstance().findRecipe(recipeName).isPresent())
+        if (recipeName == null || recipeName.isEmpty())
             throw new IllegalJsonException("\"RecipeName\" is wrong");
         else {
             this.recipeName = recipeName;

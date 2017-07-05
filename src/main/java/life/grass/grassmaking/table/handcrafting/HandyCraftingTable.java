@@ -20,12 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 public class HandyCraftingTable extends Table implements SelectorInterface {
+    private static final ItemStack PADDING_ICON;
     private static RecipeShelf recipeShelf;
 
     private Inventory inventory;
     private Map<Integer, ItemStack> selectedItemMap;
 
     static {
+        PADDING_ICON = createIcon(Material.STAINED_GLASS_PANE, 15, null, null);
         recipeShelf = RecipeShelf.getInstance();
     }
 
@@ -53,6 +55,11 @@ public class HandyCraftingTable extends Table implements SelectorInterface {
         }
 
         inventory = initInventory();
+    }
+
+    @Override
+    public ItemStack getPaddingIcon(int position) {
+        return PADDING_ICON;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class HandyCraftingTable extends Table implements SelectorInterface {
     private Map<Integer, ItemStack> selectedItemMap;
 
     static {
-        PADDING_ICON = createIcon(Material.STAINED_GLASS_PANE, 15, null, null);
+        PADDING_ICON = createIcon(Material.STAINED_GLASS_PANE, 12, null, null);
         recipeShelf = RecipeShelf.getInstance();
     }
 

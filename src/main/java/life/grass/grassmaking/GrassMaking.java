@@ -6,6 +6,10 @@ import life.grass.grassmaking.manager.StationaryTableHolder;
 import life.grass.grassmaking.operation.Operable;
 import life.grass.grassmaking.operation.Operation;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +25,7 @@ public final class GrassMaking extends JavaPlugin {
         StationaryTableHolder.getInstance();
 
         this.registerEvents();
+        this.registerRecipes();
     }
 
     @Override
@@ -54,5 +59,13 @@ public final class GrassMaking extends JavaPlugin {
         pm.registerEvents(new ItemRewrite(), this);
         pm.registerEvents(new PlayerInteract(), this);
         pm.registerEvents(new PlayerItemConsume(), this);
+    }
+
+    private void registerRecipes() {
+        ShapelessRecipe handyCraftingTable = new ShapelessRecipe(new NamespacedKey(this, "HandyCraftingTable"), new ItemStack(Material.BREWING_STAND_ITEM));
+        handyCraftingTable.addIngredient(Material.STONE_PLATE);
+        handyCraftingTable.addIngredient(Material.TRIPWIRE_HOOK);
+        handyCraftingTable.addIngredient(Material.STICK);
+        getServer().addRecipe(handyCraftingTable);
     }
 }

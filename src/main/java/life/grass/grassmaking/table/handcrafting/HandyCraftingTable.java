@@ -38,7 +38,7 @@ public class HandyCraftingTable extends Table implements SelectorInterface {
 
             ItemStack displayItem = new ItemStack(grassItem.getType(), recipe.getResultAmount(), grassItem.getDurability());
             ItemMeta meta = displayItem.getItemMeta();
-            meta.setDisplayName(grassJson.getDisplayName());
+            meta.setDisplayName(ChatColor.WHITE + grassJson.getDisplayName());
 
             List<String> lore = new ArrayList<>();
             lore.add(" ");

@@ -4,8 +4,7 @@ import life.grass.grassitem.GrassJson;
 import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.handcrafting.Recipe;
 import life.grass.grassmaking.manager.RecipeShelf;
-import life.grass.grassmaking.table.Table;
-import life.grass.grassmaking.ui.SelectorInterface;
+import life.grass.grassmaking.table.Selector;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HandyCraftingTable extends Table implements SelectorInterface {
+public class HandyCraftingTable extends Selector {
     private static final ItemStack PADDING_ICON;
     private static RecipeShelf recipeShelf;
 
@@ -36,7 +35,7 @@ public class HandyCraftingTable extends Table implements SelectorInterface {
         this.player = player;
         selectedItemMap = new HashMap<>();
 
-        for (int i = 0; i < recipeShelf.getRecipeList().size() && i < TABLE_SIZE; i++) {
+        for (int i = 0; i < recipeShelf.getRecipeList().size() && i < getTableSize(); i++) {
             Recipe recipe = recipeShelf.getRecipeList().get(i);
             GrassJson grassJson = JsonHandler.getGrassJson(recipe.getResultUniqueName());
             ItemStack grassItem = grassJson.toItemStack();
@@ -68,19 +67,6 @@ public class HandyCraftingTable extends Table implements SelectorInterface {
     @Override
     public Inventory getInventory() {
         return inventory;
-    }
-
-    @Override
-    public Inventory initInventory() {
-        Inventory inv = super.initInventory();
-
-        for (int i = 0; i < Table.TABLE_SIZE; i++) {
-            ItemStack selectedItem = getSelectedItem(i);
-
-            if (selectedItem != null && selectedItem.getType() != Material.AIR) inv.setItem(i, selectedItem);
-        }
-
-        return inv;
     }
 
     @Override

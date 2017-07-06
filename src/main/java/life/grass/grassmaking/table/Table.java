@@ -36,8 +36,8 @@ public abstract class Table implements TableInterface {
     }
 
     protected Inventory initInventory() {
-        Inventory inv = Bukkit.createInventory(this, TABLE_SIZE, getTitle());
-        for (int i = 0; i < TABLE_SIZE; i++) inv.setItem(i, getPaddingIcon(i));
+        Inventory inv = Bukkit.createInventory(this, getTableSize(), getTitle());
+        for (int i = 0; i < getTableSize(); i++) inv.setItem(i, getPaddingIcon(i));
 
         return inv;
     }

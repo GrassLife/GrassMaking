@@ -33,7 +33,7 @@ public final class GrassMaking extends JavaPlugin {
         super.onDisable();
         instance = null;
 
-        StationaryTableHolder.getInstance().getTableSet().stream()
+        StationaryTableHolder.getInstance().getTableList().stream()
                 .filter(table -> table instanceof Operable)
                 .map(table -> ((Operable) table).getOperation())
                 .forEach(Operation::cancel);
@@ -56,6 +56,7 @@ public final class GrassMaking extends JavaPlugin {
         pm.registerEvents(new ChunkLoad(), this);
         pm.registerEvents(new GrassCook(), this);
         pm.registerEvents(new InventoryClick(), this);
+        pm.registerEvents(new InventoryClose(), this);
         pm.registerEvents(new ItemRewrite(), this);
         pm.registerEvents(new PlayerInteract(), this);
         pm.registerEvents(new PlayerItemConsume(), this);

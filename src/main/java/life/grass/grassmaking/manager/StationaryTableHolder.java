@@ -36,7 +36,7 @@ public class StationaryTableHolder {
         }
     }
 
-    public List<StationaryTable> getTableSet() {
+    public List<StationaryTable> getTableList() {
         return new ArrayList(tableMap.values());
     }
 

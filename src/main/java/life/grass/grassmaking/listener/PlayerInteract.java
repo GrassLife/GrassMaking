@@ -7,6 +7,7 @@ import life.grass.grassmaking.table.cooking.IronPlate;
 import life.grass.grassmaking.table.cooking.Manaita;
 import life.grass.grassmaking.table.cooking.Pot;
 import life.grass.grassmaking.table.handcrafting.HandyCraftingTable;
+import life.grass.grassmaking.table.enchant.EnchantWindowSelector;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -21,8 +22,10 @@ import java.util.Set;
 
 public class PlayerInteract implements Listener {
     private static Set<Class<? extends StationaryTable>> tableClassSet;
+    private static StationaryTableHolder stationaryTableHolder;
 
     static {
+        stationaryTableHolder = StationaryTableHolder.getInstance();
         tableClassSet = new HashSet<>();
 
         tableClassSet.add(IronPlate.class);
@@ -40,36 +43,42 @@ public class PlayerInteract implements Listener {
 
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
-                StationaryTableHolder tableManager = StationaryTableHolder.getInstance();
+                if (block == null) return;
 
-                StationaryTable stationaryTable;
-                Class<? extends StationaryTable> clazz = tableClassSet.stream()
-                        .filter(tableClass -> {
-                            try {
-                                return tableClass.getConstructor(Block.class).newInstance(block).canOpen(block);
-                            } catch (Exception ex) {
-                                return false;
-                            }
-                        })
-                        .findFirst().orElse(null);
-
-                if (clazz == null) {
-                    stationaryTable = null;
-                } else {
-                    stationaryTable = tableManager.findTable(block).orElseGet(() -> {
-                        try {
-                            return tableManager.createTable(block, clazz.getConstructor(Block.class).newInstance(block));
-                        } catch (Exception ex) {
-                            return null;
-                        }
-                    });
-                }
-
-                if (stationaryTable instanceof Operable && stationaryTable.canOpen(block)) {
-                    if (((Operable) stationaryTable).getOperation().isOperating()) return;
-
+                if (block.getType() == Material.ENCHANTMENT_TABLE) {
+                    EnchantWindowSelector selector = new EnchantWindowSelector(block);
+                    player.openInventory(selector.getInventory());
                     event.setCancelled(true);
-                    player.openInventory(stationaryTable.getInventory());
+                } else {
+                    StationaryTable stationaryTable;
+                    Class<? extends StationaryTable> clazz = tableClassSet.stream()
+                            .filter(tableClass -> {
+                                try {
+                                    return tableClass.getConstructor(Block.class).newInstance(block).canOpen(block);
+                                } catch (Exception ex) {
+                                    return false;
+                                }
+                            })
+                            .findFirst().orElse(null);
+
+                    if (clazz == null) {
+                        stationaryTable = null;
+                    } else {
+                        stationaryTable = stationaryTableHolder.findTable(block).orElseGet(() -> {
+                            try {
+                                return stationaryTableHolder.createTable(block, clazz.getConstructor(Block.class).newInstance(block));
+                            } catch (Exception ex) {
+                                return null;
+                            }
+                        });
+                    }
+
+                    if (stationaryTable instanceof Operable && stationaryTable.canOpen(block)) {
+                        if (((Operable) stationaryTable).getOperation().isOperating()) return;
+
+                        event.setCancelled(true);
+                        player.openInventory(stationaryTable.getInventory());
+                    }
                 }
                 break;
             case RIGHT_CLICK_AIR:

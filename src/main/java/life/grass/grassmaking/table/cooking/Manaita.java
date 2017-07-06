@@ -5,7 +5,6 @@ import life.grass.grassmaking.cooking.CookingType;
 import life.grass.grassmaking.operation.cooking.ManaitaOperation;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
@@ -80,6 +79,6 @@ public class Manaita extends Cooker {
     public boolean canOpen(Block block) {
         return block != null
                 && block.getType() == Material.WOOD_PLATE
-                && block.getRelative(BlockFace.DOWN).getType() == Material.LOG;
+                && (block.getRelative(BlockFace.DOWN).getType() == Material.LOG || block.getRelative(BlockFace.DOWN).getType() == Material.LOG_2);
     }
 }

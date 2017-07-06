@@ -1,0 +1,9 @@
+{
+  "RecipeName": "Chicken",
+  "CraftingMaterial": [
+    "Vanilla_RAW_BEEF:3",
+    "Vanilla_CARROT_ITEM:5"
+  ],
+  "Result": "Vanilla_RAW_CHICKEN:10",
+  "RecipeType": "Default"
+}

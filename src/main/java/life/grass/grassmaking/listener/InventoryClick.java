@@ -53,7 +53,7 @@ public class InventoryClick implements Listener {
             HandyCraftingTable HandyCraftingTable = ((HandyCraftingTable) inventory.getHolder());
 
             if (HandyCraftingTable.getSelectedItem(slot) != null) {
-                HandyCraftingTable.onPressSelectedItem(player, slot);
+                HandyCraftingTable.onPressSelectedItem(slot);
             }
         }
     }

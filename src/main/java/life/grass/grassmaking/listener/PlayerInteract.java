@@ -75,7 +75,7 @@ public class PlayerInteract implements Listener {
             case RIGHT_CLICK_AIR:
                 if (item == null || item.getType() != Material.BREWING_STAND_ITEM) return;
 
-                HandyCraftingTable handyCraftingTable = new HandyCraftingTable();
+                HandyCraftingTable handyCraftingTable = new HandyCraftingTable(player);
                 player.openInventory(handyCraftingTable.getInventory());
                 break;
         }

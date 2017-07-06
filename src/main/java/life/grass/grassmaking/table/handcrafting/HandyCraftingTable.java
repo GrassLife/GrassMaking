@@ -24,6 +24,7 @@ public class HandyCraftingTable extends Table implements SelectorInterface {
     private static RecipeShelf recipeShelf;
 
     private Inventory inventory;
+    private Player player;
     private Map<Integer, ItemStack> selectedItemMap;
 
     static {
@@ -31,8 +32,10 @@ public class HandyCraftingTable extends Table implements SelectorInterface {
         recipeShelf = RecipeShelf.getInstance();
     }
 
-    public HandyCraftingTable() {
+    public HandyCraftingTable(Player player) {
+        this.player = player;
         selectedItemMap = new HashMap<>();
+
         for (int i = 0; i < recipeShelf.getRecipeList().size() && i < TABLE_SIZE; i++) {
             Recipe recipe = recipeShelf.getRecipeList().get(i);
             GrassJson grassJson = JsonHandler.getGrassJson(recipe.getResultUniqueName());
@@ -91,7 +94,7 @@ public class HandyCraftingTable extends Table implements SelectorInterface {
     }
 
     @Override
-    public void onPressSelectedItem(Player player, int position) {
+    public void onPressSelectedItem(int position) {
         Recipe recipe = recipeShelf.getRecipeList().get(position);
         if (recipe == null) return;
 

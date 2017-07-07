@@ -111,6 +111,8 @@ public class GrassCook implements Listener {
                 .getAsOriginalString()
                 .orElse("COOKED_BEEF"));
 
+
+        if (64 < amount) amount = 64;
         ItemStack result = JsonHandler.putUniqueName(new ItemStack(cuisineMaterial, amount), "Cuisine");
         result = JsonHandler.putDynamicData(result, "CustomMaterial", cuisineMaterial);
         result = JsonHandler.putDynamicData(result, "CustomDisplayName", cooker.namesCuisine(mainIngredient, accompaniment, mainSeasoning));

@@ -39,15 +39,19 @@ public class ItemRewrite implements Listener {
 
         Arrays.stream(FoodElement.values()).forEach(element ->
                 grassJson.getDynamicValue("FoodElement/" + element.toString()).getAsMaskedInteger().ifPresent(value -> {
-                    if (value != 0)
+                    if (value != 0) {
+                        value = Math.abs(value);
                         lore.add(ChatColor.GRAY + (0 < value ? element.getUprightName() : element.getReversedName()) + ": " + value);
+                    }
                 })
         );
 
         Arrays.stream(FoodEffect.values()).forEach(effect ->
                 grassJson.getDynamicValue("FoodEffect/" + effect.toString()).getAsOverwritedInteger().ifPresent(value -> {
-                    if (value != 0)
+                    if (value != 0) {
+                        value = Math.abs(value);
                         lore.add(ChatColor.BLUE + effect.getDisplayName() + " Lv" + value);
+                    }
                 })
         );
 

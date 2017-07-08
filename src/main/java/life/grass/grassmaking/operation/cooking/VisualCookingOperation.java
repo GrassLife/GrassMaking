@@ -6,10 +6,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 
-public class CuttingOperation extends CookingOperation {
+public abstract class VisualCookingOperation extends CookingOperation {
     private ArmorStand armorStand;
 
-    public CuttingOperation(Block block) {
+    public VisualCookingOperation(Block block) {
         super(block);
     }
 
@@ -18,11 +18,12 @@ public class CuttingOperation extends CookingOperation {
         super.onStart();
 
         World world = getBlock().getWorld();
-        Location location = getBlock().getLocation().clone().add(1, -0.73, 0.35);
 
-        armorStand = world.spawn(location, ArmorStand.class);
+        armorStand = world.spawn(getArmorStandLocation(), ArmorStand.class);
         armorStand.setCustomName("GrassMaking_" + Double.toString(Math.random()));
         armorStand.setCustomNameVisible(false);
+        armorStand.setMarker(true);
+        armorStand.setInvulnerable(true);
         armorStand.setVisible(false);
         armorStand.setGravity(false);
         armorStand.setItemInHand(getResult());
@@ -34,5 +35,15 @@ public class CuttingOperation extends CookingOperation {
         super.onFinish();
 
         armorStand.remove();
+    }
+
+    protected abstract Location getArmorStandLocation();
+
+    protected ArmorStand getArmorStand() {
+        return armorStand;
+    }
+
+    protected void setArmorStand(ArmorStand armorStand) {
+        this.armorStand = armorStand;
     }
 }

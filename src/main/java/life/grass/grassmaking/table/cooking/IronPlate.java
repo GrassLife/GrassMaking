@@ -101,7 +101,12 @@ public class IronPlate extends Cooker {
 
     @Override
     public int getCookingTick() {
-        return 5 * 6;
+        switch (getBlock().getRelative(BlockFace.DOWN).getType()) {
+            case BURNING_FURNACE:
+                return 20 * 9;
+            default:
+                return 20 * 36;
+        }
     }
 
     @Override

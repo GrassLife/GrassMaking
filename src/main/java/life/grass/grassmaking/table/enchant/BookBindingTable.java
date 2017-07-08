@@ -2,8 +2,9 @@ package life.grass.grassmaking.table.enchant;
 
 import life.grass.grassmaking.event.GrassBookBindEvent;
 import life.grass.grassmaking.operation.Operation;
-import life.grass.grassmaking.operation.ResultOperation;
+import life.grass.grassmaking.operation.enchant.BookBindingOperation;
 import life.grass.grassmaking.table.Maker;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,16 +16,16 @@ import java.util.List;
 public class BookBindingTable extends Maker {
     private static final ItemStack MAKING_ICON;
 
-    private ResultOperation operation;
+    private BookBindingOperation operation;
 
     static {
         MAKING_ICON = createIcon(Material.BOOK_AND_QUILL, 0, ChatColor.GREEN + "製本する", null);
     }
 
-    public BookBindingTable(Block block, ResultOperation resultOperation) {
+    public BookBindingTable(Block block, BookBindingOperation operation) {
         super(block);
 
-        this.operation = resultOperation;
+        this.operation = operation;
     }
 
     @Override
@@ -50,7 +51,13 @@ public class BookBindingTable extends Maker {
     @Override
     public void onPressMaking() {
         GrassBookBindEvent event = new GrassBookBindEvent();
-        // TODO: something...
+        Bukkit.getServer().getPluginManager().callEvent(event);
+
+        ItemStack result = operation.getResult();
+        if (result != null) {
+            operation.setResult(result);
+            operation.start(5 * 16 /* seconds */);
+        }
     }
 
     @Override

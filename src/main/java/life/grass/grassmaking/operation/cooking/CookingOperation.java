@@ -12,13 +12,13 @@ public abstract class CookingOperation extends ResultOperation {
 
     public CookingOperation(Block block) {
         super(block);
+
+        this.circleLocation = getBlock().getLocation().clone().add(0.5, 0, 0.5);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        this.circleLocation = getBlock().getLocation().clone().add(0.5, 0.2, 0.5);
     }
 
     @Override
@@ -27,8 +27,8 @@ public abstract class CookingOperation extends ResultOperation {
 
         new BukkitRunnable() {
             Location center = circleLocation.clone();
-            double radius = 1.2;
-            int space = 18;
+            double radius = 1.3;
+            int space = 12;
             int count = 1;
 
             @Override
@@ -51,11 +51,7 @@ public abstract class CookingOperation extends ResultOperation {
         }.runTaskTimer(GrassMaking.getInstance(), 0, 1);
     }
 
-    public Location getCircleLocation() {
-        return circleLocation;
-    }
-
-    public void setCircleLocation(Location circleLocation) {
-        this.circleLocation = circleLocation;
+    public void increaseCircleHeight(double height) {
+        this.circleLocation = circleLocation.add(0, height, 0);
     }
 }

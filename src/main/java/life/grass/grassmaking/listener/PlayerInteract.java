@@ -6,8 +6,8 @@ import life.grass.grassmaking.table.StationaryTable;
 import life.grass.grassmaking.table.cooking.IronPlate;
 import life.grass.grassmaking.table.cooking.Manaita;
 import life.grass.grassmaking.table.cooking.Pot;
-import life.grass.grassmaking.table.handcrafting.HandyCraftingTable;
 import life.grass.grassmaking.table.enchant.EnchantWindowSelector;
+import life.grass.grassmaking.table.handcrafting.HandyCraftingTable;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -56,6 +56,7 @@ public class PlayerInteract implements Listener {
                                 try {
                                     return tableClass.getConstructor(Block.class).newInstance(block).canOpen(block);
                                 } catch (Exception ex) {
+                                    ex.printStackTrace();
                                     return false;
                                 }
                             })

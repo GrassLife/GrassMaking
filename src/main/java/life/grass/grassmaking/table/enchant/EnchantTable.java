@@ -2,10 +2,10 @@ package life.grass.grassmaking.table.enchant;
 
 import life.grass.grassmaking.event.GrassEnchantEvent;
 import life.grass.grassmaking.operation.Operation;
-import life.grass.grassmaking.operation.ResultOperation;
 import life.grass.grassmaking.operation.enchant.EnchantOperation;
 import life.grass.grassmaking.table.Maker;
 import life.grass.grassmaking.ui.enchant.EnchantInterface;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,7 +21,7 @@ public class EnchantTable extends Maker implements EnchantInterface {
     private static final ItemStack REDSTONE_ICON;
     private static final ItemStack GLOWSTONE_ICON;
 
-    private ResultOperation operation;
+    private EnchantOperation operation;
 
     static {
         MAKING_ICON = createIcon(Material.ENCHANTMENT_TABLE, 0, ChatColor.BLUE + "エンチャントする", null);
@@ -59,7 +59,13 @@ public class EnchantTable extends Maker implements EnchantInterface {
     @Override
     public void onPressMaking() {
         GrassEnchantEvent event = new GrassEnchantEvent();
-        // TODO: something...
+        Bukkit.getServer().getPluginManager().callEvent(event);
+
+        ItemStack result = operation.getResult();
+        if (result != null) {
+            operation.setResult(result);
+            operation.start(20 * 16 /* seconds */);
+        }
     }
 
     @Override

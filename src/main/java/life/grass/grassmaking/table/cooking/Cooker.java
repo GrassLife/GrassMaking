@@ -127,6 +127,6 @@ public abstract class Cooker extends Maker implements CookerInterface {
     }
 
     public int getCookingTick() {
-        return 5 * 4;
+        return 20 * 10;
     }
 }

@@ -54,7 +54,9 @@ public final class GrassMaking extends JavaPlugin {
         pm.registerEvents(new BlockBreak(), this);
         pm.registerEvents(new BlockPistonExtend(), this);
         pm.registerEvents(new ChunkLoad(), this);
+        pm.registerEvents(new GrassBookBind(), this);
         pm.registerEvents(new GrassCook(), this);
+        pm.registerEvents(new GrassEnchant(), this);
         pm.registerEvents(new InventoryClick(), this);
         pm.registerEvents(new InventoryClose(), this);
         pm.registerEvents(new ItemRewrite(), this);

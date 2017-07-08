@@ -1,5 +1,6 @@
 package life.grass.grassmaking.table.enchant;
 
+import life.grass.grassmaking.operation.enchant.BookBindingOperation;
 import life.grass.grassmaking.operation.enchant.EnchantOperation;
 import life.grass.grassmaking.table.Selector;
 import life.grass.grassmaking.table.Table;
@@ -55,7 +56,7 @@ public class EnchantWindowSelector extends Selector {
 
         switch (position) {
             case 11:
-                openInventory.accept(new BookBindingTable(block, new EnchantOperation(block)));
+                openInventory.accept(new BookBindingTable(block, new BookBindingOperation(block)));
                 break;
             case 15:
                 openInventory.accept(new EnchantTable(block, new EnchantOperation(block)));

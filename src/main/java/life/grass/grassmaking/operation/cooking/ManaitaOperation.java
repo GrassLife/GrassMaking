@@ -1,12 +1,20 @@
 package life.grass.grassmaking.operation.cooking;
 
+import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 
-public class ManaitaOperation extends CuttingOperation {
+public class ManaitaOperation extends VisualCookingOperation {
 
     public ManaitaOperation(Block block) {
         super(block);
+
+        increaseCircleHeight(0.2);
+    }
+
+    @Override
+    protected Location getArmorStandLocation() {
+        return getBlock().getLocation().clone().add(1, -0.73, 0.35);
     }
 
     @Override
@@ -15,11 +23,11 @@ public class ManaitaOperation extends CuttingOperation {
 
         Block block = getBlock();
 
-        if (Math.random() < 0.7) {
+        if (Math.random() < 0.3) {
             block.getWorld().spawnParticle(
                     Particle.SWEEP_ATTACK,
                     block.getLocation().clone().add(0.5, 0.5, 0.5),
-                    2,
+                    1,
                     0.2,
                     0,
                     0.2,

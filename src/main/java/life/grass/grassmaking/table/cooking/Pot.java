@@ -6,6 +6,7 @@ import life.grass.grassmaking.operation.cooking.PotOperation;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Cauldron;
 
@@ -56,7 +57,8 @@ public class Pot extends Cooker {
     public boolean canOpen(Block block) {
         return block != null
                 && block.getType() == Material.CAULDRON
-                && ((Cauldron) block.getState().getData()).isFull();
+                && ((Cauldron) block.getState().getData()).isFull()
+                && (block.getRelative(BlockFace.DOWN).getType() == Material.MAGMA || block.getRelative(BlockFace.DOWN).getType() == Material.BURNING_FURNACE);
     }
 
     @Override
@@ -100,7 +102,7 @@ public class Pot extends Cooker {
 
     @Override
     public int getCookingTick() {
-        return 5 * 6;
+        return 20 * 7;
     }
 
     @Override

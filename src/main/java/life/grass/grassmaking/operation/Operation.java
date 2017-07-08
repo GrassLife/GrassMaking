@@ -19,7 +19,7 @@ public abstract class Operation {
         onStart();
 
         this.finishTick = finishTick;
-        taskId = instance.getServer().getScheduler().runTaskTimer(instance, this::operate, 0, 4).getTaskId();
+        taskId = instance.getServer().getScheduler().runTaskTimer(instance, this::operate, 0, 1).getTaskId();
     }
 
     public final void cancel() {

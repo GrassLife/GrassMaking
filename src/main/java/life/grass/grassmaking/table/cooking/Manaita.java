@@ -81,4 +81,9 @@ public class Manaita extends Cooker {
                 && block.getType() == Material.WOOD_PLATE
                 && (block.getRelative(BlockFace.DOWN).getType() == Material.LOG || block.getRelative(BlockFace.DOWN).getType() == Material.LOG_2);
     }
+
+    @Override
+    public int getCookingTick() {
+        return 20 * 4;
+    }
 }

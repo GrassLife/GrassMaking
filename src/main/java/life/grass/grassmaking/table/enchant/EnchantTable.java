@@ -1,5 +1,7 @@
 package life.grass.grassmaking.table.enchant;
 
+import life.grass.grassitem.GrassJson;
+import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.event.GrassEnchantEvent;
 import life.grass.grassmaking.operation.Operation;
 import life.grass.grassmaking.operation.enchant.EnchantOperation;
@@ -9,10 +11,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class EnchantTable extends Maker implements EnchantInterface {
@@ -53,19 +58,51 @@ public class EnchantTable extends Maker implements EnchantInterface {
 
     @Override
     public List<Integer> getIngredientSpacePositionList() {
-        return Arrays.asList(11, 12, 13, 19, 20, 21, 22);
+        return Arrays.asList(11, 20);
     }
 
     @Override
     public void onPressMaking() {
-        GrassEnchantEvent event = new GrassEnchantEvent();
-        Bukkit.getServer().getPluginManager().callEvent(event);
+        ItemStack glow = getInventory().getItem(getGlowstoneSpacePosition());
+        ItemStack red = getInventory().getItem(getRedstoneSpacePosition());
+        if(glow == null || red == null) return;
+        if(!glow.getType().equals(Material.GLOWSTONE_DUST) ||
+                        !red.getType().equals(Material.REDSTONE)) return;
+        ItemStack book = getInventory().getItem(11);
+        ItemStack target = getInventory().getItem(20);
 
-        ItemStack result = operation.getResult();
-        if (result != null) {
+        if(target == null || book == null) return;
+        GrassJson bookJson = JsonHandler.getGrassJson(book);
+        GrassJson targetJson = JsonHandler.getGrassJson(target);
+
+        if(!bookJson.hasDynamicValue("Enchant/Target") || !bookJson.hasDynamicValue("Enchant/Of")) return;
+        String targetKey = bookJson.getDynamicValue("Enchant/Target").getAsMaskedString().orElse("NONE");
+        if(target.equals("NONE")) return;
+        if(!targetJson.hasItemTag(targetKey)) return;
+        String enchantKey = bookJson.getDynamicValue("Enchant/Of").getAsMaskedString().orElse("");
+        if(enchantKey.equals("")) return;
+
+        ItemStack result = JsonHandler.putDynamicData(target, "Enchant/Suffix", enchantKey);
+
+        book.setAmount(book.getAmount() - 1);
+        target.setAmount(target.getAmount() - 1);
+        red.setAmount(red.getAmount() - 1);
+        glow.setAmount(glow.getAmount() - 1);
+//        GrassEnchantEvent event = new GrassEnchantEvent();
+//        Bukkit.getServer().getPluginManager().callEvent(event);
+
+//        ItemStack result = operation.getResult();
+        if (result != null && !result.getType().equals(Material.AIR)) {
             operation.setResult(result);
-            operation.start(20 * 16 /* seconds */);
+            operation.start(20 * 3 /* seconds */);
         }
+        Iterator<HumanEntity> viewerIterator = this.getInventory().getViewers().iterator();
+        while (viewerIterator.hasNext()) {
+            HumanEntity viewer = viewerIterator.next();
+            viewerIterator.remove();
+            viewer.closeInventory();
+        }
+
     }
 
     @Override

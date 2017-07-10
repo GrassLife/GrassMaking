@@ -55,11 +55,18 @@ public class Pot extends Cooker {
 
     @Override
     public boolean canOpen(Block block) {
-        // TODO: refactor
-        return block != null
-                && block.getType() == Material.CAULDRON
-                && ((Cauldron) block.getState().getData()).isFull()
-                && (block.getRelative(BlockFace.DOWN).getType() == Material.STATIONARY_LAVA || block.getRelative(BlockFace.DOWN).getType() == Material.FIRE || block.getRelative(BlockFace.DOWN).getType() == Material.MAGMA || block.getRelative(BlockFace.DOWN).getType() == Material.BURNING_FURNACE);
+        if (block.getType() != Material.CAULDRON || !((Cauldron) block.getState().getData()).isFull()) return false;
+
+        switch (block.getRelative(BlockFace.DOWN).getType()) {
+            case STATIONARY_LAVA:
+            case LAVA:
+            case FIRE:
+            case MAGMA:
+            case BURNING_FURNACE:
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override
@@ -103,7 +110,14 @@ public class Pot extends Cooker {
 
     @Override
     public int getCookingTick() {
-        return 20 * 7;
+        switch (getBlock().getRelative(BlockFace.DOWN).getType()) {
+            case STATIONARY_LAVA:
+            case BURNING_FURNACE:
+            case FIRE:
+                return 20 * 7;
+            default:
+                return 20 * 21;
+        }
     }
 
     @Override

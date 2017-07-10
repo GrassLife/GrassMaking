@@ -4,8 +4,6 @@ import life.grass.grassmaking.operation.ResultOperation;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Item;
-import org.bukkit.util.Vector;
 
 public class EnchantOperation extends ResultOperation {
 

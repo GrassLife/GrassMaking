@@ -2,6 +2,7 @@ package life.grass.grassmaking.listener;
 
 import life.grass.grassmaking.table.Maker;
 import life.grass.grassmaking.table.cooking.Cooker;
+import life.grass.grassmaking.table.enchant.BookBindingTable;
 import life.grass.grassmaking.table.enchant.EnchantTable;
 import life.grass.grassmaking.ui.MakerInterface;
 import life.grass.grassmaking.ui.SelectorInterface;
@@ -16,7 +17,7 @@ public class InventoryClick implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory inventory = event.getInventory();
-        int slot = event.getSlot();
+        int slot = event.getRawSlot();
 
         if (inventory == null) return;
 
@@ -32,7 +33,17 @@ public class InventoryClick implements Listener {
             if (maker instanceof EnchantTable) {
                 EnchantTable enchantTable = (EnchantTable) maker;
                 if (enchantTable.getGlowstoneIconPosition() == slot
-                        || enchantTable.getRedstoneIconPosition() == slot) {
+                        || enchantTable.getRedstoneIconPosition() == slot
+                        || enchantTable.getEnchantedBookIconPosition() == slot
+                        || enchantTable.getTargetIconPosition() == slot) {
+                    event.setCancelled(true);
+                }
+            }
+
+            if (maker instanceof BookBindingTable) {
+                BookBindingTable bookBindingTable = (BookBindingTable) maker;
+                if (event.getRawSlot() < inventory.getSize() && !bookBindingTable.getIngredientSpacePositionList().contains(slot)
+                        && bookBindingTable.getLeatherSpacePosition() != slot) {
                     event.setCancelled(true);
                 }
             }

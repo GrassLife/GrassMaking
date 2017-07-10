@@ -2,12 +2,10 @@ package life.grass.grassmaking.table.enchant;
 
 import life.grass.grassitem.GrassJson;
 import life.grass.grassitem.JsonHandler;
-import life.grass.grassmaking.event.GrassEnchantEvent;
 import life.grass.grassmaking.operation.Operation;
 import life.grass.grassmaking.operation.enchant.EnchantOperation;
 import life.grass.grassmaking.table.Maker;
 import life.grass.grassmaking.ui.enchant.EnchantInterface;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,24 +13,23 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 public class EnchantTable extends Maker implements EnchantInterface {
     private static final ItemStack MAKING_ICON;
-    private static final ItemStack ENCHANTED_BOOK_ICON;
     private static final ItemStack REDSTONE_ICON;
     private static final ItemStack GLOWSTONE_ICON;
+    private static final ItemStack ENCHANTED_BOOK_ICON;
+    private static final ItemStack TARGET_ICON;
 
     private EnchantOperation operation;
 
     static {
         MAKING_ICON = createIcon(Material.ENCHANTMENT_TABLE, 0, ChatColor.BLUE + "エンチャントする", null);
-        ENCHANTED_BOOK_ICON = createIcon(Material.ENCHANTED_BOOK, 0, ChatColor.LIGHT_PURPLE + "エンチャント本", null);
         REDSTONE_ICON = createIcon(Material.REDSTONE, 0, ChatColor.RED + "レッドストーン", null);
         GLOWSTONE_ICON = createIcon(Material.GLOWSTONE_DUST, 0, ChatColor.YELLOW + "グロウストーンダスト", null);
+        ENCHANTED_BOOK_ICON = createIcon(Material.ENCHANTED_BOOK, 0, ChatColor.LIGHT_PURPLE + "エンチャント本", null);
+        TARGET_ICON = createIcon(Material.IRON_PICKAXE, 0, ChatColor.GOLD + "エンチャント対象", null);
     }
 
     public EnchantTable(Block block, EnchantOperation operation) {
@@ -57,30 +54,25 @@ public class EnchantTable extends Maker implements EnchantInterface {
     }
 
     @Override
-    public List<Integer> getIngredientSpacePositionList() {
-        return Arrays.asList(11, 20);
-    }
-
-    @Override
     public void onPressMaking() {
         ItemStack glow = getInventory().getItem(getGlowstoneSpacePosition());
         ItemStack red = getInventory().getItem(getRedstoneSpacePosition());
-        if(glow == null || red == null) return;
-        if(!glow.getType().equals(Material.GLOWSTONE_DUST) ||
-                        !red.getType().equals(Material.REDSTONE)) return;
-        ItemStack book = getInventory().getItem(11);
-        ItemStack target = getInventory().getItem(20);
+        if (glow == null || red == null) return;
+        if (!glow.getType().equals(Material.GLOWSTONE_DUST) ||
+                !red.getType().equals(Material.REDSTONE)) return;
+        ItemStack book = getInventory().getItem(getEnchantedBookSpacePosition());
+        ItemStack target = getInventory().getItem(getTargetSpacePosition());
 
-        if(target == null || book == null) return;
+        if (target == null || book == null) return;
         GrassJson bookJson = JsonHandler.getGrassJson(book);
         GrassJson targetJson = JsonHandler.getGrassJson(target);
 
-        if(!bookJson.hasDynamicValue("Enchant/Target") || !bookJson.hasDynamicValue("Enchant/Of")) return;
+        if (!bookJson.hasDynamicValue("Enchant/Target") || !bookJson.hasDynamicValue("Enchant/Of")) return;
         String targetKey = bookJson.getDynamicValue("Enchant/Target").getAsMaskedString().orElse("NONE");
-        if(target.equals("NONE")) return;
-        if(!targetJson.hasItemTag(targetKey)) return;
+        if (target.equals("NONE")) return;
+        if (!targetJson.hasItemTag(targetKey)) return;
         String enchantKey = bookJson.getDynamicValue("Enchant/Of").getAsMaskedString().orElse("");
-        if(enchantKey.equals("")) return;
+        if (enchantKey.equals("")) return;
 
         ItemStack result = JsonHandler.putDynamicData(target, "Enchant/Suffix", enchantKey);
 
@@ -117,12 +109,7 @@ public class EnchantTable extends Maker implements EnchantInterface {
 
     @Override
     public ItemStack getPaddingIcon(int position) {
-        switch (position) {
-            case 10:
-                return ENCHANTED_BOOK_ICON;
-            default:
-                return super.getPaddingIcon(position);
-        }
+        return super.getPaddingIcon(position);
     }
 
     @Override
@@ -133,6 +120,10 @@ public class EnchantTable extends Maker implements EnchantInterface {
         inventory.setItem(getRedstoneSpacePosition(), null);
         inventory.setItem(getGlowstoneIconPosition(), getGlowstoneIcon());
         inventory.setItem(getGlowstoneSpacePosition(), null);
+        inventory.setItem(getEnchantedBookIconPosition(), getEnchantedBookIcon());
+        inventory.setItem(getEnchantedBookSpacePosition(), null);
+        inventory.setItem(getTargetIconPosition(), getTargetIcon());
+        inventory.setItem(getTargetSpacePosition(), null);
 
         return inventory;
     }
@@ -143,12 +134,12 @@ public class EnchantTable extends Maker implements EnchantInterface {
 
     @Override
     public int getRedstoneIconPosition() {
-        return 37;
+        return 28;
     }
 
     @Override
     public int getRedstoneSpacePosition() {
-        return 38;
+        return 29;
     }
 
     @Override
@@ -164,5 +155,35 @@ public class EnchantTable extends Maker implements EnchantInterface {
     @Override
     public int getGlowstoneSpacePosition() {
         return 41;
+    }
+
+    @Override
+    public ItemStack getEnchantedBookIcon() {
+        return ENCHANTED_BOOK_ICON;
+    }
+
+    @Override
+    public int getEnchantedBookIconPosition() {
+        return 11;
+    }
+
+    @Override
+    public int getEnchantedBookSpacePosition() {
+        return 12;
+    }
+
+    @Override
+    public ItemStack getTargetIcon() {
+        return TARGET_ICON;
+    }
+
+    @Override
+    public int getTargetIconPosition() {
+        return 23;
+    }
+
+    @Override
+    public int getTargetSpacePosition() {
+        return 24;
     }
 }

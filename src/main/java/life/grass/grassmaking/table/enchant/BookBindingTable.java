@@ -81,7 +81,7 @@ public class BookBindingTable extends Maker implements BookBindingInterface {
 
         ItemStack result = JsonHandler.getEnchantBook(JsonBucket.getInstance().determineEnchant(Math.max(level, 1)), getInventory().getViewers().stream().findFirst().orElse(null));
         if (result != null) {
-            pages.stream().forEach(page -> page.setAmount(page.getAmount() - 1));
+            getIngredientSpacePositionList().stream().map(position -> getInventory().getItem(position)).forEach(item -> item.setAmount(item.getAmount() - 1));
             leather.setAmount(leather.getAmount() - 1);
             operation.setResult(result);
             operation.start(20 * 4 /* seconds */);

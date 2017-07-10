@@ -55,10 +55,11 @@ public class Pot extends Cooker {
 
     @Override
     public boolean canOpen(Block block) {
+        // TODO: refactor
         return block != null
                 && block.getType() == Material.CAULDRON
                 && ((Cauldron) block.getState().getData()).isFull()
-                && (block.getRelative(BlockFace.DOWN).getType() == Material.MAGMA || block.getRelative(BlockFace.DOWN).getType() == Material.BURNING_FURNACE);
+                && (block.getRelative(BlockFace.DOWN).getType() == Material.STATIONARY_LAVA || block.getRelative(BlockFace.DOWN).getType() == Material.FIRE || block.getRelative(BlockFace.DOWN).getType() == Material.MAGMA || block.getRelative(BlockFace.DOWN).getType() == Material.BURNING_FURNACE);
     }
 
     @Override

@@ -19,6 +19,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class GrassCook implements Listener {
+    private static final double SIZE_BONUS_MULTIPLE = 0.27;
 
     @EventHandler(priority = EventPriority.LOW)
     public void onGrassCook(GrassCookEvent event) {
@@ -43,6 +44,7 @@ public class GrassCook implements Listener {
                 .getAsMaskedInteger().orElse(10))
                 .sum();
         int amount = totalWeight / cookingType.getWeightDivider() + 1;
+        if (64 < amount) amount = 64;
 
         int oily = ingredientList.stream()
                 .mapToInt(ingredient -> {
@@ -84,7 +86,7 @@ public class GrassCook implements Listener {
                 .sum() * seasoningList.stream().mapToDouble(seasoning -> JsonHandler.getGrassJson(seasoning)
                 .getDynamicValue("CalorieMultiple")
                 .getAsMaskedDouble().orElse(1.0))
-                .reduce(1, (n, m) -> n * m));
+                .reduce(1, (n, m) -> n * m)) * (int) (1 + totalWeight / 1200 * SIZE_BONUS_MULTIPLE);
         int calorie = totalCalorie / amount;
 
         Map<FoodElement, Integer> foodElementMap = new HashMap<>();
@@ -111,8 +113,6 @@ public class GrassCook implements Listener {
                 .getAsOriginalString()
                 .orElse("COOKED_BEEF"));
 
-
-        if (64 < amount) amount = 64;
         ItemStack result = JsonHandler.putUniqueName(new ItemStack(cuisineMaterial, amount), "Cuisine");
         result = JsonHandler.putDynamicData(result, "CustomMaterial", cuisineMaterial);
         result = JsonHandler.putDynamicData(result, "CustomDisplayName", cooker.namesCuisine(mainIngredient, accompaniment, mainSeasoning));

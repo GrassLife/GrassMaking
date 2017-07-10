@@ -36,7 +36,7 @@ public class EnchantOperation extends ResultOperation {
 
     @Override
     protected void onFinish() {
-        setDropLocation(getBlock().getLocation().clone().add(0, 5, 0));
+        setDropLocation(getBlock().getLocation().clone().add(0, 2, 0));
         super.onFinish();
     }
 }

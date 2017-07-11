@@ -76,15 +76,15 @@ public class EnchantTable extends Maker implements EnchantInterface {
 
         ItemStack result = JsonHandler.putDynamicData(target, "Enchant/Suffix", enchantKey);
 
-        book.setAmount(book.getAmount() - 1);
-        target.setAmount(target.getAmount() - 1);
-        red.setAmount(red.getAmount() - 1);
-        glow.setAmount(glow.getAmount() - 1);
 //        GrassEnchantEvent event = new GrassEnchantEvent();
 //        Bukkit.getServer().getPluginManager().callEvent(event);
 
 //        ItemStack result = operation.getResult();
         if (result != null && !result.getType().equals(Material.AIR)) {
+            book.setAmount(book.getAmount() - 1);
+            target.setAmount(target.getAmount() - 1);
+            red.setAmount(red.getAmount() - 1);
+            glow.setAmount(glow.getAmount() - 1);
             operation.setResult(result);
             operation.start(20 * 3 /* seconds */);
         }

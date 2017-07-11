@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 public class GrassCook implements Listener {
     private static final double SIZE_BONUS_MULTIPLE = 0.27;
+    private static final int SIZE_BONUS_WEIGHT = 2100;
 
     @EventHandler(priority = EventPriority.LOW)
     public void onGrassCook(GrassCookEvent event) {
@@ -44,7 +45,7 @@ public class GrassCook implements Listener {
                 .getAsMaskedInteger().orElse(10))
                 .sum();
         int amount = totalWeight / cookingType.getWeightDivider() + 1;
-        if (64 < amount) amount = 64;
+        if (16 < amount) amount = 16;
 
         int oily = ingredientList.stream()
                 .mapToInt(ingredient -> {
@@ -64,7 +65,7 @@ public class GrassCook implements Listener {
                     return grassJson.getDynamicValue("Calorie").getAsMaskedInteger().orElse(1) / ingredientType.getOilyPerCalorie();
                 }).sum() / amount;
 
-        int totalCalorie = (int) (ingredientList.stream()
+        int totalCalorie = (int) ((ingredientList.stream()
                 .mapToInt(ingredient -> {
                     GrassJson grassJson = JsonHandler.getGrassJson(ingredient);
 
@@ -86,7 +87,8 @@ public class GrassCook implements Listener {
                 .sum() * seasoningList.stream().mapToDouble(seasoning -> JsonHandler.getGrassJson(seasoning)
                 .getDynamicValue("CalorieMultiple")
                 .getAsMaskedDouble().orElse(1.0))
-                .reduce(1, (n, m) -> n * m)) * (int) (1 + totalWeight / 1200 * SIZE_BONUS_MULTIPLE);
+                .reduce(1, (n, m) -> n * m)) * (1.0 + (double) (totalWeight / SIZE_BONUS_WEIGHT) * SIZE_BONUS_MULTIPLE));
+        System.out.println((1.0 + (double) (totalWeight / SIZE_BONUS_WEIGHT) * SIZE_BONUS_MULTIPLE));
         int calorie = totalCalorie / amount;
 
         Map<FoodElement, Integer> foodElementMap = new HashMap<>();
@@ -117,7 +119,7 @@ public class GrassCook implements Listener {
         result = JsonHandler.putDynamicData(result, "CustomMaterial", cuisineMaterial);
         result = JsonHandler.putDynamicData(result, "CustomDisplayName", cooker.namesCuisine(mainIngredient, accompaniment, mainSeasoning));
         result = JsonHandler.putDynamicData(result, "Calorie", "+" + calorie);
-        result = cooker.extendExpireDate(result);
+        result = cooker.getExtendExpireDate(result);
 
         for (FoodElement element : foodElementMap.keySet()) {
             int value = foodElementMap.get(element);

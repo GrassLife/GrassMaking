@@ -1,8 +1,6 @@
 package life.grass.grassmaking.listener;
 
-import life.grass.grassmaking.table.Maker;
-import life.grass.grassmaking.table.enchant.BookBindingTable;
-import life.grass.grassmaking.table.enchant.EnchantTable;
+import life.grass.grassmaking.table.BlockTable;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,38 +15,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryClose implements Listener {
-    private static final String ENCHANT_PACKAGE = "life.grass.grassmaking.table.enchant";
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         Inventory inventory = event.getInventory();
         InventoryHolder holder = inventory.getHolder();
+        List<ItemStack> dropList = new ArrayList<>();
 
-        if (holder.getClass().getName().contains(ENCHANT_PACKAGE)) {
-            List<ItemStack> dropList = new ArrayList<>();
+        if (holder instanceof BlockTable) {
+            BlockTable blockTable = (BlockTable) holder;
+            Block block = blockTable.getBlock();
 
-            if (holder instanceof Maker) {
-                Maker maker = (Maker) holder;
-                Block block = maker.getBlock();
+            if (blockTable.canKeepInventory()) return;
 
-                maker.getIngredientSpacePositionList().forEach(position -> dropList.add(inventory.getItem(position)));
+            blockTable.getSlotPartMap().forEach((slot, slotPart) -> {
+                if (slotPart.canMove()) dropList.add(inventory.getItem(slot));
+            });
 
-                if (holder instanceof EnchantTable) {
-                    EnchantTable enchantTable = ((EnchantTable) holder);
-                    dropList.add(inventory.getItem(enchantTable.getRedstoneSpacePosition()));
-                    dropList.add(inventory.getItem(enchantTable.getGlowstoneSpacePosition()));
-                }
-
-                if (holder instanceof BookBindingTable) {
-                    BookBindingTable table = (BookBindingTable) holder;
-                    dropList.add(inventory.getItem(table.getLeatherSpacePosition()));
-                }
-
-                Location dropLocation = block.getRelative(BlockFace.UP).getLocation().add(0.5, 0.1, 0.5);
-                dropList.forEach(item -> {
-                    if (item != null) block.getWorld().dropItem(dropLocation, item);
-                });
-            }
+            Location dropLocation = block.getRelative(BlockFace.UP).getLocation().add(0.5, 0.1, 0.5);
+            dropList.forEach(item -> {
+                if (item != null) block.getWorld().dropItem(dropLocation, item);
+            });
         }
     }
 }

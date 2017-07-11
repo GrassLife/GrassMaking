@@ -2,7 +2,9 @@ package life.grass.grassmaking.table.cooking;
 
 import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.cooking.CookingType;
+import life.grass.grassmaking.operation.Operation;
 import life.grass.grassmaking.operation.cooking.ManaitaOperation;
+import life.grass.grassmaking.ui.SlotPart;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,53 +12,29 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Manaita extends Cooker {
-    private static final ItemStack MAKING_ICON;
+    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, MAKING_TAG, Material.WOOD_PLATE, 0, ChatColor.YELLOW + "切る", null);
 
-
-    static {
-        MAKING_ICON = createIcon(Material.WOOD_PLATE, 0, ChatColor.YELLOW + "切る", null);
-    }
+    private Operation operation;
 
     public Manaita(Block block) {
-        super(block, new ManaitaOperation(block));
-    }
+        super(block);
+        this.operation = new ManaitaOperation(block);
 
-    @Override
-    public ItemStack getMakingIcon() {
-        return MAKING_ICON;
+        addSlotPart(37, MAKING_SLOT_PART);
+        addSlotPart(10, SEASONING_SLOT_PART);
+        Arrays.asList(21, 22, 23, 24, 25, 30, 31, 32, 33, 34, 39, 40, 41, 42, 43).forEach(slot -> addSlotPart(slot, INGREDIENT_SPACE_SLOT_PART));
+        addSlotPart(19, SEASONING_SPACE_SLOT_PART);
     }
-
-    @Override
-    public int getMakingIconPosition() {
-        return 37;
-    }
-
-    @Override
-    public List<Integer> getIngredientSpacePositionList() {
-        return Arrays.asList(21, 22, 23, 24, 25, 30, 31, 32, 33, 34, 39, 40, 41, 42, 43);
-    }
-
-    @Override
-    public int getSeasoningIconPosition() {
-        return 10;
-    }
-
-    @Override
-    public List<Integer> getSeasoningSpacePositionList() {
-        return Collections.singletonList(19);
-    }
-
     @Override
     public String namesCuisine(ItemStack mainIngredient, ItemStack accompaniment, ItemStack mainSeasoning) {
         return "切った" + JsonHandler.getGrassJson(mainIngredient).getDisplayName() + (accompaniment != null ? "と" + JsonHandler.getGrassJson(accompaniment).getDisplayName() : "");
     }
 
     @Override
-    public ItemStack extendExpireDate(ItemStack item) {
+    public ItemStack getExtendExpireDate(ItemStack item) {
         return JsonHandler.putExpireDateHours(item, 8);
     }
 
@@ -85,5 +63,10 @@ public class Manaita extends Cooker {
     @Override
     public int getCookingTick() {
         return 20 * 4;
+    }
+
+    @Override
+    public Operation getOperation() {
+        return operation;
     }
 }

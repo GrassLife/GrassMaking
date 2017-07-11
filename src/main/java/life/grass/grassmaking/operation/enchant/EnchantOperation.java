@@ -1,13 +1,11 @@
 package life.grass.grassmaking.operation.enchant;
 
-import life.grass.grassmaking.operation.ResultOperation;
+import life.grass.grassmaking.operation.Operation;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 
-public class EnchantOperation extends ResultOperation {
-
-    // TODO: add particle effects
+public class EnchantOperation extends Operation {
 
     public EnchantOperation(Block block) {
         super(block);

@@ -2,7 +2,9 @@ package life.grass.grassmaking.table.cooking;
 
 import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.cooking.CookingType;
+import life.grass.grassmaking.operation.Operation;
 import life.grass.grassmaking.operation.cooking.IronPlateOperation;
+import life.grass.grassmaking.ui.SlotPart;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,22 +12,25 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class IronPlate extends Cooker {
-    private static final ItemStack PADDING_ICON_FENCE;
-    private static final ItemStack PADDING_ICON_FIRE;
-    private static final ItemStack MAKING_ICON;
+    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, MAKING_TAG, Material.STONE_PLATE, 0, ChatColor.RED + "焼く", null);
+    private static final SlotPart FENCE_SLOT_PART = new SlotPart(false, null, Material.IRON_FENCE, 0, null, null);
+    private static final SlotPart FIRE_SLOT_PART = new SlotPart(false, null, Material.STAINED_GLASS_PANE, 14, null, null);
 
-    static {
-        PADDING_ICON_FENCE = createIcon(Material.IRON_FENCE, 0, null, null);
-        PADDING_ICON_FIRE = createIcon(Material.STAINED_GLASS_PANE, 14, null, null);
-        MAKING_ICON = createIcon(Material.REDSTONE_TORCH_ON, 0, ChatColor.RED + "焼く", null);
-    }
+    private IronPlateOperation operation;
 
     public IronPlate(Block block) {
-        super(block, new IronPlateOperation(block));
+        super(block);
+        operation = new IronPlateOperation(block);
+
+        Arrays.asList(37, 38, 39, 40, 41).forEach(slot -> addSlotPart(slot, FENCE_SLOT_PART));
+        Arrays.asList(46, 47, 48, 49, 50).forEach(slot -> addSlotPart(slot, FIRE_SLOT_PART));
+        addSlotPart(43, MAKING_SLOT_PART);
+        addSlotPart(16, SEASONING_SLOT_PART);
+        Arrays.asList(10, 11, 12, 13, 14, 19, 20, 21, 22, 23, 28, 29, 30, 31, 32).forEach(slot -> addSlotPart(slot, INGREDIENT_SPACE_SLOT_PART));
+        addSlotPart(25, SEASONING_SPACE_SLOT_PART);
     }
 
     @Override
@@ -34,7 +39,7 @@ public class IronPlate extends Cooker {
     }
 
     @Override
-    public ItemStack extendExpireDate(ItemStack item) {
+    public ItemStack getExtendExpireDate(ItemStack item) {
         return JsonHandler.putExpireDateHours(item, 12);
     }
 
@@ -61,45 +66,6 @@ public class IronPlate extends Cooker {
     }
 
     @Override
-    public ItemStack getPaddingIcon(int position) {
-        ItemStack icon = super.getPaddingIcon(position);
-
-        switch (position) {
-            case 37:
-            case 38:
-            case 39:
-            case 40:
-            case 41:
-                icon = PADDING_ICON_FENCE;
-                break;
-            case 46:
-            case 47:
-            case 48:
-            case 49:
-            case 50:
-                icon = PADDING_ICON_FIRE;
-                break;
-        }
-
-        return icon;
-    }
-
-    @Override
-    public ItemStack getMakingIcon() {
-        return MAKING_ICON;
-    }
-
-    @Override
-    public int getSeasoningIconPosition() {
-        return 16;
-    }
-
-    @Override
-    public List<Integer> getSeasoningSpacePositionList() {
-        return Collections.singletonList(25);
-    }
-
-    @Override
     public int getCookingTick() {
         switch (getBlock().getRelative(BlockFace.DOWN).getType()) {
             case BURNING_FURNACE:
@@ -110,12 +76,7 @@ public class IronPlate extends Cooker {
     }
 
     @Override
-    public int getMakingIconPosition() {
-        return 43;
-    }
-
-    @Override
-    public List<Integer> getIngredientSpacePositionList() {
-        return Arrays.asList(10, 11, 12, 13, 14, 19, 20, 21, 22, 23, 28, 29, 30, 31, 32);
+    public Operation getOperation() {
+        return operation;
     }
 }

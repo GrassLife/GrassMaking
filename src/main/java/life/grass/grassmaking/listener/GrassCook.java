@@ -45,7 +45,7 @@ public class GrassCook implements Listener {
                 .getAsMaskedInteger().orElse(10))
                 .sum();
         int amount = totalWeight / cookingType.getWeightDivider() + 1;
-        if (16 < amount) amount = 16;
+        if (64 < amount) amount = 64;
 
         int oily = ingredientList.stream()
                 .mapToInt(ingredient -> {
@@ -88,7 +88,6 @@ public class GrassCook implements Listener {
                 .getDynamicValue("CalorieMultiple")
                 .getAsMaskedDouble().orElse(1.0))
                 .reduce(1, (n, m) -> n * m)) * (1.0 + (double) (totalWeight / SIZE_BONUS_WEIGHT) * SIZE_BONUS_MULTIPLE));
-        System.out.println((1.0 + (double) (totalWeight / SIZE_BONUS_WEIGHT) * SIZE_BONUS_MULTIPLE));
         int calorie = totalCalorie / amount;
 
         Map<FoodElement, Integer> foodElementMap = new HashMap<>();

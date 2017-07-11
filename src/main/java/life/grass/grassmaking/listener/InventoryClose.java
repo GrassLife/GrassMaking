@@ -1,6 +1,7 @@
 package life.grass.grassmaking.listener;
 
 import life.grass.grassmaking.table.Maker;
+import life.grass.grassmaking.table.enchant.BookBindingTable;
 import life.grass.grassmaking.table.enchant.EnchantTable;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -36,6 +37,11 @@ public class InventoryClose implements Listener {
                     EnchantTable enchantTable = ((EnchantTable) holder);
                     dropList.add(inventory.getItem(enchantTable.getRedstoneSpacePosition()));
                     dropList.add(inventory.getItem(enchantTable.getGlowstoneSpacePosition()));
+                }
+
+                if (holder instanceof BookBindingTable) {
+                    BookBindingTable table = (BookBindingTable) holder;
+                    dropList.add(inventory.getItem(table.getLeatherSpacePosition()));
                 }
 
                 Location dropLocation = block.getRelative(BlockFace.UP).getLocation().add(0.5, 0.1, 0.5);

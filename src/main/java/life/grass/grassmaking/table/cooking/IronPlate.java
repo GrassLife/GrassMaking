@@ -54,6 +54,11 @@ public class IronPlate extends Cooker {
     }
 
     @Override
+    protected int getMaxCuisineAmount() {
+        return 16;
+    }
+
+    @Override
     public String getTitle() {
         return ChatColor.DARK_RED + "鉄板";
     }

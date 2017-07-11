@@ -55,6 +55,11 @@ public class Pot extends Cooker {
     }
 
     @Override
+    protected int getMaxCuisineAmount() {
+        return 32;
+    }
+
+    @Override
     public String getTitle() {
         return ChatColor.DARK_RED + "鍋";
     }

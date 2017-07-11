@@ -38,6 +38,8 @@ public abstract class Cooker extends MakingTable {
 
     public abstract int getCookingTick();
 
+    public abstract int getMaxCuisineAmount();
+
     protected abstract CookingType getCookingType();
 
     protected abstract boolean canCook(List<ItemStack> ingredientList, List<ItemStack> seasoningList);

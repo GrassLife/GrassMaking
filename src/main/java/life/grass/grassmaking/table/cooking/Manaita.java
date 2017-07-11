@@ -28,6 +28,7 @@ public class Manaita extends Cooker {
         Arrays.asList(21, 22, 23, 24, 25, 30, 31, 32, 33, 34, 39, 40, 41, 42, 43).forEach(slot -> addSlotPart(slot, INGREDIENT_SPACE_SLOT_PART));
         addSlotPart(19, SEASONING_SPACE_SLOT_PART);
     }
+
     @Override
     public String namesCuisine(ItemStack mainIngredient, ItemStack accompaniment, ItemStack mainSeasoning) {
         return "切った" + JsonHandler.getGrassJson(mainIngredient).getDisplayName() + (accompaniment != null ? "と" + JsonHandler.getGrassJson(accompaniment).getDisplayName() : "");
@@ -46,6 +47,11 @@ public class Manaita extends Cooker {
     @Override
     protected boolean canCook(List<ItemStack> ingredientList, List<ItemStack> seasoningList) {
         return true;
+    }
+
+    @Override
+    protected int getMaxCuisineAmount() {
+        return 64;
     }
 
     @Override

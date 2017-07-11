@@ -45,7 +45,7 @@ public class GrassCook implements Listener {
                 .getAsMaskedInteger().orElse(10))
                 .sum();
         int amount = totalWeight / cookingType.getWeightDivider() + 1;
-        if (64 < amount) amount = 64;
+        if (cooker.getMaxCuisineAmount() < amount) amount = cooker.getMaxCuisineAmount();
 
         int oily = ingredientList.stream()
                 .mapToInt(ingredient -> {

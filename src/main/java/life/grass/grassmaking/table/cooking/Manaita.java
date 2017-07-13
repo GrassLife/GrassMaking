@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Manaita extends Cooker {
-    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, MAKING_TAG, Material.WOOD_PLATE, 0, ChatColor.YELLOW + "切る", null);
+    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, false, MAKING_TAG, Material.WOOD_PLATE, 0, ChatColor.YELLOW + "切る", null);
 
     private Operation operation;
 
@@ -40,6 +40,11 @@ public class Manaita extends Cooker {
     }
 
     @Override
+    public int getMaxCuisineAmount() {
+        return 64;
+    }
+
+    @Override
     protected CookingType getCookingType() {
         return CookingType.CUTTING;
     }
@@ -47,11 +52,6 @@ public class Manaita extends Cooker {
     @Override
     protected boolean canCook(List<ItemStack> ingredientList, List<ItemStack> seasoningList) {
         return true;
-    }
-
-    @Override
-    protected int getMaxCuisineAmount() {
-        return 64;
     }
 
     @Override

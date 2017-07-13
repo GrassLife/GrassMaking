@@ -19,15 +19,15 @@ public class EnchantTable extends MakingTable {
     private static final String GLOWSTONE_TAG = "Glowstone";
     private static final String ENCHANTED_BOOK_TAG = "EnchantedBook";
     private static final String TARGET_TAG = "Target";
-    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, MAKING_TAG, Material.ENCHANTMENT_TABLE, 0, ChatColor.BLUE + "エンチャントする", null);
-    private static final SlotPart REDSTONE_SLOT_PART = new SlotPart(false, null, Material.REDSTONE, 0, ChatColor.RED + "レッドストーン入れ", null);
-    private static final SlotPart GLOWSTONE_SLOT_PART = new SlotPart(false, null, Material.GLOWSTONE_DUST, 0, ChatColor.YELLOW + "グロウストーンダスト入れ", null);
-    private static final SlotPart ENCHANTED_BOOK_SLOT_PART = new SlotPart(false, null, Material.ENCHANTED_BOOK, 0, ChatColor.LIGHT_PURPLE + "エンチャント本", null);
-    private static final SlotPart TARGET_SLOT_PART = new SlotPart(false, null, Material.IRON_PICKAXE, 0, ChatColor.GOLD + "エンチャント対象", null);
-    private static final SlotPart REDSTONE_SPACE_SLOT_PART = new SlotPart(true, REDSTONE_TAG);
-    private static final SlotPart GLOWSTONE_SPACE_SLOT_PART = new SlotPart(true, GLOWSTONE_TAG);
-    private static final SlotPart ENCHANTED_BOOK_SPACE_SLOT_PART = new SlotPart(true, ENCHANTED_BOOK_TAG);
-    private static final SlotPart TARGET_SPACE_SLOT_PART = new SlotPart(true, TARGET_TAG);
+    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, false, MAKING_TAG, Material.ENCHANTMENT_TABLE, 0, ChatColor.BLUE + "エンチャントする", null);
+    private static final SlotPart REDSTONE_SLOT_PART = new SlotPart(false, false, null, Material.REDSTONE, 0, ChatColor.RED + "レッドストーン入れ", null);
+    private static final SlotPart GLOWSTONE_SLOT_PART = new SlotPart(false, false, null, Material.GLOWSTONE_DUST, 0, ChatColor.YELLOW + "グロウストーンダスト入れ", null);
+    private static final SlotPart ENCHANTED_BOOK_SLOT_PART = new SlotPart(false, false, null, Material.ENCHANTED_BOOK, 0, ChatColor.LIGHT_PURPLE + "エンチャント本", null);
+    private static final SlotPart TARGET_SLOT_PART = new SlotPart(false, false, null, Material.IRON_PICKAXE, 0, ChatColor.GOLD + "エンチャント対象", null);
+    private static final SlotPart REDSTONE_SPACE_SLOT_PART = new SlotPart(true, true, REDSTONE_TAG);
+    private static final SlotPart GLOWSTONE_SPACE_SLOT_PART = new SlotPart(true, true, GLOWSTONE_TAG);
+    private static final SlotPart ENCHANTED_BOOK_SPACE_SLOT_PART = new SlotPart(true, true, ENCHANTED_BOOK_TAG);
+    private static final SlotPart TARGET_SPACE_SLOT_PART = new SlotPart(true, true, TARGET_TAG);
 
     private EnchantOperation operation;
 

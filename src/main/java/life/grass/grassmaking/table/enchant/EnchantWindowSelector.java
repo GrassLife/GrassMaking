@@ -14,8 +14,8 @@ import java.util.Iterator;
 import java.util.function.Consumer;
 
 public class EnchantWindowSelector extends Selector {
-    private static final SlotPart BINDING_BOOK_SLOT_PART = new SlotPart(false, SELECTING_TAG, Material.KNOWLEDGE_BOOK, 0, ChatColor.GREEN + "製本する", null);
-    private static final SlotPart ENCHANT_SLOT_PART = new SlotPart(false, SELECTING_TAG, Material.ENCHANTED_BOOK, 0, ChatColor.BLUE + "エンチャントする", null);
+    private static final SlotPart BINDING_BOOK_SLOT_PART = new SlotPart(false, false, SELECTING_TAG, Material.KNOWLEDGE_BOOK, 0, ChatColor.GREEN + "製本する", null);
+    private static final SlotPart ENCHANT_SLOT_PART = new SlotPart(false, false, SELECTING_TAG, Material.ENCHANTED_BOOK, 0, ChatColor.BLUE + "エンチャントする", null);
 
     private Block block;
 

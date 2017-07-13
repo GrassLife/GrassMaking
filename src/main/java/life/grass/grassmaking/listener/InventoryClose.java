@@ -29,7 +29,7 @@ public class InventoryClose implements Listener {
             if (blockTable.canKeepInventory()) return;
 
             blockTable.getSlotPartMap().forEach((slot, slotPart) -> {
-                if (slotPart.canMove()) dropList.add(inventory.getItem(slot));
+                if (slotPart.canDrop()) dropList.add(inventory.getItem(slot));
             });
 
             Location dropLocation = block.getRelative(BlockFace.UP).getLocation().add(0.5, 0.1, 0.5);

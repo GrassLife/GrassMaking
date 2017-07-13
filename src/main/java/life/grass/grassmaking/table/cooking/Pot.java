@@ -16,9 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Pot extends Cooker {
-    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, MAKING_TAG, Material.CAULDRON_ITEM, 0, ChatColor.AQUA + "茹でる", null);
-    private static final SlotPart FENCE_SLOT_PART = new SlotPart(false, null, Material.FENCE, 0, null, null);
-    private static final SlotPart FIRE_SLOT_PART = new SlotPart(false, null, Material.STAINED_GLASS_PANE, 14, null, null);
+    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, false, MAKING_TAG, Material.CAULDRON_ITEM, 0, ChatColor.AQUA + "茹でる", null);
+    private static final SlotPart FENCE_SLOT_PART = new SlotPart(false, false, null, Material.FENCE, 0, null, null);
+    private static final SlotPart FIRE_SLOT_PART = new SlotPart(false, false, null, Material.STAINED_GLASS_PANE, 14, null, null);
 
     private PotOperation operation;
 
@@ -44,6 +44,12 @@ public class Pot extends Cooker {
         return JsonHandler.putExpireDateHours(item, 6);
     }
 
+
+    @Override
+    public int getMaxCuisineAmount() {
+        return 32;
+    }
+
     @Override
     protected CookingType getCookingType() {
         return CookingType.BOIL;
@@ -52,11 +58,6 @@ public class Pot extends Cooker {
     @Override
     protected boolean canCook(List<ItemStack> ingredientList, List<ItemStack> seasoningList) {
         return true;
-    }
-
-    @Override
-    protected int getMaxCuisineAmount() {
-        return 32;
     }
 
     @Override

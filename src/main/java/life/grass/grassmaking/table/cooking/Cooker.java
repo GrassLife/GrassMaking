@@ -24,9 +24,9 @@ import java.util.function.Consumer;
 public abstract class Cooker extends MakingTable {
     private static final String INGREDIENT_TAG = "Ingredient";
     private static final String SEASONING_TAG = "Seasoning";
-    protected static final SlotPart INGREDIENT_SPACE_SLOT_PART = new SlotPart(true, INGREDIENT_TAG);
-    protected static final SlotPart SEASONING_SPACE_SLOT_PART = new SlotPart(true, SEASONING_TAG);
-    protected static final SlotPart SEASONING_SLOT_PART = new SlotPart(false, null, Material.NAME_TAG, 0, ChatColor.RED + "調味料", null);
+    protected static final SlotPart INGREDIENT_SPACE_SLOT_PART = new SlotPart(true, true, INGREDIENT_TAG);
+    protected static final SlotPart SEASONING_SPACE_SLOT_PART = new SlotPart(true, true, SEASONING_TAG);
+    protected static final SlotPart SEASONING_SLOT_PART = new SlotPart(false, false, null, Material.NAME_TAG, 0, ChatColor.RED + "調味料", null);
 
     public Cooker(Block block) {
         super(block);

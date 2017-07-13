@@ -9,16 +9,17 @@ import java.util.Collections;
 import java.util.Optional;
 
 public class SlotPart {
-    private boolean canMove;
+    private boolean canMove, canDrop;
     private ItemStack item;
     private String tag;
 
-    public SlotPart(boolean canMove, String tag) {
-        this(canMove, tag, null, 0, null, null);
+    public SlotPart(boolean canMove, boolean canDrop, String tag) {
+        this(canMove, canDrop, tag, null, 0, null, null);
     }
 
-    public SlotPart(boolean canMove, String tag, Material material, int data, String name, String description) {
+    public SlotPart(boolean canMove, boolean canDrop, String tag, Material material, int data, String name, String description) {
         this.canMove = canMove;
+        this.canDrop = canDrop;
         this.tag = tag;
 
         if (material == null) {
@@ -34,14 +35,19 @@ public class SlotPart {
         }
     }
 
-    public SlotPart(boolean canMove, String tag, ItemStack item) {
+    public SlotPart(boolean canMove, boolean canDrop, String tag, ItemStack item) {
         this.canMove = canMove;
+        this.canDrop = canDrop;
         this.tag = tag;
         this.item = item;
     }
 
     public boolean canMove() {
         return canMove;
+    }
+
+    public boolean canDrop() {
+        return canDrop;
     }
 
     public Optional<ItemStack> getItemStack() {

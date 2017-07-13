@@ -15,9 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class IronPlate extends Cooker {
-    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, MAKING_TAG, Material.STONE_PLATE, 0, ChatColor.RED + "焼く", null);
-    private static final SlotPart FENCE_SLOT_PART = new SlotPart(false, null, Material.IRON_FENCE, 0, null, null);
-    private static final SlotPart FIRE_SLOT_PART = new SlotPart(false, null, Material.STAINED_GLASS_PANE, 14, null, null);
+    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, false, MAKING_TAG, Material.STONE_PLATE, 0, ChatColor.RED + "焼く", null);
+    private static final SlotPart FENCE_SLOT_PART = new SlotPart(false, false, null, Material.IRON_FENCE, 0, null, null);
+    private static final SlotPart FIRE_SLOT_PART = new SlotPart(false, false, null, Material.STAINED_GLASS_PANE, 14, null, null);
 
     private IronPlateOperation operation;
 
@@ -44,6 +44,11 @@ public class IronPlate extends Cooker {
     }
 
     @Override
+    public int getMaxCuisineAmount() {
+        return 16;
+    }
+
+    @Override
     protected CookingType getCookingType() {
         return CookingType.GRILL;
     }
@@ -51,11 +56,6 @@ public class IronPlate extends Cooker {
     @Override
     protected boolean canCook(List<ItemStack> ingredientList, List<ItemStack> seasoningList) {
         return true;
-    }
-
-    @Override
-    protected int getMaxCuisineAmount() {
-        return 16;
     }
 
     @Override

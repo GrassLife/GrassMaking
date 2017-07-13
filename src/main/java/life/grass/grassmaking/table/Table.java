@@ -13,7 +13,7 @@ import java.util.Map;
 
 public abstract class Table implements InventoryHolder {
     private static final int DEFAULT_TABLE_SIZE = 54;
-    private static final SlotPart PADDING_SLOT_PART = new SlotPart(false, null, Material.STAINED_GLASS_PANE, 15, null, null);
+    private static final SlotPart PADDING_SLOT_PART = new SlotPart(false, false, null, Material.STAINED_GLASS_PANE, 15, null, null);
 
     private Inventory inventory;
     private Map<Integer, SlotPart> slotPartMap = new HashMap<>();

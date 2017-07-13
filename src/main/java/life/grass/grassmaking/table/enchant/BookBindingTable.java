@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 public class BookBindingTable extends MakingTable {
     private static final String PAGE_TAG = "Page";
     private static final String LEATHER_TAG = "Leather";
-    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, null, Material.BOOK_AND_QUILL, 0, ChatColor.GREEN + "製本する", null);
-    private static final SlotPart LEATHER_SLOT_PART = new SlotPart(false, null, Material.LEATHER, 0, ChatColor.GOLD + "皮入れ", null);
-    private static final SlotPart LEATHER_SPACE_SLOT_PART = new SlotPart(true, LEATHER_TAG);
-    private static final SlotPart PAGE_SPACE_SLOT_PART = new SlotPart(true, PAGE_TAG);
+    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, false, null, Material.BOOK_AND_QUILL, 0, ChatColor.GREEN + "製本する", null);
+    private static final SlotPart LEATHER_SLOT_PART = new SlotPart(false, false, null, Material.LEATHER, 0, ChatColor.GOLD + "皮入れ", null);
+    private static final SlotPart LEATHER_SPACE_SLOT_PART = new SlotPart(true, true, LEATHER_TAG);
+    private static final SlotPart PAGE_SPACE_SLOT_PART = new SlotPart(true, true, PAGE_TAG);
 
     private BookBindingOperation operation;
 
@@ -31,7 +31,8 @@ public class BookBindingTable extends MakingTable {
         this.operation = operation;
 
         addSlotPart(11, LEATHER_SLOT_PART);
-        Arrays.asList(29, 30, 31, 32, 33, 38, 39, 40, 41, 42).forEach(slot -> addSlotPart(slot, LEATHER_SPACE_SLOT_PART));
+        addSlotPart(12, LEATHER_SPACE_SLOT_PART);
+        Arrays.asList(29, 30, 31, 32, 33, 38, 39, 40, 41, 42).forEach(slot -> addSlotPart(slot, PAGE_SPACE_SLOT_PART));
         addSlotPart(15, MAKING_SLOT_PART);
     }
 

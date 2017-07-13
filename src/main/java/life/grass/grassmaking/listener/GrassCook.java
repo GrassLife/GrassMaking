@@ -37,7 +37,11 @@ public class GrassCook implements Listener {
                         .getAsMaskedInteger().orElse(10))
                         .reversed());
         ItemStack mainIngredient = getSortedItemStackStream.apply(ingredientList).findFirst().orElseThrow(IllegalArgumentException::new);
-        ItemStack accompaniment = getSortedItemStackStream.apply(ingredientList).skip(1).findFirst().orElse(null);
+        ItemStack accompaniment = null;
+        for (int i = 1; i <= ingredientList.size(); i++) {
+            accompaniment = getSortedItemStackStream.apply(ingredientList).skip(i).findFirst().orElse(null);
+            if (accompaniment == null || accompaniment.getType() != mainIngredient.getType()) break;
+        }
         ItemStack mainSeasoning = getSortedItemStackStream.apply(seasoningList).findFirst().orElse(null);
 
         int totalWeight = ingredientList.stream().mapToInt(ingredient -> JsonHandler.getGrassJson(ingredient)

@@ -1,14 +1,14 @@
 package life.grass.grassmaking.cooking;
 
 public enum CookingType {
-    GRILL(200, 1.5) {
+    GRILL(200, 1.2) {
         @Override
         public double getCalorieMultiple(IngredientType ingredientType) {
             switch (ingredientType) {
                 case MEAT:
                 case FISH:
                 case VEGETABLE:
-                    return 1.3;
+                    return 1.4;
                 default:
                     return 1;
             }
@@ -21,23 +21,22 @@ public enum CookingType {
                 case MEAT:
                     return 0.6;
                 case FISH:
-                    return 1.3;
+                    return 1.2;
                 case VEGETABLE:
-                    return 1;
+                    return 1.1;
                 default:
                     return 1;
             }
         }
     },
-    BOIL(140, 1.2) {
+    BOIL(110, 1.4) {
         @Override
         public double getCalorieMultiple(IngredientType ingredientType) {
             switch (ingredientType) {
                 case MEAT:
                 case FISH:
-                    return 1.15;
                 case VEGETABLE:
-                    return 0.8;
+                    return 1.15;
                 default:
                     return 1;
             }

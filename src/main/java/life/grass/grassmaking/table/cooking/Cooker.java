@@ -4,10 +4,9 @@ import life.grass.grassitem.GrassJson;
 import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.cooking.CookingType;
 import life.grass.grassmaking.event.GrassCookEvent;
-import life.grass.grassmaking.operation.ResultOperation;
-import life.grass.grassmaking.operation.cooking.CookingOperation;
-import life.grass.grassmaking.table.Maker;
-import life.grass.grassmaking.ui.cooking.CookerInterface;
+import life.grass.grassmaking.operation.Operation;
+import life.grass.grassmaking.table.MakingTable;
+import life.grass.grassmaking.ui.SlotPart;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,48 +21,38 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
-public abstract class Cooker extends Maker implements CookerInterface {
-    private static final ItemStack SEASONING_ICON;
+public abstract class Cooker extends MakingTable {
+    private static final String INGREDIENT_TAG = "Ingredient";
+    private static final String SEASONING_TAG = "Seasoning";
+    protected static final SlotPart INGREDIENT_SPACE_SLOT_PART = new SlotPart(true, true, INGREDIENT_TAG);
+    protected static final SlotPart SEASONING_SPACE_SLOT_PART = new SlotPart(true, true, SEASONING_TAG);
+    protected static final SlotPart SEASONING_SLOT_PART = new SlotPart(false, false, null, Material.NAME_TAG, 0, ChatColor.RED + "調味料", null);
 
-    private CookingOperation operation;
-
-    static {
-        SEASONING_ICON = createIcon(Material.NAME_TAG, 0, ChatColor.RED + "調味料", null);
-    }
-
-    public Cooker(Block block, CookingOperation operation) {
+    public Cooker(Block block) {
         super(block);
-
-        this.operation = operation;
     }
 
     public abstract String namesCuisine(ItemStack mainIngredient, ItemStack accompaniment, ItemStack mainSeasoning);
 
-    public abstract ItemStack extendExpireDate(ItemStack item);
+    public abstract ItemStack getExtendExpireDate(ItemStack item);
+
+    public abstract int getCookingTick();
+
+    public abstract int getMaxCuisineAmount();
 
     protected abstract CookingType getCookingType();
 
     protected abstract boolean canCook(List<ItemStack> ingredientList, List<ItemStack> seasoningList);
 
     @Override
-    public ItemStack getSeasoningIcon() {
-        return SEASONING_ICON;
-    }
-
-    @Override
-    public Inventory initInventory() {
-        Inventory inv = super.initInventory();
-
-        getSeasoningSpacePositionList().forEach(position -> inv.setItem(position, null));
-        inv.setItem(getSeasoningIconPosition(), getSeasoningIcon());
-
-        return inv;
+    public boolean canKeepInventory() {
+        return true;
     }
 
     @Override
     public void onPressMaking() {
         List<ItemStack> ingredientList = new ArrayList<>();
-        getIngredientSpacePositionList().stream()
+        collectTagSlotList(INGREDIENT_TAG).stream()
                 .map(position -> getInventory().getItem(position))
                 .filter(ingredient -> {
                     GrassJson grassJson = JsonHandler.getGrassJson(ingredient);
@@ -81,7 +70,7 @@ public abstract class Cooker extends Maker implements CookerInterface {
                 .forEach(ingredientList::add);
 
         List<ItemStack> seasoningList = new ArrayList<>();
-        getSeasoningSpacePositionList().stream()
+        collectTagSlotList(SEASONING_TAG).stream()
                 .map(position -> getInventory().getItem(position))
                 .filter(seasoning -> seasoning != null
                         && JsonHandler.getGrassJson(seasoning) != null
@@ -111,22 +100,15 @@ public abstract class Cooker extends Maker implements CookerInterface {
                 viewer.closeInventory();
             }
 
+            Operation operation = getOperation();
             operation.setResult(result);
             operation.start(getCookingTick());
         }
     }
 
-    public ItemStack cook(List<ItemStack> ingredientList, List<ItemStack> seasoningList) {
+    private ItemStack cook(List<ItemStack> ingredientList, List<ItemStack> seasoningList) {
         GrassCookEvent event = new GrassCookEvent(this, getCookingType(), ingredientList, seasoningList);
         Bukkit.getServer().getPluginManager().callEvent(event);
         return event.getResult();
-    }
-
-    public ResultOperation getOperation() {
-        return operation;
-    }
-
-    public int getCookingTick() {
-        return 20 * 10;
     }
 }

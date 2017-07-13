@@ -1,42 +1,42 @@
 package life.grass.grassmaking.manager;
 
-import life.grass.grassmaking.table.StationaryTable;
+import life.grass.grassmaking.table.BlockTable;
 import org.bukkit.block.Block;
 
 import java.util.*;
 
-public class StationaryTableHolder {
-    private static StationaryTableHolder instance;
+public class BlockTableHolder {
+    private static BlockTableHolder instance;
 
-    private Map<String, StationaryTable> tableMap;
+    private Map<String, BlockTable> tableMap;
 
     static {
-        instance = new StationaryTableHolder();
+        instance = new BlockTableHolder();
     }
 
-    private StationaryTableHolder() {
+    private BlockTableHolder() {
         tableMap = new HashMap<>();
     }
 
-    public static StationaryTableHolder getInstance() {
+    public static BlockTableHolder getInstance() {
         return instance;
     }
 
-    public Optional<StationaryTable> findTable(Block block) {
+    public Optional<BlockTable> findTable(Block block) {
         return Optional.ofNullable(tableMap.get(generateKey(block)));
     }
 
-    public StationaryTable createTable(Block block, StationaryTable stationaryTable) {
+    public BlockTable createTable(Block block, BlockTable blockTable) {
         String key = generateKey(block);
         try {
-            tableMap.put(key, stationaryTable);
+            tableMap.put(key, blockTable);
             return tableMap.get(key);
         } catch (Exception ignore) {
             return null;
         }
     }
 
-    public List<StationaryTable> getTableList() {
+    public List<BlockTable> getTableList() {
         return new ArrayList(tableMap.values());
     }
 

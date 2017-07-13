@@ -1,8 +1,8 @@
 package life.grass.grassmaking.listener;
 
-import life.grass.grassmaking.manager.StationaryTableHolder;
+import life.grass.grassmaking.manager.BlockTableHolder;
 import life.grass.grassmaking.operation.Operable;
-import life.grass.grassmaking.table.StationaryTable;
+import life.grass.grassmaking.table.BlockTable;
 import life.grass.grassmaking.table.cooking.IronPlate;
 import life.grass.grassmaking.table.cooking.Manaita;
 import life.grass.grassmaking.table.cooking.Pot;
@@ -21,11 +21,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PlayerInteract implements Listener {
-    private static Set<Class<? extends StationaryTable>> tableClassSet;
-    private static StationaryTableHolder stationaryTableHolder;
+    private static Set<Class<? extends BlockTable>> tableClassSet;
+    private static BlockTableHolder blockTableHolder;
 
     static {
-        stationaryTableHolder = StationaryTableHolder.getInstance();
+        blockTableHolder = BlockTableHolder.getInstance();
         tableClassSet = new HashSet<>();
 
         tableClassSet.add(IronPlate.class);
@@ -50,8 +50,8 @@ public class PlayerInteract implements Listener {
                     player.openInventory(selector.getInventory());
                     event.setCancelled(true);
                 } else {
-                    StationaryTable stationaryTable;
-                    Class<? extends StationaryTable> clazz = tableClassSet.stream()
+                    BlockTable blockTable;
+                    Class<? extends BlockTable> clazz = tableClassSet.stream()
                             .filter(tableClass -> {
                                 try {
                                     return tableClass.getConstructor(Block.class).newInstance(block).canOpen(block);
@@ -63,22 +63,22 @@ public class PlayerInteract implements Listener {
                             .findFirst().orElse(null);
 
                     if (clazz == null) {
-                        stationaryTable = null;
+                        blockTable = null;
                     } else {
-                        stationaryTable = stationaryTableHolder.findTable(block).orElseGet(() -> {
+                        blockTable = blockTableHolder.findTable(block).orElseGet(() -> {
                             try {
-                                return stationaryTableHolder.createTable(block, clazz.getConstructor(Block.class).newInstance(block));
+                                return blockTableHolder.createTable(block, clazz.getConstructor(Block.class).newInstance(block));
                             } catch (Exception ex) {
                                 return null;
                             }
                         });
                     }
 
-                    if (stationaryTable instanceof Operable && stationaryTable.canOpen(block)) {
-                        if (((Operable) stationaryTable).getOperation().isOperating()) return;
+                    if (blockTable instanceof Operable && blockTable.canOpen(block)) {
+                        if (((Operable) blockTable).getOperation().isOperating()) return;
 
                         event.setCancelled(true);
-                        player.openInventory(stationaryTable.getInventory());
+                        player.openInventory(blockTable.getInventory());
                     }
                 }
                 break;

@@ -4,40 +4,48 @@ import life.grass.grassitem.GrassJson;
 import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.operation.Operation;
 import life.grass.grassmaking.operation.enchant.EnchantOperation;
-import life.grass.grassmaking.table.Maker;
-import life.grass.grassmaking.ui.enchant.EnchantInterface;
+import life.grass.grassmaking.table.MakingTable;
+import life.grass.grassmaking.ui.SlotPart;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class EnchantTable extends Maker implements EnchantInterface {
-    private static final ItemStack MAKING_ICON;
-    private static final ItemStack REDSTONE_ICON;
-    private static final ItemStack GLOWSTONE_ICON;
-    private static final ItemStack ENCHANTED_BOOK_ICON;
-    private static final ItemStack TARGET_ICON;
+public class EnchantTable extends MakingTable {
+    private static final String REDSTONE_TAG = "Redstone";
+    private static final String GLOWSTONE_TAG = "Glowstone";
+    private static final String ENCHANTED_BOOK_TAG = "EnchantedBook";
+    private static final String TARGET_TAG = "Target";
+    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, false, MAKING_TAG, Material.ENCHANTMENT_TABLE, 0, ChatColor.BLUE + "エンチャントする", null);
+    private static final SlotPart REDSTONE_SLOT_PART = new SlotPart(false, false, null, Material.REDSTONE, 0, ChatColor.RED + "レッドストーン入れ", null);
+    private static final SlotPart GLOWSTONE_SLOT_PART = new SlotPart(false, false, null, Material.GLOWSTONE_DUST, 0, ChatColor.YELLOW + "グロウストーンダスト入れ", null);
+    private static final SlotPart ENCHANTED_BOOK_SLOT_PART = new SlotPart(false, false, null, Material.ENCHANTED_BOOK, 0, ChatColor.LIGHT_PURPLE + "エンチャント本", null);
+    private static final SlotPart TARGET_SLOT_PART = new SlotPart(false, false, null, Material.IRON_PICKAXE, 0, ChatColor.GOLD + "エンチャント対象", null);
+    private static final SlotPart REDSTONE_SPACE_SLOT_PART = new SlotPart(true, true, REDSTONE_TAG);
+    private static final SlotPart GLOWSTONE_SPACE_SLOT_PART = new SlotPart(true, true, GLOWSTONE_TAG);
+    private static final SlotPart ENCHANTED_BOOK_SPACE_SLOT_PART = new SlotPart(true, true, ENCHANTED_BOOK_TAG);
+    private static final SlotPart TARGET_SPACE_SLOT_PART = new SlotPart(true, true, TARGET_TAG);
 
     private EnchantOperation operation;
 
-    static {
-        MAKING_ICON = createIcon(Material.ENCHANTMENT_TABLE, 0, ChatColor.BLUE + "エンチャントする", null);
-        REDSTONE_ICON = createIcon(Material.REDSTONE, 0, ChatColor.RED + "レッドストーン", null);
-        GLOWSTONE_ICON = createIcon(Material.GLOWSTONE_DUST, 0, ChatColor.YELLOW + "グロウストーンダスト", null);
-        ENCHANTED_BOOK_ICON = createIcon(Material.ENCHANTED_BOOK, 0, ChatColor.LIGHT_PURPLE + "エンチャント本", null);
-        TARGET_ICON = createIcon(Material.IRON_PICKAXE, 0, ChatColor.GOLD + "エンチャント対象", null);
-    }
-
     public EnchantTable(Block block, EnchantOperation operation) {
         super(block);
-
         this.operation = operation;
+
+        addSlotPart(28, REDSTONE_SLOT_PART);
+        addSlotPart(29, REDSTONE_SPACE_SLOT_PART);
+        addSlotPart(40, GLOWSTONE_SLOT_PART);
+        addSlotPart(41, GLOWSTONE_SPACE_SLOT_PART);
+        addSlotPart(11, ENCHANTED_BOOK_SLOT_PART);
+        addSlotPart(12, ENCHANTED_BOOK_SPACE_SLOT_PART);
+        addSlotPart(23, TARGET_SLOT_PART);
+        addSlotPart(24, TARGET_SPACE_SLOT_PART);
+        addSlotPart(43, MAKING_SLOT_PART);
     }
 
     @Override
@@ -46,24 +54,14 @@ public class EnchantTable extends Maker implements EnchantInterface {
     }
 
     @Override
-    public ItemStack getMakingIcon() {
-        return MAKING_ICON;
-    }
-
-    @Override
-    public int getMakingIconPosition() {
-        return 43;
-    }
-
-    @Override
     public void onPressMaking() {
-        ItemStack glow = getInventory().getItem(getGlowstoneSpacePosition());
-        ItemStack red = getInventory().getItem(getRedstoneSpacePosition());
+        ItemStack glow = getInventory().getItem(collectTagSlotList(GLOWSTONE_TAG).get(0));
+        ItemStack red = getInventory().getItem(collectTagSlotList(REDSTONE_TAG).get(0));
         if (glow == null || red == null) return;
         if (!glow.getType().equals(Material.GLOWSTONE_DUST) ||
                 !red.getType().equals(Material.REDSTONE)) return;
-        ItemStack book = getInventory().getItem(getEnchantedBookSpacePosition());
-        ItemStack target = getInventory().getItem(getTargetSpacePosition());
+        ItemStack book = getInventory().getItem(collectTagSlotList(ENCHANTED_BOOK_TAG).get(0));
+        ItemStack target = getInventory().getItem(collectTagSlotList(TARGET_TAG).get(0));
 
         if (target == null || book == null) return;
         GrassJson bookJson = JsonHandler.getGrassJson(book);
@@ -105,88 +103,13 @@ public class EnchantTable extends Maker implements EnchantInterface {
     }
 
     @Override
+    public boolean canKeepInventory() {
+        return false;
+    }
+
+    @Override
     public boolean canOpen(Block block) {
         return true;
-    }
-
-    @Override
-    public ItemStack getPaddingIcon(int position) {
-        return super.getPaddingIcon(position);
-    }
-
-    @Override
-    public Inventory initInventory() {
-        Inventory inventory = super.initInventory();
-
-        inventory.setItem(getRedstoneIconPosition(), getRedstoneIcon());
-        inventory.setItem(getRedstoneSpacePosition(), null);
-        inventory.setItem(getGlowstoneIconPosition(), getGlowstoneIcon());
-        inventory.setItem(getGlowstoneSpacePosition(), null);
-        inventory.setItem(getEnchantedBookIconPosition(), getEnchantedBookIcon());
-        inventory.setItem(getEnchantedBookSpacePosition(), null);
-        inventory.setItem(getTargetIconPosition(), getTargetIcon());
-        inventory.setItem(getTargetSpacePosition(), null);
-
-        return inventory;
-    }
-
-    public ItemStack getRedstoneIcon() {
-        return REDSTONE_ICON;
-    }
-
-    @Override
-    public int getRedstoneIconPosition() {
-        return 28;
-    }
-
-    @Override
-    public int getRedstoneSpacePosition() {
-        return 29;
-    }
-
-    @Override
-    public ItemStack getGlowstoneIcon() {
-        return GLOWSTONE_ICON;
-    }
-
-    @Override
-    public int getGlowstoneIconPosition() {
-        return 40;
-    }
-
-    @Override
-    public int getGlowstoneSpacePosition() {
-        return 41;
-    }
-
-    @Override
-    public ItemStack getEnchantedBookIcon() {
-        return ENCHANTED_BOOK_ICON;
-    }
-
-    @Override
-    public int getEnchantedBookIconPosition() {
-        return 11;
-    }
-
-    @Override
-    public int getEnchantedBookSpacePosition() {
-        return 12;
-    }
-
-    @Override
-    public ItemStack getTargetIcon() {
-        return TARGET_ICON;
-    }
-
-    @Override
-    public int getTargetIconPosition() {
-        return 23;
-    }
-
-    @Override
-    public int getTargetSpacePosition() {
-        return 24;
     }
 
     @Override

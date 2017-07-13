@@ -111,9 +111,4 @@ public class EnchantTable extends MakingTable {
     public boolean canOpen(Block block) {
         return true;
     }
-
-    @Override
-    public List<Integer> getIngredientSpacePositionList() {
-        return Arrays.asList();
-    }
 }

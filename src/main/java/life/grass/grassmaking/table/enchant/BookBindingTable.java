@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class BookBindingTable extends MakingTable {
     private static final String PAGE_TAG = "Page";
     private static final String LEATHER_TAG = "Leather";
-    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, false, null, Material.BOOK_AND_QUILL, 0, ChatColor.GREEN + "製本する", null);
+    private static final SlotPart MAKING_SLOT_PART = new SlotPart(false, false, MAKING_TAG, Material.BOOK_AND_QUILL, 0, ChatColor.GREEN + "製本する", null);
     private static final SlotPart LEATHER_SLOT_PART = new SlotPart(false, false, null, Material.LEATHER, 0, ChatColor.GOLD + "皮入れ", null);
     private static final SlotPart LEATHER_SPACE_SLOT_PART = new SlotPart(true, true, LEATHER_TAG);
     private static final SlotPart PAGE_SPACE_SLOT_PART = new SlotPart(true, true, PAGE_TAG);
@@ -54,7 +54,6 @@ public class BookBindingTable extends MakingTable {
                     return true;
                 }).collect(Collectors.toList());
         if(pages.size() <= 0) return;
-
         double sum = pages.stream()
                 .collect(Collectors.summingDouble(page -> {
                     GrassJson json = JsonHandler.getGrassJson(page);
@@ -67,7 +66,7 @@ public class BookBindingTable extends MakingTable {
 
         ItemStack result = JsonHandler.getEnchantBook(JsonBucket.getInstance().determineEnchant(Math.max((int) level, 1)), getInventory().getViewers().stream().findFirst().orElse(null));
         if (result != null) {
-            collectTagSlotList(PAGE_TAG).stream().map(position -> getInventory().getItem(position)).forEach(item -> item.setAmount(item.getAmount() - 1));
+            pages.stream().forEach(item -> item.setAmount(item.getAmount() - 1));
             leather.setAmount(leather.getAmount() - 1);
             operation.setResult(result);
             operation.start(20 * 4 /* seconds */);

@@ -15,7 +15,7 @@ public enum FoodEffect {
             if (level < 1) return;
 
             player.addPotionEffects(Collections.singletonList(
-                    new PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 5 + (int) (1.5 * level) - 1, level / 2)
+                    new PotionEffect(PotionEffectType.REGENERATION, 20 * 5 + (int) (1.5 * level) - 1, level / 2)
             ));
         }
     },

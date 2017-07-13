@@ -43,7 +43,7 @@ public class HandyCraftingTable extends Selector {
             displayItem.setItemMeta(meta);
             displayItem = JsonHandler.putDynamicData(displayItem, "Ignore", 1);
 
-            addSlotPart(i, new SlotPart(false, false, null, displayItem));
+            addSlotPart(i, new SlotPart(false, false, SELECTING_TAG, displayItem));
         }
     }
 
@@ -56,7 +56,6 @@ public class HandyCraftingTable extends Selector {
     public void onPressSelecting(int position) {
         Recipe recipe = recipeShelf.getRecipeList().get(position);
         if (recipe == null) return;
-
         PlayerInventory inventory = player.getInventory();
 
         Map<String, Integer> craftingMaterialMap = new HashMap<>();

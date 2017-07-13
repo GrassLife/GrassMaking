@@ -64,24 +64,29 @@ public class BookBindingTable extends Maker implements BookBindingInterface {
         List<ItemStack> pages = getIngredientSpacePositionList().stream().map(position -> getInventory().getItem(position))
                 .filter(item -> {
                     GrassJson json = JsonHandler.getGrassJson(item);
-                    if (item == null || json == null || json.hasDynamicValue("EnchantPower")) return false;
-                    map.put(json.getDynamicValue("CustomName").getAsMaskedString().orElse(""), 0);
+                    if (item == null || json == null || !json.hasDynamicValue("EnchantPower")) return false;
+                    map.put(json.getUniqueName(), 0);
                     return true;
                 }).collect(Collectors.toList());
+        if(pages.size() <= 0) return;
+
         double sum = pages.stream()
                 .collect(Collectors.summingDouble(page -> {
                     GrassJson json = JsonHandler.getGrassJson(page);
                     return json.getDynamicValue("EnchantPower").getAsMaskedDouble().orElse(0.0);
                 }));
-        int level = (int) (sum / (11.0 - (double) map.size()));
 
-
+        double level = sum / pages.size() * map.size();
 //        GrassBookBindEvent event = new GrassBookBindEvent();
 //        Bukkit.getServer().getPluginManager().callEvent(event);
 
-        ItemStack result = JsonHandler.getEnchantBook(JsonBucket.getInstance().determineEnchant(Math.max(level, 1)), getInventory().getViewers().stream().findFirst().orElse(null));
+        ItemStack result = JsonHandler.getEnchantBook(JsonBucket.getInstance().determineEnchant(Math.max((int) level, 1)), getInventory().getViewers().stream().findFirst().orElse(null));
         if (result != null) {
-            getIngredientSpacePositionList().stream().map(position -> getInventory().getItem(position)).forEach(item -> item.setAmount(item.getAmount() - 1));
+            getIngredientSpacePositionList().stream()
+                    .map(position -> getInventory().getItem(position))
+                    .forEach(item -> {
+                        if(item != null) item.setAmount(item.getAmount() - 1);
+                    });
             leather.setAmount(leather.getAmount() - 1);
             operation.setResult(result);
             operation.start(20 * 4 /* seconds */);

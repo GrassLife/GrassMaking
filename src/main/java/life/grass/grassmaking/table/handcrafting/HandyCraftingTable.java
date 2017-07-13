@@ -5,10 +5,9 @@ import life.grass.grassitem.JsonHandler;
 import life.grass.grassmaking.handcrafting.Recipe;
 import life.grass.grassmaking.manager.RecipeShelf;
 import life.grass.grassmaking.table.Selector;
+import life.grass.grassmaking.ui.SlotPart;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,21 +18,12 @@ import java.util.List;
 import java.util.Map;
 
 public class HandyCraftingTable extends Selector {
-    private static final ItemStack PADDING_ICON;
-    private static RecipeShelf recipeShelf;
+    private static RecipeShelf recipeShelf = RecipeShelf.getInstance();
 
-    private Inventory inventory;
     private Player player;
-    private Map<Integer, ItemStack> selectedItemMap;
-
-    static {
-        PADDING_ICON = createIcon(Material.STAINED_GLASS_PANE, 12, null, null);
-        recipeShelf = RecipeShelf.getInstance();
-    }
 
     public HandyCraftingTable(Player player) {
         this.player = player;
-        selectedItemMap = new HashMap<>();
 
         for (int i = 0; i < recipeShelf.getRecipeList().size() && i < getTableSize(); i++) {
             Recipe recipe = recipeShelf.getRecipeList().get(i);
@@ -53,20 +43,8 @@ public class HandyCraftingTable extends Selector {
             displayItem.setItemMeta(meta);
             displayItem = JsonHandler.putDynamicData(displayItem, "Ignore", 1);
 
-            selectedItemMap.put(i, displayItem);
+            addSlotPart(i, new SlotPart(false, false, null, displayItem));
         }
-
-        inventory = initInventory();
-    }
-
-    @Override
-    public ItemStack getPaddingIcon(int position) {
-        return PADDING_ICON;
-    }
-
-    @Override
-    public Inventory getInventory() {
-        return inventory;
     }
 
     @Override
@@ -75,12 +53,7 @@ public class HandyCraftingTable extends Selector {
     }
 
     @Override
-    public ItemStack getSelectedItem(int position) {
-        return selectedItemMap.getOrDefault(position, null);
-    }
-
-    @Override
-    public void onPressSelectedItem(int position) {
+    public void onPressSelecting(int position) {
         Recipe recipe = recipeShelf.getRecipeList().get(position);
         if (recipe == null) return;
 

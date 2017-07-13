@@ -2,7 +2,7 @@ package life.grass.grassmaking;
 
 import life.grass.grassmaking.listener.*;
 import life.grass.grassmaking.manager.RecipeShelf;
-import life.grass.grassmaking.manager.StationaryTableHolder;
+import life.grass.grassmaking.manager.BlockTableHolder;
 import life.grass.grassmaking.operation.Operable;
 import life.grass.grassmaking.operation.Operation;
 import org.bukkit.Bukkit;
@@ -22,7 +22,7 @@ public final class GrassMaking extends JavaPlugin {
         instance = this;
 
         RecipeShelf.getInstance();
-        StationaryTableHolder.getInstance();
+        BlockTableHolder.getInstance();
 
         this.registerEvents();
         this.registerRecipes();
@@ -33,7 +33,7 @@ public final class GrassMaking extends JavaPlugin {
         super.onDisable();
         instance = null;
 
-        StationaryTableHolder.getInstance().getTableList().stream()
+        BlockTableHolder.getInstance().getTableList().stream()
                 .filter(table -> table instanceof Operable)
                 .map(table -> ((Operable) table).getOperation())
                 .forEach(Operation::cancel);

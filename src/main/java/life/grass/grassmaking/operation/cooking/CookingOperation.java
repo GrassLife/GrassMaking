@@ -1,13 +1,13 @@
 package life.grass.grassmaking.operation.cooking;
 
 import life.grass.grassmaking.GrassMaking;
-import life.grass.grassmaking.operation.ResultOperation;
+import life.grass.grassmaking.operation.Operation;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public abstract class CookingOperation extends ResultOperation {
+public abstract class CookingOperation extends Operation {
     private Location circleLocation;
 
     public CookingOperation(Block block) {

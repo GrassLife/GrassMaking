@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 public class GrassCook implements Listener {
     private static final double SIZE_BONUS_MULTIPLE = 0.27;
+    private static final int SIZE_BONUS_WEIGHT = 2100;
 
     @EventHandler(priority = EventPriority.LOW)
     public void onGrassCook(GrassCookEvent event) {
@@ -36,7 +37,11 @@ public class GrassCook implements Listener {
                         .getAsMaskedInteger().orElse(10))
                         .reversed());
         ItemStack mainIngredient = getSortedItemStackStream.apply(ingredientList).findFirst().orElseThrow(IllegalArgumentException::new);
-        ItemStack accompaniment = getSortedItemStackStream.apply(ingredientList).skip(1).findFirst().orElse(null);
+        ItemStack accompaniment = null;
+        for (int i = 1; i <= ingredientList.size(); i++) {
+            accompaniment = getSortedItemStackStream.apply(ingredientList).skip(i).findFirst().orElse(null);
+            if (accompaniment == null || accompaniment.getType() != mainIngredient.getType()) break;
+        }
         ItemStack mainSeasoning = getSortedItemStackStream.apply(seasoningList).findFirst().orElse(null);
 
         int totalWeight = ingredientList.stream().mapToInt(ingredient -> JsonHandler.getGrassJson(ingredient)
@@ -44,7 +49,7 @@ public class GrassCook implements Listener {
                 .getAsMaskedInteger().orElse(10))
                 .sum();
         int amount = totalWeight / cookingType.getWeightDivider() + 1;
-        if (64 < amount) amount = 64;
+        if (cooker.getMaxCuisineAmount() < amount) amount = cooker.getMaxCuisineAmount();
 
         int oily = ingredientList.stream()
                 .mapToInt(ingredient -> {
@@ -64,7 +69,7 @@ public class GrassCook implements Listener {
                     return grassJson.getDynamicValue("Calorie").getAsMaskedInteger().orElse(1) / ingredientType.getOilyPerCalorie();
                 }).sum() / amount;
 
-        int totalCalorie = (int) (ingredientList.stream()
+        int totalCalorie = (int) ((ingredientList.stream()
                 .mapToInt(ingredient -> {
                     GrassJson grassJson = JsonHandler.getGrassJson(ingredient);
 
@@ -86,7 +91,7 @@ public class GrassCook implements Listener {
                 .sum() * seasoningList.stream().mapToDouble(seasoning -> JsonHandler.getGrassJson(seasoning)
                 .getDynamicValue("CalorieMultiple")
                 .getAsMaskedDouble().orElse(1.0))
-                .reduce(1, (n, m) -> n * m)) * (int) (1 + totalWeight / 1200 * SIZE_BONUS_MULTIPLE);
+                .reduce(1, (n, m) -> n * m)) * (1.0 + (double) (totalWeight / SIZE_BONUS_WEIGHT) * SIZE_BONUS_MULTIPLE));
         int calorie = totalCalorie / amount;
 
         Map<FoodElement, Integer> foodElementMap = new HashMap<>();
@@ -117,7 +122,7 @@ public class GrassCook implements Listener {
         result = JsonHandler.putDynamicData(result, "CustomMaterial", cuisineMaterial);
         result = JsonHandler.putDynamicData(result, "CustomDisplayName", cooker.namesCuisine(mainIngredient, accompaniment, mainSeasoning));
         result = JsonHandler.putDynamicData(result, "Calorie", "+" + calorie);
-        result = cooker.extendExpireDate(result);
+        result = cooker.getExtendExpireDate(result);
 
         for (FoodElement element : foodElementMap.keySet()) {
             int value = foodElementMap.get(element);

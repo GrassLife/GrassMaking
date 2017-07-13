@@ -26,21 +26,26 @@ public class ItemRewrite implements Listener {
         grassJson.getDynamicValue("ExpireDate").getAsOverwritedString()
                 .ifPresent(expireDate -> {
                     LocalDateTime localDateTime = LocalDateTime.parse(expireDate);
-                    lore.add(ChatColor.GRAY + "消費期限: " + localDateTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
+                    lore.add(ChatColor.DARK_GRAY + "消費期限: " + localDateTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
+                });
+        if(grassJson.hasItemTag("Ingredient")) lore.add(ChatColor.DARK_GRAY + "調理可能アイテム");
+        if(grassJson.hasItemTag("Seasoning")) lore.add(ChatColor.DARK_GRAY + "調味料");
+
+        final String[] wc = {ChatColor.GRAY + ""};
+        grassJson.getDynamicValue("Calorie").getAsMaskedInteger()
+                .ifPresent(calorie -> {
+                    if (calorie != 0) wc[0] += (calorie + "kcal");
                 });
         grassJson.getDynamicValue("Weight").getAsMaskedInteger()
                 .ifPresent(weight -> {
-                    if (weight != 0) lore.add(ChatColor.GRAY + "重さ: " + weight + "g");
+                    if (weight != 0) wc[0] += (" / " + weight + "g");
                 });
-        grassJson.getDynamicValue("Calorie").getAsMaskedInteger()
-                .ifPresent(calorie -> {
-                    if (calorie != 0) lore.add(ChatColor.GRAY + "カロリー: " + calorie + "kcal");
-                });
+        lore.add(wc[0]);
 
         Arrays.stream(FoodElement.values()).forEach(element ->
                 grassJson.getDynamicValue("FoodElement/" + element.toString()).getAsMaskedInteger().ifPresent(value -> {
                     if (value != 0)
-                        lore.add(ChatColor.GRAY + (0 < value ? element.getUprightName() : element.getReversedName()) + ": " + Math.abs(value));
+                        lore.add(ChatColor.GOLD + (0 < value ? element.getUprightName() : element.getReversedName()) + ": " + Math.abs(value));
                 })
         );
 

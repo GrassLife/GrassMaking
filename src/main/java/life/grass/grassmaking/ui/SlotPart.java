@@ -1,5 +1,6 @@
 package life.grass.grassmaking.ui;
 
+import life.grass.grassitem.JsonHandler;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,13 +26,14 @@ public class SlotPart {
         if (material == null) {
             this.item = null;
         } else {
-            this.item = new ItemStack(material, 1, ((short) data));
+            ItemStack item = new ItemStack(material, 1, ((short) data));
             ItemMeta meta = item.getItemMeta();
 
             meta.setDisplayName(name == null ? " " : name);
             meta.setLore(description == null ? new ArrayList<>() : Collections.singletonList(description));
-
-            this.item.setItemMeta(meta);
+            item.setItemMeta(meta);
+            item = JsonHandler.putDynamicData(item, "Ignore", 1);
+            this.item = item;
         }
     }
 

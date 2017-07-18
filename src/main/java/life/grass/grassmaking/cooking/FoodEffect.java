@@ -41,6 +41,16 @@ public enum FoodEffect {
             ));
         }
     },
+    EUPHORIA("多幸感") {
+        @Override
+        public void exert(Player player, int level) {
+            if (level < 1) return;
+
+            player.addPotionEffects(Collections.singletonList(
+                    new PotionEffect(PotionEffectType.SPEED, 20 * 45 * level, level - 1)
+            ));
+        }
+    },
     HEAVY_STOMACH("胃もたれ") {
         @Override
         public void exert(Player player, int level) {

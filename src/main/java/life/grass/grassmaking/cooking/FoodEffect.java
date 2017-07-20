@@ -10,50 +10,50 @@ import java.util.Collections;
 public enum FoodEffect {
     MEDICINAL("体力回復") {
         @Override
-        public void exert(Player player, int level) {
+        public void exert(Player player, int level, int calorie) {
             level = Math.abs(level);
             if (level < 1) return;
 
             player.addPotionEffects(Collections.singletonList(
-                    new PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 5 + (int) (1.5 * level) - 1, level / 2)
+                    new PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * calorie / 30, level - 1)
             ));
         }
     },
     FULLNESS("満足感") {
         @Override
-        public void exert(Player player, int level) {
+        public void exert(Player player, int level, int calorie) {
             level = Math.abs(level);
             if (level < 1) return;
 
             player.addPotionEffects(Collections.singletonList(
-                    new PotionEffect(PotionEffectType.FAST_DIGGING, 20 * 40 + 5 * level, level / 2)
+                    new PotionEffect(PotionEffectType.FAST_DIGGING, 20 * calorie / 2, level / 2 - 1)
             ));
         }
     },
     ANALGESIC("鎮痛") {
         @Override
-        public void exert(Player player, int level) {
+        public void exert(Player player, int level, int calorie) {
             level = Math.abs(level);
             if (level < 1) return;
 
             player.addPotionEffects(Collections.singletonList(
-                    new PotionEffect(PotionEffectType.ABSORPTION, 20 * 45, level)
+                    new PotionEffect(PotionEffectType.ABSORPTION, 20 * calorie / 5, level)
             ));
         }
     },
     EUPHORIA("多幸感") {
         @Override
-        public void exert(Player player, int level) {
+        public void exert(Player player, int level, int calorie) {
             if (level < 1) return;
 
             player.addPotionEffects(Collections.singletonList(
-                    new PotionEffect(PotionEffectType.SPEED, 20 * 45 * level, level - 1)
+                    new PotionEffect(PotionEffectType.SPEED, 20 * calorie / 18, level - 1)
             ));
         }
     },
     HEAVY_STOMACH("胃もたれ") {
         @Override
-        public void exert(Player player, int level) {
+        public void exert(Player player, int level, int calorie) {
             if (level < 1) return;
 
             player.addPotionEffects(Arrays.asList(
@@ -64,7 +64,7 @@ public enum FoodEffect {
     },
     UNKNOWN("効果なし") {
         @Override
-        public void exert(Player player, int level) {
+        public void exert(Player player, int level, int calorie) {
         }
     };
 
@@ -75,7 +75,7 @@ public enum FoodEffect {
         this.displayName = displayName;
     }
 
-    public abstract void exert(Player player, int level);
+    public abstract void exert(Player player, int level, int calorie);
 
     public String getDisplayName() {
         return displayName;

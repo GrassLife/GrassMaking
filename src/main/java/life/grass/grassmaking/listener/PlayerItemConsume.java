@@ -45,18 +45,24 @@ public class PlayerItemConsume implements Listener {
         LocalDateTime expireDate = LocalDateTime.parse(grassJson.getDynamicValue("ExpireDate")
                 .getAsOverwritedString()
                 .orElse(LocalDateTime.now().minusSeconds(1).toString()));
+        int calorie = grassJson.getDynamicValue("Calorie").getAsMaskedInteger().orElse(1);
+
         if (expireDate.isBefore(LocalDateTime.now())) {
             player.sendTitle("", ChatColor.DARK_GREEN + "腐っているようだ...", 3, 20 * 2, 3);
             grassPlayer.incrementEffectiveStamina(-10);
         } else {
-            int restoreAmount = grassJson.getDynamicValue("Calorie").getAsMaskedInteger().orElse(1) / CALORIE_PER_RESTORE_AMOUNT;
+            int restoreAmount = calorie / CALORIE_PER_RESTORE_AMOUNT;
             grassPlayer.incrementEffectiveStamina(restoreAmount);
             player.sendTitle("", ChatColor.GOLD + "スタミナの有効値が " + restoreAmount + " 回復した", 3, 20 * 2, 3);
         }
 
         Arrays.stream(FoodEffect.values()).forEach(element -> {
             if (grassJson.hasDynamicValue("FoodEffect/" + element.toString())) {
-                element.exert(player, grassJson.getDynamicValue("FoodEffect/" + element.toString()).getAsMaskedInteger().orElse(1));
+                element.exert(
+                        player,
+                        grassJson.getDynamicValue("FoodEffect/" + element.toString()).getAsMaskedInteger().orElse(1),
+                        calorie
+                );
             }
         });
 

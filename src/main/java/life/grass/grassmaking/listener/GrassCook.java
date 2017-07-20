@@ -100,13 +100,13 @@ public class GrassCook implements Listener {
                     .getDynamicValue("FoodElement/" + foodElement.toString())
                     .getAsMaskedInteger()
                     .orElse(0))
-                    .filter(elementValue -> elementValue / 2 != 0)
-                    .forEach(elementValue -> foodElementMap.put(foodElement, elementValue / 2));
+                    .filter(elementValue -> elementValue * 2 / 3 != 0)
+                    .forEach(elementValue -> foodElementMap.put(foodElement, elementValue * 2 / 3));
             seasoningList.stream().mapToInt(seasoning -> JsonHandler.getGrassJson(seasoning)
                     .getDynamicValue("FoodElement/" + foodElement.toString())
                     .getAsMaskedInteger().orElse(0))
-                    .filter(elementValue -> elementValue != 0)
-                    .forEach(elementValue -> foodElementMap.put(foodElement, elementValue * 2));
+                    .filter(elementValue -> elementValue * 3 / 2 != 0)
+                    .forEach(elementValue -> foodElementMap.put(foodElement, elementValue * 3 / 2));
             foodElementMap.put(
                     foodElement,
                     (int) (foodElementMap.getOrDefault(foodElement, 0) * cookingType.getFoodElementMultiple())

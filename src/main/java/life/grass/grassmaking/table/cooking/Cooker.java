@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -93,12 +92,9 @@ public abstract class Cooker extends MakingTable {
             consumeItemStackInInventory.accept(ingredientList);
             consumeItemStackInInventory.accept(seasoningList);
 
-            Iterator<HumanEntity> viewerIterator = this.getInventory().getViewers().iterator();
-            while (viewerIterator.hasNext()) {
-                HumanEntity viewer = viewerIterator.next();
-                viewerIterator.remove();
-                viewer.closeInventory();
-            }
+            List<HumanEntity> viewerList = new ArrayList<>(this.getInventory().getViewers());
+            this.getInventory().getViewers().removeIf(viewer -> true);
+            viewerList.forEach(HumanEntity::closeInventory);
 
             Operation operation = getOperation();
             operation.setResult(result);

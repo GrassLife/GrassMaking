@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public abstract class Cooker extends MakingTable {
     private static final String INGREDIENT_TAG = "Ingredient";
@@ -80,17 +80,20 @@ public abstract class Cooker extends MakingTable {
         if (canCook(ingredientList, seasoningList) && result != null) {
             Inventory inventory = getInventory();
 
-            Consumer<List<ItemStack>> consumeItemStackInInventory = itemStackList ->
+            BiConsumer<List<ItemStack>, List<Integer>> consumeItemStackInInventory = (itemStackList, slotList) ->
                     itemStackList.forEach(item -> {
-                        int position = inventory.first(item);
+                        int position = slotList.stream().filter(slot -> {
+                            ItemStack compared = inventory.getItem(slot);
+                            return compared != null && compared.isSimilar(item);
+                        }).findFirst().orElse(-1);
                         if (position == -1) return;
 
                         ItemStack slotItem = inventory.getItem(position);
                         slotItem.setAmount(slotItem.getAmount() - 1);
                         inventory.setItem(position, slotItem);
                     });
-            consumeItemStackInInventory.accept(ingredientList);
-            consumeItemStackInInventory.accept(seasoningList);
+            consumeItemStackInInventory.accept(ingredientList, collectTagSlotList(INGREDIENT_TAG));
+            consumeItemStackInInventory.accept(seasoningList, collectTagSlotList(SEASONING_TAG));
 
             List<HumanEntity> viewerList = new ArrayList<>(this.getInventory().getViewers());
             this.getInventory().getViewers().removeIf(viewer -> true);

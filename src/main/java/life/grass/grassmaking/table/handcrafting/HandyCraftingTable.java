@@ -43,7 +43,7 @@ public class HandyCraftingTable extends Selector {
             displayItem.setItemMeta(meta);
             displayItem = JsonHandler.putDynamicData(displayItem, "Ignore", 1);
 
-            addSlotPart(i, new SlotPart(false, false, null, displayItem));
+            addSlotPart(i, new SlotPart(false, false, SELECTING_TAG, displayItem));
         }
     }
 

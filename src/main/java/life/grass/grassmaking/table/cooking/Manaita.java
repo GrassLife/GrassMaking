@@ -36,7 +36,7 @@ public class Manaita extends Cooker {
 
     @Override
     public ItemStack getExtendExpireDate(ItemStack item) {
-        return JsonHandler.putExpireDateHours(item, 8);
+        return JsonHandler.putExpireDateHours(item, 24);
     }
 
     @Override

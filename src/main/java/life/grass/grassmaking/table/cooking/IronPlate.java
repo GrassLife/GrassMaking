@@ -40,7 +40,7 @@ public class IronPlate extends Cooker {
 
     @Override
     public ItemStack getExtendExpireDate(ItemStack item) {
-        return JsonHandler.putExpireDateHours(item, 12);
+        return JsonHandler.putExpireDateHours(item, 30);
     }
 
     @Override

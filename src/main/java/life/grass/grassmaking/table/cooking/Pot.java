@@ -41,7 +41,7 @@ public class Pot extends Cooker {
 
     @Override
     public ItemStack getExtendExpireDate(ItemStack item) {
-        return JsonHandler.putExpireDateHours(item, 6);
+        return JsonHandler.putExpireDateHours(item, 30);
     }
 
 

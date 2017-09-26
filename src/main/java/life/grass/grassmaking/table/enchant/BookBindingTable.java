@@ -49,21 +49,21 @@ public class BookBindingTable extends MakingTable {
         List<ItemStack> pages = collectTagSlotList(PAGE_TAG).stream().map(position -> getInventory().getItem(position))
                 .filter(item -> {
                     GrassJson json = JsonHandler.getGrassJson(item);
-                    if (item == null || json == null || json.hasDynamicValue("EnchantPower")) return false;
-                    map.put(json.getDynamicValue("CustomName").getAsMaskedString().orElse(""), 0);
+                    if (item == null || json == null || !json.hasDynamicValue("EnchantPower")) return false;
+                    map.put(json.getUniqueName(), 0);
                     return true;
                 }).collect(Collectors.toList());
+        if(pages.size() <= 0) return;
         double sum = pages.stream().mapToDouble(page -> {
             GrassJson json = JsonHandler.getGrassJson(page);
             return json.getDynamicValue("EnchantPower").getAsMaskedDouble().orElse(0.0);
         }).sum();
-        int level = (int) (sum / (11.0 - (double) map.size()));
-
+        double level = sum / pages.size() * map.size();
 
 //        GrassBookBindEvent event = new GrassBookBindEvent();
 //        Bukkit.getServer().getPluginManager().callEvent(event);
 
-        ItemStack result = JsonHandler.getEnchantBook(JsonBucket.getInstance().determineEnchant(Math.max(level, 1)), getInventory().getViewers().stream().findFirst().orElse(null));
+        ItemStack result = JsonHandler.getEnchantBook(JsonBucket.getInstance().determineEnchant(Math.max((int)level, 1)), getInventory().getViewers().stream().findFirst().orElse(null));
         if (result != null) {
             collectTagSlotList(PAGE_TAG).stream().map(position -> getInventory().getItem(position)).forEach(item -> {
                 if (item != null) item.setAmount(item.getAmount() - 1);
